@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="1.6" type="plugin" group="system" method="upgrade">
+    <name>Tag</name>
+    <packagename>Tag</packagename>
+    <author>Cedric Walter</author>
+    <authorEmail>cedric.walter@gmail.com</authorEmail>
+    <authorUrl>http://www.waltercedric.com</authorUrl>
+    <packager>Cedric Walter</packager>
+    <packagerurl>http://www.waltercedric.com</packagerurl>
+    <creationDate>Dec 2011</creationDate>
+    <copyright>Copyright (C) 2011 waltercedric.com All rights reserved.</copyright>
+    <license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
+    <version>2.5.0</version>
+    <description>Package Cedric Walter thumbnails</description>
+    <scriptfile>install.script.php</scriptfile>
+
+    <files>
+        <filename plugin="installer">installer.php</filename>
+    </files>
+
+    <cogs>
+        <cog type="component" client="site" access="0" enabled="true" protected="false" remove_admin_menu="true">
+            com_tag
+            <name>Component CedTag</name>
+        </cog>
+        <cog type="module" client="site">
+            mod_latestTags
+            <name>Module Latest Tags</name>
+            <description></description>
+        </cog>
+        <cog type="module" client="site">
+            mod_mostPopularTags
+            <name>Module Popular Tags</name>
+            <description></description>
+        </cog>
+        <cog type="module" client="site">
+            mod_mostReadTags
+            <name>Module Most Read Tags</name>
+            <description></description>
+        </cog>
+        <cog type="module" client="site">
+            mod_randomTags
+            <name>Module Random Tags</name>
+            <description></description>
+        </cog>
+        <cog type="module" client="site">
+            mod_customTagsCloud
+            <name>Module Custom Tags Cloud</name>
+            <description></description>
+        </cog>
+        <cog type="plugin" group="system" client="site" ordering="1" access="1" enabled="true" protected="false">
+            plg_system_tagSef
+            <name>Plugin SEF Tags</name>
+            <description></description>
+        </cog>
+        <cog type="plugin" client="site" group="search" ordering="0" access="1" enabled="true" protected="false">
+            plg_search_tags
+            <name>Plugin Search Tags</name>
+            <description></description>
+        </cog>
+        <cog type="plugin" client="site" group="content" ordering="0" access="1" enabled="true" protected="false">
+            plg_content_tags
+            <name>Plugin Content Tags</name>
+            <description></description>
+        </cog>
+        <cog type="plugin" client="site" group="editors-xtd" ordering="0" access="1" enabled="true" protected="false">
+            plg_addTags_button
+            <name>Plugin Button Add Tags</name>
+            <description></description>
+        </cog>
+
+    </cogs>
+</extension>
