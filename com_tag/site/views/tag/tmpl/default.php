@@ -17,7 +17,7 @@ $bottomAds = $params->get('bottomAds');
 $showTagDescription = $params->get('description');
 $config =& JFactory::getConfig();
 ?>
-<div class="componentheading"><?php echo($tag);?></div>
+<h1><?php echo($tag);?></h1>
 
 <table class="contentpaneopen" border="0" cellpadding="0"
        cellspacing="0" width="100%">
@@ -31,14 +31,14 @@ $config =& JFactory::getConfig();
 
     $count = $this->pagination->limitstart;
     if (isset($this->results) && !empty($this->results)) {
-        require_once (JPATH_SITE . DS . 'components' . DS . 'com_content' . DS . 'helpers' . DS . 'route.php');
+        require_once (JPATH_SITE . '/components/com_content/helpers/route.php');
         $odd = 0;
         foreach ($this->results as $result) {
             ?>
             <tr class="sectiontableentry<?php echo($odd + 1);?>">
                 <td>
                     <div><span class="small"><?php echo (++$count) . '. ';?></span> <a
-                        href="<?php echo JRoute::_(ContentHelperRoute::getArticleRoute($result->slug, $result->catslug, $result->sectionid)); ?>">
+                        href="<?php echo JRoute::_(ContentHelperRoute::getArticleRoute($result->slug, $result->catslug)); ?>">
                         <?php echo $this->escape($result->title);?> </a></div>
                 </td>
             </tr>
@@ -56,12 +56,7 @@ $config =& JFactory::getConfig();
         echo('<tr><td>' . $bottomAds . '</td></tr>');
     }
     ?>
-    <tr>
-        <td>
-            <div class="joomlatags">Powered by <a href="http://www.joomlatags.org"
-                                                  title="Tags for Joomla">Tags for Joomla</a></div>
-        </td>
-    </tr>
+    <!-- Tags for Joomla by www.waltercedric.com -->
 </table>
 
 <?php
@@ -73,6 +68,6 @@ if ($this->tagDescription) {
 }
 $document->setTitle($tag . ' | ' . $config->getValue('sitename'));
 $document->setMetadata('keywords', $tag);
-$document->addStyleSheet(JURI::base() . 'components/com_tag/css/tagcloud.css');
+$document->addStyleSheet(JURI::base() . 'media/com_tag/css/tagcloud.css');
 ?>
 

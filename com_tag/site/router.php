@@ -6,15 +6,13 @@
  * @copyright (C) 2012 http://www.waltercedric.com 2010- http://www.joomlatags.org
  * @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
  **/
-require_once JPATH_SITE . DS . 'components' . DS . 'com_tag' . DS . 'helper' . DS . 'helper.php';
+require_once JPATH_SITE . '/components/com_tag/helper/helper.php';
 /**
  * @param    array
  * @return    array
  */
 function TagBuildRoute(&$query)
 {
-    print_r("router::TagBuildRoute" . $query);
-
     $segments = array();
 
     if (isset($query['tag'])) {

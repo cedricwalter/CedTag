@@ -9,6 +9,7 @@
 defined('_JEXEC') or die();
 
 jimport('joomla.application.controller');
+jimport( 'joomla.application.input' );
 
 class TagControllerTerm extends JController
 {
@@ -35,7 +36,6 @@ class TagControllerTerm extends JController
             default:
                 $this->display();
         }
-
     }
 
     /**
@@ -44,7 +44,7 @@ class TagControllerTerm extends JController
      */
     function display()
     {
-        JRequest::setVar('view', 'term');
+        JFactory::getApplication()->input->set('view', 'term');
         parent::display();
     }
 
@@ -76,8 +76,8 @@ class TagControllerTerm extends JController
 
     function edit()
     {
-        JRequest::setVar('view', 'term');
-        JRequest::setVar('layout', 'edit');
+        JFactory::getApplication()->input->set('view', 'term');
+        JFactory::getApplication()->input->set('layout', 'edit');
         parent::display();
     }
 
@@ -96,8 +96,8 @@ class TagControllerTerm extends JController
 
     function batchAdd()
     {
-        JRequest::setVar('view', 'term');
-        JRequest::setVar('layout', 'batchadd');
+        JFactory::getApplication()->input->set('view', 'term');
+        JFactory::getApplication()->input->set('layout', 'batchadd');
         parent::display();
 
     }

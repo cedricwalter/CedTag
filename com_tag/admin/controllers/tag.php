@@ -9,6 +9,8 @@
 
 defined('_JEXEC') or die();
 
+jimport('joomla.application.input');
+
 class TagControllerTag extends JController
 {
 
@@ -35,7 +37,6 @@ class TagControllerTag extends JController
             default:
                 $this->display();
         }
-
     }
 
     /**
@@ -44,28 +45,26 @@ class TagControllerTag extends JController
      */
     function display()
     {
-        JRequest::setVar('view', 'tag');
+        JFactory::getApplication()->input->set('view', 'tag');
         parent::display();
     }
 
     function batchSave()
     {
 
-        $ids = JRequest::getVar('id', array(0), 'POST', 'array');
-        $tags = JRequest::getVar('tag', array(0), 'POST', 'array');
+        $ids = JFactory::getApplication()->input->get('id', array(0), 'array');
+        $tags = JFactory::getApplication()->input->get('tag', array(0), 'array');
         $combined = $this->array_combine($ids, $tags);
 
         $model = $this->getModel('tag');
-        $msg = "";
+        $message = JText::_('TAGS SUCCESSFULLY SAVED');
 
         $ok = $model->batchUpdate($combined);
         if ($ok) {
-            $msg = JText::_('TAGS COULD NOT BE SAVED PLEASE CHECK');
-        } else {
-            $msg = JText::_('TAGS SUCCESSFULLY SAVED');
+            $message = JText::_('TAGS COULD NOT BE SAVED PLEASE CHECK');
         }
         //parent::display();
-        $this->setRedirect("index.php?option=com_tag&controller=tag", $msg);
+        $this->setRedirect("index.php?option=com_tag&controller=tag", $message);
     }
 
     function clearAll()
@@ -108,17 +107,16 @@ class TagControllerTag extends JController
 
     function warning()
     {
-        JRequest::setVar('view', 'tag');
-        JRequest::setVar('layout', 'warning');
+        JFactory::getApplication()->input->set('view', 'tag');
+        JFactory::getApplication()->input->set('layout', 'warning');
         parent::display();
     }
 
     function add()
     {
-        JRequest::setVar('view', 'tag');
-        JRequest::setVar('layout', 'add');
-        JRequest::setVar('tmpl', 'component');
-        $document = & JFactory::getDocument();
+        JFactory::getApplication()->input->set('view', 'tag');
+        JFactory::getApplication()->input->set('layout', 'add');
+        JFactory::getApplication()->input->set('tmpl', 'component');
         parent::display();
     }
 

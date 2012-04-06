@@ -8,13 +8,14 @@
  **/
 defined('_JEXEC') or die();
 jimport('joomla.application.component.view');
+jimport( 'joomla.application.input' );
 
 class TagViewTerm extends JView
 {
 
     function display($tpl = null)
     {
-        $layout = JRequest::getCmd("layout", "default");
+        $layout = JInput::get('layout', "default", 'STRING');
         switch ($layout) {
             case 'edit':
                 $this->edit($tpl);

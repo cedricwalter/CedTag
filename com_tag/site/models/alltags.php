@@ -10,7 +10,7 @@ defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.model');
 
-require_once JPATH_COMPONENT_SITE . DS . 'helper' . DS . 'helper.php';
+require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
 
 class TagModelAllTags extends JModel
 {
@@ -24,7 +24,6 @@ class TagModelAllTags extends JModel
 
     function _buildOrderBy($order)
     {
-        $orderBy = 'RAND()';
         switch ($order)
         {
             case 'random':

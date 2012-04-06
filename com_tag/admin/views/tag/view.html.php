@@ -10,13 +10,14 @@
 
 defined('_JEXEC') or die();
 jimport('joomla.application.component.view');
+jimport( 'joomla.application.input' );
 
 class TagViewTag extends JView
 {
 
     function display($tpl = null)
     {
-        $layout = JRequest::getCmd("layout", "default");
+        $layout = JInput::get('layout', "default", 'STRING');
         switch ($layout) {
             case 'add':
                 $this->add($tpl);

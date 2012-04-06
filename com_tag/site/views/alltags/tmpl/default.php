@@ -7,9 +7,12 @@
  * @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
  **/
 defined('_JEXEC') or die('Restricted access');
-require_once JPATH_COMPONENT_SITE . DS . 'helper' . DS . 'helper.php';
+
+require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
+
 $document =& JFactory::getDocument();
 $description = JoomlaTagsHelper::param('metaDescription');
+
 $document->setDescription(JoomlaTagsHelper::truncate($description));
 $keywords = JoomlaTagsHelper::param('metaKeywords');
 
@@ -18,7 +21,7 @@ $document->setMetadata('keywords', $keywords);
 $title = JoomlaTagsHelper::param('title');
 $document->setTitle($title);
 
-$document->addStyleSheet(JURI::base() . 'components/com_tag/css/tagcloud.css');
+$document->addStyleSheet(JURI::base() . 'media/com_tag/css/tagcloud.css');
 ?>
 <div class="componentheading"><?php echo($title);?></div>
 <?php $rows =& $this->allTags;
@@ -72,9 +75,13 @@ if (isset($rows) && !empty($rows)) {
     //done restore
     //usort($rows, array('JoomlaTagsHelper','tag_alphasort'));
 }
+
+//TODO remove table layout
 ?>
+
 <table class="contentpaneopen" border="0" cellpadding="0"
        cellspacing="0" width="100%">
+    <!-- Tags for Joomla by www.walttercedric.com -->
     <tr>
         <td><?php if (isset($orderedRows) && !empty($orderedRows)) { ?>
             <div class="tagCloud"><?php    foreach ($orderedRows as $order => $item) { ?> <a
@@ -83,13 +90,6 @@ if (isset($rows) && !empty($rows)) {
 
             </div>
             <?php }     ?></td>
-    </tr>
-    <tr>
-        <td>
-            <div class="joomlatags">Powered by <a href="http://www.joomlatags.org"
-                                                  title="Tags for Joomla">Tags for Joomla</a></div>
-
-        </td>
     </tr>
 </table>
 

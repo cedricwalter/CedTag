@@ -10,7 +10,7 @@
 defined('_JEXEC') or die('Restricted access');
 class JoomlaTagsHelper
 {
-    function param($name, $default = '')
+    static function param($name, $default = '')
     {
         static $params;
         if (!isset($params)) {
@@ -20,7 +20,14 @@ class JoomlaTagsHelper
         return $params->get($name, $default);
     }
 
-    function tag_alphasort($tag1, $tag2)
+    static function addCss()
+    {
+        $document =& JFactory::getDocument();
+        $document->addStyleSheet(JURI::base() . 'media/com_tag/css/tagcloud.css');
+    }
+
+
+    static function tag_alphasort($tag1, $tag2)
     {
         if ($tag1->name == $tag2->name) {
             return 0;
@@ -28,7 +35,7 @@ class JoomlaTagsHelper
         return ($tag1->name < $tag2->name) ? -1 : 1;
     }
 
-    function tag_popularasort($tag1, $tag2)
+    static function tag_popularasort($tag1, $tag2)
     {
         if ($tag1->ct == $tag2->ct) {
             return 0;
@@ -36,7 +43,7 @@ class JoomlaTagsHelper
         return ($tag1->ct < $tag2->ct) ? -1 : 1;
     }
 
-    function tag_latestasort($tag1, $tag2)
+    static function tag_latestasort($tag1, $tag2)
     {
         if ($tag1->created == $tag2->created) {
             return 0;
@@ -44,7 +51,7 @@ class JoomlaTagsHelper
         return ($tag1->created < $tag2->created) ? -1 : 1;
     }
 
-    function hitsasort($tag1, $tag2)
+    static function hitsasort($tag1, $tag2)
     {
         if ($tag1->hits == $tag2->hits) {
             return 0;
@@ -52,14 +59,14 @@ class JoomlaTagsHelper
         return ($tag1->hits < $tag2->hits) ? -1 : 1;
     }
 
-    function getComponentVersion()
+    static function getComponentVersion()
     {
         static $version;
 
         if (!isset($version)) {
             $xml = JFactory::getXMLParser('Simple');
 
-            $xmlFile = JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_tag' . DS . 'manifest.xml';
+            $xmlFile = JPATH_ADMINISTRATOR . '/components/com_tag/manifest.xml';
 
             if (file_exists($xmlFile)) {
                 if ($xml->loadFile($xmlFile)) {
@@ -73,7 +80,7 @@ class JoomlaTagsHelper
         return $version;
     }
 
-    function preHandle($tag)
+    static function preHandle($tag)
     {
         $tag = JoomlaTagsHelper::tripChars($tag);
         $tag = JString::trim($tag);
@@ -85,7 +92,7 @@ class JoomlaTagsHelper
         return $tag;
     }
 
-    function ucwords($word)
+    static function ucwords($word)
     {
         if (JoomlaTagsHelper::param('capitalize')) {
             return JString::ucwords($word);
@@ -94,7 +101,7 @@ class JoomlaTagsHelper
         }
     }
 
-    function urlTagname($tagname)
+    static function urlTagname($tagname)
     {
         return preg_replace(
             array('/-/', '/\+/'),
@@ -104,7 +111,7 @@ class JoomlaTagsHelper
         //return urlencode($tagname);
     }
 
-    function unUrlTagname($tagname)
+    static function unUrlTagname($tagname)
     {
         return preg_replace(
             '/[:-]/',
@@ -114,7 +121,7 @@ class JoomlaTagsHelper
         //return urldecode($tagname);
     }
 
-    function truncate($blurb)
+    static function truncate($blurb)
     {
         $blurb = strip_tags($blurb);
         $blurb = str_replace('"', '\"', $blurb);
@@ -127,7 +134,7 @@ class JoomlaTagsHelper
         return $blurb;
     }
 
-    function tripChars($name)
+    static function tripChars($name)
     {
         $stripChars = JoomlaTagsHelper::param('StripCharacters');
 
@@ -150,7 +157,7 @@ class JoomlaTagsHelper
         return $name;
     }
 
-    function isValidName($name)
+    static function  isValidName($name)
     {
         $valid = true;
 

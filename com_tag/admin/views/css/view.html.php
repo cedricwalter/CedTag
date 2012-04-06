@@ -8,15 +8,15 @@
  **/
 defined('_JEXEC') or die();
 jimport('joomla.application.component.view');
+jimport( 'joomla.filesystem.file' );
+
 
 class TagViewCss extends JView
 {
 
     function display($tpl = null)
     {
-
         $this->defaultTpl($tpl);
-
     }
 
     function defaultTpl($tpl = null)
@@ -27,12 +27,15 @@ class TagViewCss extends JView
         JToolBarHelper::custom('restore', 'default', '', JText::_('RESTORE DEFAULT'), false);
         JToolBarHelper::spacer();
         JToolBarHelper::back(JText::_('CONTROL PANEL'), 'index.php?option=com_tag');
-        $tagCssFile = JPATH_SITE.'media/com_tag/css/tagcloud.css';
+
+        $tagCssFile = JPATH_SITE.'/media/com_tag/css/tagcloud.css';
         $isCssWritable = is_writable($tagCssFile);
-        $cssFileContent = file_get_contents($tagCssFile);
+
+        $cssFileContent = JFile::read($tagCssFile);
         $this->assign('isCssWritable', $isCssWritable);
         $this->assignRef('cssFileName', $tagCssFile);
         $this->assignRef('cssFileContent', $cssFileContent);
+
         parent::display($tpl);
     }
 

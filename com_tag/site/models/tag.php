@@ -10,7 +10,7 @@ defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.model');
 
-require_once JPATH_COMPONENT_SITE . DS . 'helper' . DS . 'helper.php';
+require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
 
 class TagModelTag extends JModel
 {
@@ -43,11 +43,6 @@ class TagModelTag extends JModel
     var $_ids = null;
 
 
-    /**
-     * Constructor
-     *
-     * @since 1.5
-     */
     function __construct()
     {
         parent::__construct();
@@ -107,11 +102,9 @@ class TagModelTag extends JModel
         $tag = explode("?start=", $tag);
         $tag = JoomlaTagsHelper::preHandle($tag[0]);
 
-        JRequest::setVar('tag', $tag);
+        JFactory::getApplication()->input->set('tag', $tag);
         $tag = trim($tag);
         $db =& JFactory::getDBO();
-
-
         $tagObj = null;
         $ids = $this->_ids;
         if (!isset($this->_tagDescription)) {
@@ -165,13 +158,12 @@ class TagModelTag extends JModel
         }
 
         $query = 'SELECT ' .
-            ' a.id, a.title, a.created,u.name as author,a.created_by_alias as created_by_alias ,a.sectionid,COUNT(a.id) as total,a.introtext, a.fulltext, a.access, cc.title as section,' .
+            ' a.id, a.title, a.created,u.name as author,a.created_by_alias as created_by_alias , COUNT(a.id) as total,a.introtext, a.fulltext, a.access, cc.title as section,' .
             ' CASE WHEN CHAR_LENGTH(a.alias) THEN CONCAT_WS(":", a.id, a.alias) ELSE a.id END as slug,' .
             ' CASE WHEN CHAR_LENGTH(cc.alias) THEN CONCAT_WS(":", cc.id, cc.alias) ELSE cc.id END as catslug,' .
             ' CHAR_LENGTH( a.`fulltext` ) AS readmore' .
             ' FROM #__content AS a' .
             ' INNER JOIN #__categories AS cc ON cc.id = a.catid' .
-            ' INNER JOIN #__sections AS s ON s.id=a.sectionid' .
             ' INNER JOIN #__users AS u ON u.id=a.created_by' .
             ' WHERE (a.id in (' . $ids . ') AND ' .
             '(' . $state . '))' .
@@ -179,7 +171,6 @@ class TagModelTag extends JModel
             ' AND ( a.publish_down = ' . $db->Quote($nullDate) . ' OR a.publish_down >= ' . $db->Quote($now) . ' )' .
             ' AND cc.published = 1' .
             ' GROUP BY(a.id)  ORDER BY  ' . $this->_buildOrderBy($order);
-        //echo($query);
 
         return $query;
 
@@ -187,7 +178,6 @@ class TagModelTag extends JModel
 
     function _buildOrderBy($order)
     {
-        $orderby = 'a.ordering';
         switch ($order)
         {
             case 'date' :

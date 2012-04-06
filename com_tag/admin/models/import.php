@@ -9,8 +9,8 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.model');
-require_once JPATH_COMPONENT_ADMINISTRATOR . DS . 'models' . DS . 'tag.php';
-require_once JPATH_COMPONENT_SITE . DS . 'helper' . DS . 'helper.php';
+require_once JPATH_COMPONENT_ADMINISTRATOR . '/models/tag.php';
+require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
 
 /**
  * Tag Component Import Model

@@ -7,7 +7,7 @@
  * @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
  **/
 defined('_JEXEC') or die('Restricted access');
-require_once (JPATH_SITE . DS . 'components' . DS . 'com_content' . DS . 'helpers' . DS . 'route.php');
+require_once (JPATH_SITE . '/components/com_content/helpers/route.php');
 $tag = JRequest::getVar('tag', null);
 
 $tagKeyword = JText::_('TAG:') . $tag;
@@ -24,13 +24,13 @@ function readmore($item, $user)
 {
     if ($item->access <= $user->get('aid', 0)) {
         //$item->readmore_link = JRoute::_('index.php?view=article&catid='.$this->category->slug.'&id='.$item->slug);
-        $item->readmore_link = JRoute::_(ContentHelperRoute::getArticleRoute($item->slug, $item->catslug, $item->sectionid));
+        $item->readmore_link = JRoute::_(ContentHelperRoute::getArticleRoute($item->slug, $item->catslug));
         $item->readmore_register = false;
     }
     else
     {
         $item->readmore_link = JRoute::_('index.php?option=com_user&view=login');
-        $returnURL = JRoute::_(ContentHelperRoute::getArticleRoute($item->slug, $item->catslug, $item->sectionid), false);
+        $returnURL = JRoute::_(ContentHelperRoute::getArticleRoute($item->slug, $item->catslug), false);
         $fullURL = new JURI($item->readmore_link);
         $fullURL->setVar('return', base64_encode($returnURL));
         $item->readmore_link = $fullURL->toString();
@@ -40,7 +40,7 @@ function readmore($item, $user)
 }
 
 ?>
-<div class="componentheading"><?php echo($tag);?></div>
+<h1><?php echo($tag);?></h1>
 
 <table class="blog" cellpadding="0" cellspacing="0">
     <tbody>
@@ -67,7 +67,7 @@ function readmore($item, $user)
                         $result->text =& $result->introtext;
                     } else {
                         $result->text = $result->introtext . $result->fulltext;
-                        $result->readmore_link = JRoute::_(ContentHelperRoute::getArticleRoute($result->slug, $result->catslug, $result->sectionid));
+                        $result->readmore_link = JRoute::_(ContentHelperRoute::getArticleRoute($result->slug, $result->catslug));
                     }
                     ?>
 
@@ -112,13 +112,7 @@ function readmore($item, $user)
             </div>
         </td>
     </tr>
-    <tr>
-        <td>
-            <div class="joomlatags"
-                >Powered by <a href="http://www.joomlatags.org" title="Tags for Joomla">Tags
-                for Joomla</a></div>
-        </td>
-    </tr>
+    <!-- Tags for Joomla by www.walttercedric.com -->
     </tbody>
 
 </table>
@@ -132,5 +126,5 @@ if ($this->tagDescription) {
 }
 $document->setTitle($tag . ' | ' . $config->getValue('sitename'));
 $document->setMetadata('keywords', $tag);
-$document->addStyleSheet(JURI::base() . 'components/com_tag/css/tagcloud.css');
+$document->addStyleSheet(JURI::base() . 'media/com_tag/css/tagcloud.css');
 ?>

@@ -42,9 +42,8 @@ defined('_JEXEC') or die('Restricted access');
         </tbody>
     </table>
     <input type="hidden" name="cid" value="<?php echo JRequest::getString('article_id')?>"/>
-    <input type="hidden" name="refresh" value="<?php echo JRequest::getString('refresh')?>"></input><input type="hidden"
-                                                                                                           name="task"
-                                                                                                           value="save">
-    <input type="hidden" name="option"
-           value="com_tag"> <?php echo JHTML::_('form.token'); ?>
+    <input type="hidden" name="refresh" value="<?php echo JRequest::getString('refresh')?>"/>
+    <input type="hidden" name="task" value="save">
+    <input type="hidden" name="option" value="com_tag">
+    <?php echo JHTML::_('form.token'); ?>
 </form>

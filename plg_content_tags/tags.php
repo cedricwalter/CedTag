@@ -65,8 +65,9 @@ class plgContentTags extends JPlugin
         $terms = $db->loadObjectList();
         $SuppresseSingleTerms = JoomlaTagsHelper::param('SuppresseSingleTerms');
         $HitsNumber = JoomlaTagsHelper::param('HitsNumber');
-        $document =& JFactory::getDocument();
-        $document->addStyleSheet(JURI::base() . 'media/com_tag/css/tagcloud.css');
+
+        JoomlaTagsHelper::addCss();
+
         $havingTags = false;
         $links = '';
         $link = '';

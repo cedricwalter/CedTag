@@ -9,6 +9,8 @@
 
 
 defined('_JEXEC') or die();
+jimport( 'joomla.application.input' );
+jimport( 'joomla.filesystem.file' );
 
 class TagControllerCss extends JController
 {
@@ -26,40 +28,35 @@ class TagControllerCss extends JController
             default:
                 $this->display();
         }
-
     }
 
-    /**
-     * display the form
-     * @return void
-     */
     function display()
     {
-        JRequest::setVar('view', 'css');
+        JFactory::getApplication()->input->set('view', 'css');
         parent::display();
     }
 
 
     function save()
     {
+        $updatedCss = JFactory::getApplication()->input->get('csscontent', '', 'STRING');
+        $tagCssFile = JPATH_SITE.'/media/com_tag/css/tagcloud.css';
 
-        $updatedCss = $_POST['csscontent'];
-        $tagCssFile = JPATH_SITE.'media/com_tag/css/tagcloud.css';
-        file_put_contents($tagCssFile, $updatedCss);
+        JFile::write($tagCssFile, $updatedCss);
 
-        JRequest::setVar('view', 'css');
+        JFactory::getApplication()->input->set('view', 'css');
         parent::display();
-
     }
 
     function restore()
     {
-        $tagCssFile = JPATH_SITE.'media/com_tag/css/tagcloud.css';
         $defaultCssFile = JPATH_SITE . '/media/com_tag/css/tagcloud.default.css';
-        $defaultCssFileContent = file_get_contents($defaultCssFile);
-        file_put_contents($tagCssFile, $defaultCssFileContent);
+        $defaultCssFileContent = JFile::read($defaultCssFile);
 
-        JRequest::setVar('view', 'css');
+        $tagCssFile = JPATH_SITE.'/media/com_tag/css/tagcloud.css';
+        JFile::write($tagCssFile, $defaultCssFileContent);
+
+        JFactory::getApplication()->input->set('view', 'css');
         parent::display();
     }
 

@@ -8,8 +8,9 @@
 // no direct access
 defined('_JEXEC') or die('Restricted access');
 
-require_once JPATH_SITE . DS . 'components' . DS . 'com_content' . DS . 'helpers' . DS . 'route.php';
-require_once JPATH_SITE . DS . 'components' . DS . 'com_tag' . DS . 'helper' . DS . 'helper.php';
+require_once JPATH_SITE . '/components/com_content/helpers/route.php';
+require_once JPATH_SITE . '/components/com_tag/helper/helper.php';
+
 class modMostPopularTagsHelper
 {
     function getList(&$params)
@@ -24,9 +25,9 @@ class modMostPopularTagsHelper
         if (isset($rows) && !empty($rows)) {
 
             usort($rows, array('JoomlaTagsHelper', 'tag_popularasort'));
-            $document =& JFactory::getDocument();
-            //if($document->)
-            $document->addStyleSheet(JURI::base() . 'components/com_tag/css/tagcloud.css');
+
+            JoomlaTagsHelper::addCss();
+
             $tag_sizes = 7;
             $total_tags = count($rows);
             $min_tags = $total_tags / $tag_sizes;

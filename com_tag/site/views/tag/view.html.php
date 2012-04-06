@@ -11,12 +11,14 @@ defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.view');
 jimport('joomla.application.pathway');
+jimport( 'joomla.application.input' );
+
 
 class TagViewTag extends JView
 {
     function display($tpl = null)
     {
-        $layout = JRequest::getCmd("layout", "default");
+        $layout = JInput::get('layout', 'default', 'STRING');
         switch ($layout) {
             case 'add':
                 $this->add($tpl);
@@ -36,7 +38,8 @@ class TagViewTag extends JView
         $tag = JRequest::getString('tag', null);
         //$tag=URLDecode($tag);
         $tag = JoomlaTagsHelper::unUrlTagname($tag);
-        JRequest::setVar('tag', $tag);
+
+        JFactory::getApplication()->input->set('tag', $tag);
 
         $results = & $this->get('Data');
         $total = & $this->get('Total');
@@ -44,8 +47,8 @@ class TagViewTag extends JView
         $tagDescription =& $this->get('TagDescription');
         $isTermExist = $this->get('TermExist');
         if (!$isTermExist) {
-            //$layout=JRequest::setVar("layout","warning");
-            //JRequest::setVar('tagsWarning','REQUEST_TAG_NOT_EXIST_WARNING');
+            //$layout=JFactory::getApplication()->input->set("layout","warning");
+            //JFactory::getApplication()->input->set('tagsWarning','REQUEST_TAG_NOT_EXIST_WARNING');
             //$this->setLayout('warning');
             JError::raiseError(404, JText::_("Could not find tag \"$tag\""));
         } else {
@@ -54,9 +57,10 @@ class TagViewTag extends JView
             $this->assign('total', $total);
             $this->assign('tagDescription', $tagDescription);
 
-
             $params = JComponentHelper::getParams('com_tag');
-            $layout = JRequest::getCmd("layout", $params->get('layout', 'default'));
+
+            $defaultLayout = $params->get('layout', 'default');
+            $layout = JInput::get('layout', $defaultLayout, 'STRING');
 
             $this->setLayout($layout);
             $showMeta = $params->get('contentMeta', '1');

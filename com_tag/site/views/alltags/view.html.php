@@ -19,15 +19,11 @@ class TagViewAllTags extends JView
         $allTags = $this->get('AllTags');
         $this->assignRef('allTags', $allTags);
         $this->defaultTpl($tpl);
-
-
     }
 
     function defaultTpl($tpl = null)
     {
-
         parent::display($tpl);
-
     }
 
 }

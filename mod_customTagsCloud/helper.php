@@ -47,7 +47,7 @@ class modCustomTagsCloudHelper
             unset($sortedRows);
             unset($rowsMap);
             $document =& JFactory::getDocument();
-            $document->addStyleSheet(JURI::base() . 'components/com_tag/css/tagcloud.css');
+            $document->addStyleSheet(JURI::base() . 'media/com_tag/css/tagcloud.css');
             $tag_sizes = 7;
 
             $min_tags = $total_tags / $tag_sizes;

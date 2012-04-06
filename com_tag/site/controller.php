@@ -11,13 +11,12 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.controller');
-
+jimport( 'joomla.application.input' );
 
 class TagController extends JController
 {
     function execute($task)
     {
-
         switch ($task) {
             case 'tag':
                 $this->display();
@@ -38,7 +37,6 @@ class TagController extends JController
             default:
                 $this->display();
         }
-
     }
 
     /**
@@ -52,29 +50,29 @@ class TagController extends JController
         $view = JRequest::getVar('view');
         //Set default view
         if (!isset($view)) {
-            JRequest::setVar('view', 'tag');
+            JFactory::getApplication()->input->set('view', 'tag');
         }
         parent::display();
     }
 
     function allTags()
     {
-        JRequest::setVar('view', 'alltags');
+        JFactory::getApplication()->input->set('view', 'alltags');
         parent::display();
     }
 
     function warning()
     {
-        JRequest::setVar('view', 'tag');
-        JRequest::setVar('layout', 'warning');
+        JFactory::getApplication()->input->set('view', 'tag');
+        JFactory::getApplication()->input->set('layout', 'warning');
         parent::display();
     }
 
     function add()
     {
-        JRequest::setVar('view', 'tag');
-        JRequest::setVar('layout', 'add');
-        JRequest::setVar('tmpl', 'component');
+        JFactory::getApplication()->input->set('view', 'tag');
+        JFactory::getApplication()->input->set('layout', 'add');
+        JFactory::getApplication()->input->set('tmpl', 'component');
         $document = & JFactory::getDocument();
         parent::display();
     }
@@ -88,14 +86,13 @@ class TagController extends JController
         $combined[$id] = $tags;
 
 
-        $message = "";
-        JModel::addIncludePath(JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_tag' . DS . 'models');
+        JModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tag/models');
         $model = $this->getModel('tag');
         $ok = $model->batchUpdate($combined);
+
+        $message = JText::_('Tags successfully saved!');
         if ($ok) {
             $message = JText::_('Tags could not be Saved, please check!');
-        } else {
-            $message = JText::_('Tags successfully saved!');
         }
 
         // echo('<script> alert("'.$msg.'"); window.history.go(-1); </script>');

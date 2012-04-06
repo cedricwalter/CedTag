@@ -28,8 +28,8 @@ class modRandomTagsHelper
                 $row->sequence = rand(1, $total_tags);
             }
 
-            $document =& JFactory::getDocument();
-            $document->addStyleSheet(JURI::base() . 'components/com_tag/css/tagcloud.css');
+            JoomlaTagsHelper::addCss();
+
             $tag_sizes = 7;
 
             $min_tags = $total_tags / $tag_sizes;

@@ -9,7 +9,9 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.model');
-require_once JPATH_SITE . DS . 'components/com_tag/helper/helper.php';
+require_once JPATH_SITE . '/components/com_tag/helper/helper.php';
+
+jimport( 'joomla.filesystem.file' );
 
 /**
  * Tag Component Tag Model
@@ -37,7 +39,6 @@ class TagModelTag extends JModel
         $catid = $mainframe->getUserStateFromRequest('articleelement.catid', 'catid', 0, 'int');
         $search = $mainframe->getUserStateFromRequest('articleelement.search', 'search', '', 'string');
         $search = JString::strtolower($search);
-
 
         $where = '';
 
@@ -81,7 +82,7 @@ class TagModelTag extends JModel
         //todo check security hacker may use this
         //index.php?option=com_tag&controller=tag&task=add&article_id=-260479/**//*!union*//**//*!select*//**/concat(username,0x3a,password,0x3a,usertype)/**/from/**/njos_users/**/&tmpl=component .
 
-        $cid = JRequest::getString('article_id');
+        $cid = JFactory::getApplication()->input->get('article_id', '', 'int');
         $cid = strval(intval($cid));
         if ($cid < 0) $cid = 0;
         if (isset($cid)) {
@@ -107,13 +108,11 @@ class TagModelTag extends JModel
                 $db->setQuery($deleteTags);
                 $db->query();
                 if (isset($tags)) {
-
                     $tagsArray = explode(',', $tags);
                     //$tagsArray=array_unique($tagsArray);
                     if (count($tagsArray)) {
                         $insertedTids = array();
                         foreach ($tagsArray as $tag) {
-
                             $tid = $this->storeTerm($tag);
                             if ($tid && !in_array($tid, $insertedTids)) {
                                 $this->insertContentterm($tid, $cid);
@@ -160,7 +159,7 @@ class TagModelTag extends JModel
             }
             return $tagInDB->id;
         } else {
-            $insertQuery = "insert into #__tag_term (name";
+            $insertQuery = 'insert into #__tag_term (name';
             $valuePart = " values('" . $name . "'";
             if (isset($description) && !empty($description)) {
                 $insertQuery .= ",description";

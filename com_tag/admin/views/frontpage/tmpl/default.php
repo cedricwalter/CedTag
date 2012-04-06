@@ -13,7 +13,7 @@ $document->addStyleSheet(JURI::root(true) . '/media/system/css/modal.css');
 //$document->addStyleSheet(JURI::root(true).'/administrator/components/com_tag/css/tag.css' );
 JHTML::_('behavior.modal', 'a.modal');
 
-require_once JPATH_COMPONENT_SITE . DS . 'helper' . DS . 'helper.php';
+require_once JPATH_COMPONENT_SITE .'/helper/helper.php';
 ?>
 
 <table class="adminform" width="100%">

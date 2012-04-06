@@ -7,6 +7,7 @@
  * @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
  **/
 jimport('joomla.application.component.controller');
+jimport( 'joomla.application.input' );
 
 /**
  * Joomla Tag component Controller
@@ -21,7 +22,7 @@ class TagController extends JController
     {
         $view = JRequest::getVar('view');
         if (!isset($view)) {
-            JRequest::setVar('view', 'frontpage');
+            JFactory::getApplication()->input->set('view', 'frontpage');
         }
         parent::display();
     }

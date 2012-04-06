@@ -9,13 +9,17 @@
 // no direct access
 defined('_JEXEC') or die('Restricted access');
 
-// Require the com_content helper library
-require_once (JPATH_COMPONENT . DS . 'controller.php');
+jimport('joomla.application.component.controller');
+jimport( 'joomla.application.input' );
 
 // Create the controller
-$controller = new TagController();
+$controller = JController::getInstance('Tag');
+
+//$task = JInput::get('task', '', 'STRING');
+$task = JRequest::getCmd('task');
 
 // Perform the Request task
-$controller->execute(JRequest::getCmd('task'));
+$controller->execute($task);
+
 // Redirect if set by the controller
 $controller->redirect();

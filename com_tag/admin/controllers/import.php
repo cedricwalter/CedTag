@@ -8,6 +8,7 @@
  **/
 
 defined('_JEXEC') or die();
+jimport( 'joomla.application.input' );
 
 class TagControllerImport extends JController
 {
@@ -26,7 +27,6 @@ class TagControllerImport extends JController
             default:
                 $this->display();
         }
-
     }
 
     /**
@@ -35,7 +35,7 @@ class TagControllerImport extends JController
      */
     function display()
     {
-        JRequest::setVar('view', 'import');
+        JFactory::getApplication()->input->set('view', 'import');
         parent::display();
     }
 

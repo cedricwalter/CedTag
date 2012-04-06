@@ -26,6 +26,6 @@ if ($firstWarning) {
 <?php
 }
 ;
-JRequest::setVar('FirstWarning', false);
+JFactory::getApplication()->input->set('FirstWarning', false);
 ?>
 

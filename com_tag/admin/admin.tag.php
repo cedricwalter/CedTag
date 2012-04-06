@@ -8,11 +8,11 @@
  **/
 defined('_JEXEC') or die('Restricted access');
 
-require_once (JPATH_COMPONENT . DS . 'controller.php');
-require_once (JPATH_COMPONENT . DS . 'controllers' . DS . 'tag.php');
-require_once (JPATH_COMPONENT . DS . 'controllers' . DS . 'term.php');
-require_once (JPATH_COMPONENT . DS . 'controllers' . DS . 'css.php');
-require_once (JPATH_COMPONENT . DS . 'controllers' . DS . 'import.php');
+require_once (JPATH_COMPONENT . '/controller.php');
+require_once (JPATH_COMPONENT . '/controllers/tag.php');
+require_once (JPATH_COMPONENT . '/controllers/term.php');
+require_once (JPATH_COMPONENT . '/controllers/css.php');
+require_once (JPATH_COMPONENT . '/controllers/import.php');
 $document = & JFactory::getDocument();
 $document->addStyleSheet(JURI::root(true) . '/administrator/components/com_tag/css/tag.css');
 
