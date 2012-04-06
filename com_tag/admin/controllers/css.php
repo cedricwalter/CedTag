@@ -44,7 +44,7 @@ class TagControllerCss extends JController
     {
 
         $updatedCss = $_POST['csscontent'];
-        $tagCssFile = JPATH_COMPONENT_SITE . DS . 'css' . DS . 'tagcloud.css';
+        $tagCssFile = JPATH_SITE.'media/com_tag/css/tagcloud.css';
         file_put_contents($tagCssFile, $updatedCss);
 
         JRequest::setVar('view', 'css');
@@ -54,8 +54,8 @@ class TagControllerCss extends JController
 
     function restore()
     {
-        $tagCssFile = JPATH_COMPONENT_SITE . DS . 'css' . DS . 'tagcloud.css';
-        $defaultCssFile = JPATH_COMPONENT_SITE . DS . 'css' . DS . 'tagcloud.default.css';
+        $tagCssFile = JPATH_SITE.'media/com_tag/css/tagcloud.css';
+        $defaultCssFile = JPATH_SITE . '/media/com_tag/css/tagcloud.default.css';
         $defaultCssFileContent = file_get_contents($defaultCssFile);
         file_put_contents($tagCssFile, $defaultCssFileContent);
 

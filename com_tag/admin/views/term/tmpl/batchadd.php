@@ -23,8 +23,8 @@ defined('_JEXEC') or die('Restricted access');
 
     </table>
 
-    <input type="hidden"
-           name="task" value="batchsave"> <input type="hidden"
-                                                 name="controller" value="term"> <input type="hidden" name="option"
-                                                                                        value="com_tag"> <?php echo JHTML::_('form.token'); ?>
+    <input type="hidden" name="task" value="batchsave">
+    <input type="hidden" name="controller" value="term">
+    <input type="hidden" name="option" value="com_tag">
+    <?php echo JHTML::_('form.token'); ?>
 </form>

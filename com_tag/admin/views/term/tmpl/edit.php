@@ -56,8 +56,8 @@ $editor =& JFactory::getEditor();
 
     <input type="hidden" name="controller" value="term"/>
     <input type="hidden" name="task" value="save">
-    <input type="hidden" name="id" value="<?php  echo  $term->id;?>">
-    <input type="hidden" name="cid[]" value="<?php  echo  $term->id;?>">
+    <input type="hidden" name="id" value="<?php  echo  $id;?>">
+    <input type="hidden" name="cid[]" value="<?php  echo  $id;?>">
     <input type="hidden" name="option" value="com_tag">
     <?php echo JHTML::_('form.token'); ?>
 </form>

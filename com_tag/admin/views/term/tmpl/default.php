@@ -92,8 +92,8 @@ $rows = $this->termList->list;
         </tbody>
     </table>
 
-    <input type="hidden" name="boxchecked" value="0"/> <input type="hidden"
-                                                              name="task" value=""> <input type="hidden"
-                                                                                           name="controller"
-                                                                                           value="term">  <?php echo JHTML::_('form.token'); ?>
+    <input type="hidden" name="boxchecked" value="0"/>
+    <input type="hidden" name="task" value="">
+    <input type="hidden" name="controller" value="term">
+    <?php echo JHTML::_('form.token'); ?>
     <input type="hidden" name="limitstart"></form>

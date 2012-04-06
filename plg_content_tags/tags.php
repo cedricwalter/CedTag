@@ -9,19 +9,22 @@
 defined('_JEXEC') or  die('Restricted access');
 jimport('joomla.event.plugin');
 
-require_once JPATH_SITE . DS . 'components' . DS . 'com_tag' . DS . 'helper' . DS . 'helper.php';
-require_once JPATH_SITE . DS . 'components' . DS . 'com_content' . DS . 'helpers' . DS . 'route.php';
+jimport('joomla.plugin.plugin');
+jimport('joomla.language.helper');
+
+require_once JPATH_SITE . '/components/com_tag/helper/helper.php';
+require_once JPATH_SITE . '/components/com_content/helpers/route.php';
+
 class plgContentTags extends JPlugin
 {
 
-
-    function plgContentTags(&$subject, $params)
+    public function __construct(& $subject, $config)
     {
-        parent::__construct($subject, $params);
+        parent::__construct($subject, $config);
+        $this->loadLanguage();
     }
 
-
-    function onPrepareContent(&$article, &$params)
+    public function onContentPrepare($context, &$article, &$params, $limitstart)
     {
 
         //$regex = "#{tag\s*(.*?)}(.*?){/tag}#s";
@@ -63,7 +66,7 @@ class plgContentTags extends JPlugin
         $SuppresseSingleTerms = JoomlaTagsHelper::param('SuppresseSingleTerms');
         $HitsNumber = JoomlaTagsHelper::param('HitsNumber');
         $document =& JFactory::getDocument();
-        $document->addStyleSheet(JURI::base() . 'components/com_tag/css/tagcloud.css');
+        $document->addStyleSheet(JURI::base() . 'media/com_tag/css/tagcloud.css');
         $havingTags = false;
         $links = '';
         $link = '';
@@ -99,9 +102,9 @@ class plgContentTags extends JPlugin
 
                 $term->name = JoomlaTagsHelper::ucwords($term->name);
                 if ($HitsNumber) {
-                    $links .= '<li><a href="' . $link . '" rel="tag" title="' . $term->name . ';Hits:' . $term->hits . '" >' . $term->name . '</a></li>';
+                    $links .= '<li><a href="' . $link . '" rel="tag" title="' . $term->name . ';Hits:' . $term->hits . '" >' . $term->name . '</a></li> ';
                 } else {
-                    $links .= '<li><a href="' . $link . '" rel="tag" title="' . $term->name . '" >' . $term->name . '</a></li>';
+                    $links .= '<li><a href="' . $link . '" rel="tag" title="' . $term->name . '" >' . $term->name . '</a></li> ';
                 }
                 $havingTags = true;
             }
@@ -147,6 +150,7 @@ class plgContentTags extends JPlugin
         $count = JoomlaTagsHelper::param('RelatedArticlesCountByTags', 10);
         $relatedArticlesTitle = JoomlaTagsHelper::param('RelatedArticlesTitleByTags', "Related Articles");
         //$max=max(intval($relatedArticlesCount),array_count_values($termIds));
+        $relatedArticlesCount = 0;
         $max = max(intval($relatedArticlesCount), count($termIds));
         $termIds = array_slice($termIds, 0, $max);
         $termIdsCondition = @implode(',', $termIds);
@@ -186,7 +190,7 @@ class plgContentTags extends JPlugin
         $aid = $user->get('aid', 0);
 
         $html = '<div class="relateditemsbytags"><h3>' . $relatedArticlesTitle . '</h3><ul class="relateditems">';
-        $link;
+        $link = "";
         foreach ($rows as $row)
         {
 
@@ -255,7 +259,7 @@ class plgContentTags extends JPlugin
         $url = JRoute::_($url);
         $icon_url = JURI::Base() . 'components/com_tag/images/logo.png';
 
-        $add_tag_txt;
+        $add_tag_txt = null;
         if ($havingTags) {
             $add_tag_txt = JText::_('EDIT TAGS');
         } else {
@@ -287,7 +291,7 @@ class plgContentTags extends JPlugin
                 $combined = array();
                 $combined[$id] = $tags;
 
-                require_once(JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_tag' . DS . 'models' . DS . 'tag.php');
+                require_once(JPATH_ADMINISTRATOR . DS . 'components/com_tag/models/tag.php');
                 $tmodel = new TagModelTag();
                 $tmodel->batchUpdate($combined);
             }

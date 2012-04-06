@@ -27,7 +27,7 @@ class TagViewCss extends JView
         JToolBarHelper::custom('restore', 'default', '', JText::_('RESTORE DEFAULT'), false);
         JToolBarHelper::spacer();
         JToolBarHelper::back(JText::_('CONTROL PANEL'), 'index.php?option=com_tag');
-        $tagCssFile = JPATH_COMPONENT_SITE . DS . 'css' . DS . 'tagcloud.css';
+        $tagCssFile = JPATH_SITE.'media/com_tag/css/tagcloud.css';
         $isCssWritable = is_writable($tagCssFile);
         $cssFileContent = file_get_contents($tagCssFile);
         $this->assign('isCssWritable', $isCssWritable);

@@ -23,7 +23,7 @@ class TagModelTerm extends JModel
 {
     function remove($ids)
     {
-        $where;
+        $where = "";
         if (count($ids) > 1) {
             $where = ' id in(' . implode(',', $ids) . ')';
         } else if (count($ids) == 1) {
@@ -32,9 +32,10 @@ class TagModelTerm extends JModel
             return false;
         }
         $query = 'delete from #__tag_term where ' . $where;
-        //echo($query);
-        $this->_db->setQuery($query);
-        return $this->_db->query();
+        JDatabase::getInstance();
+        $db = JFactory::getDbo();
+        $db->setQuery($query);
+        return $db->query();
     }
 
     function update($id, $name, $description, $weight)
@@ -44,8 +45,9 @@ class TagModelTerm extends JModel
             return false;
         }
         $updateQuery = 'update #__tag_term set name="' . $name . '", weight="' . $weight . '", description="' . $description . '" where id=' . $id;
-        $this->_db->setQuery($updateQuery);
-        return $this->_db->query();
+        $db = JFactory::getDbo();
+        $db->setQuery($updateQuery);
+        return $db->query();
     }
 
     function store($name, $description = NULL, $weight = 0)
@@ -55,8 +57,9 @@ class TagModelTerm extends JModel
             return false;
         }
         $query = "SELECT * FROM #__tag_term where binary name='" . $name . "'";
-        $this->_db->setQuery($query, 0, 1);
-        $tagInDB = $this->_db->loadObject();
+        $db = JFactory::getDbo();
+        $$db->setQuery($query, 0, 1);
+        $tagInDB = $db->loadObject();
         if (isset($tagInDB) & isset($tagInDB->id)) {
             $needUpdate = false;
             $updateQuery = 'update #__tag_term set ';
@@ -74,8 +77,8 @@ class TagModelTerm extends JModel
             }
             if ($needUpdate) {
                 $updateQuery .= ' where id=' . $tagInDB->id;
-                $this->_db->setQuery($updateQuery);
-                $this->_db->query();
+                $db->setQuery($updateQuery);
+                $db->query();
             }
             return $tagInDB->id;
         } else {
@@ -90,12 +93,12 @@ class TagModelTerm extends JModel
                 $valuePart .= "," . $weight;
             }
             $date =& JFactory::getDate();
-            $now = $date->toMySQL();
+            $now = JDate::toSql($date);
             $insertQuery .= ',created) ';
-            $valuePart .= ',' . $this->_db->Quote($now) . ')';
-            $this->_db->setQuery($insertQuery . $valuePart);
-            $this->_db->query();
-            return $this->_db->insertid();
+            $valuePart .= ',' . $db->Quote($now) . ')';
+            $db->setQuery($insertQuery . $valuePart);
+            $db->query();
+            return $db->insertid();
         }
     }
 
@@ -119,9 +122,10 @@ class TagModelTerm extends JModel
 
     function deleteContentTerms($cid)
     {
+        $db = JFactory::getDbo();
         $deleteQuery = 'delete from #__tag_term_content where cid=' . $cid;
-        $this->_db->setQuery($deleteQuery);
-        $this->_db->query();
+        $db->setQuery($deleteQuery);
+        $db->query();
     }
 
     function insertContentTerms($cid, $tids)
@@ -133,16 +137,18 @@ class TagModelTerm extends JModel
 
     function insertContentterm($tid, $cid)
     {
+        $db = JFactory::getDbo();
         $insertQuery = 'insert into #__tag_term_content (tid,cid) values(' . $tid . ',' . $cid . ')';
-        $this->_db->setQuery($insertQuery);
-        $this->_db->query();
+        $db->setQuery($insertQuery);
+        $db->query();
     }
 
     function termsForContent($cid)
     {
+        $db = JFactory::getDbo();
         $query = 'select t.id as tid,t.name from #__tag_term as t left join #__tag_term_content as c  on c.tid=t.id where c.cid=' . $cid . ' order by t.weight desc,t.name';
-        $this->_db->setQuery($query);
-        return $this->_db->loadResultArray();
+        $db->setQuery($query);
+        return $db->loadColumn();
     }
 
     function getTermList()
@@ -154,31 +160,37 @@ class TagModelTerm extends JModel
         if (!is_null($search)) {
             $where = " where name like'%" . $search . "%' ";
         }
+        $db = JFactory::getDbo();
         $query = "select count(*) as ct from #__tag_term " . $where;
-        $this->_db->setQuery($query);
-        $this->_db->query();
-        $total = $this->_db->loadResult();
-        $limitstart = JRequest::getVar('limitstart', 0, '', 'int');
+        $db->setQuery($query);
+        $db->query();
+        $total = $db->loadResult();
+
+        $jinput = JFactory::getApplication()->input;
+        $limitstart = $jinput->get('limitstart', 0, '', 'int');
         $params = JComponentHelper::getParams('com_tag');
         $limit = $params->get('tag_page_limit', 30);
 
         $query = 'select t.id,t.name,t.description,t.weight,t.created,t.hits,count(c.cid)as count from #__tag_term  as t  left join  #__tag_term_content as c  on c.tid=t.id ' . $where . ' group by(t.id) order by t.name';
-        $this->_db->setQuery($query, $limitstart, $limit);
+        $db->setQuery($query, $limitstart, $limit);
         jimport('joomla.html.pagination');
-        //$result;
-        $result->page = new JPagination($total, $limitstart, $limit);
-        $result->list = $this->_db->loadObjectList();
-        return $result;
+
+
+        $this->page = new JPagination($total, $limitstart, $limit);
+        $this->list = $db->loadObjectList();
+        return $this;
 
 
     }
 
     function getTerm()
     {
-        $id = JRequest::getVar('cid', array(0), '', 'array');
+        $db = JFactory::getDbo();
+        $jinput = JFactory::getApplication()->input;
+        $id = $jinput->get('cid', array(0), '', 'array');
         $query = 'select * from #__tag_term  where id=' . $id[0];
-        $this->_db->setQuery($query);
-        return $this->_db->loadObject();
+        $db->setQuery($query);
+        return $db->loadObject();
     }
 
 }

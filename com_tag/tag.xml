@@ -26,6 +26,12 @@
         <language tag="en-GB">language/en-GB.com_tag.ini</language>
         <language tag="zh-CN">language/zh-CN.com_tag.ini</language>
     </languages>
+
+    <media destination="com_tag">
+        <filename>site/css/tagcloud.css</filename>
+        <filename>site/css/tagcloud.default.css</filename>
+    </media>
+
     <files folder="site">
         <filename>controller.php</filename>
         <filename>index.html</filename>
@@ -34,7 +40,6 @@
         <folder>views</folder>
         <folder>models</folder>
         <folder>helper</folder>
-        <folder>css</folder>
         <folder>images</folder>
     </files>
     <administration>

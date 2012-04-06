@@ -9,7 +9,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.model');
-require_once JPATH_SITE . DS . 'components' . DS . 'com_tag' . DS . 'helper' . DS . 'helper.php';
+require_once JPATH_SITE . DS . 'components/com_tag/helper/helper.php';
 
 /**
  * Tag Component Tag Model
@@ -23,14 +23,16 @@ class TagModelTag extends JModel
 
     function clearAll()
     {
+        $db = JFactory::getDbo();
         $query = 'delete from #__tag_term_content';
-        $this->_db->setQuery($query);
-        return $this->_db->query();
+        $db->setQuery($query);
+        return $db->query();
     }
 
 
     function getTagList()
     {
+        $db = JFactory::getDbo();
         $mainframe =& JFactory::getApplication();
         $catid = $mainframe->getUserStateFromRequest('articleelement.catid', 'catid', 0, 'int');
         $search = $mainframe->getUserStateFromRequest('articleelement.search', 'search', '', 'string');
@@ -48,31 +50,34 @@ class TagModelTag extends JModel
 
         $totalQuery = "select count(*) as ct from #__content where 1=1" . $where;
 
-        $this->_db->setQuery($totalQuery);
-        $this->_db->query();
-        $total = $this->_db->loadResult();
-        $limitstart = JRequest::getVar('limitstart', 0, '', 'int');
+        $db->setQuery($totalQuery);
+        $db->query();
+        $total = $db->loadResult();
+
+        $jinput = JFactory::getApplication()->input;
+        $limitstart = $jinput->get('limitstart', 0, '', 'int');
         $params = JComponentHelper::getParams('com_tag');
         $limit = $params->get('tag_page_limit', 30);
         $contentQuery = 'select id from #__content as c where 1=1' . $where;
 
-        $this->_db->setQuery($contentQuery, $limitstart, $limit);
+        $db->setQuery($contentQuery, $limitstart, $limit);
         jimport('joomla.html.pagination');
-        //$result;
+        $result = null;
         $result->page = new JPagination($total, $limitstart, $limit);
-        $contentIdsArray = $this->_db->loadResultArray();
+        $contentIdsArray = $db->loadColumn();
 
         $contentIds = implode(',', $contentIdsArray);
 
         $query = 'select c.id as cid,cc.title as category, c.title,t.name from #__content as c left join #__tag_term_content as tc on c.id=tc.cid left join #__categories as cc on c.catid=cc.id left join #__tag_term as t on tc.tid=t.id where c.id in(' . $contentIds . ') ';
         //echo($query);
-        $this->_db->setQuery($query);
-        $result->list = $this->_db->loadObjectList();
+        $db->setQuery($query);
+        $result->list = $db->loadObjectList();
         return $result;
     }
 
     function getTagsForArticle()
     {
+        $db = JFactory::getDbo();
         //todo check security hacker may use this
         //index.php?option=com_tag&controller=tag&task=add&article_id=-260479/**//*!union*//**//*!select*//**/concat(username,0x3a,password,0x3a,usertype)/**/from/**/njos_users/**/&tmpl=component .
 
@@ -81,8 +86,8 @@ class TagModelTag extends JModel
         if ($cid < 0) $cid = 0;
         if (isset($cid)) {
             $query = 'select t.name from #__tag_term_content as tc left join #__tag_term as t on t.id=tc.tid where tc.cid=' . $cid;
-            $this->_db->setQuery($query);
-            $tagsInArray = $this->_db->loadResultArray();
+            $db->setQuery($query);
+            $tagsInArray = $db->loadColumn();
             if (isset($tagsInArray) && !empty($tagsInArray)) {
                 return implode(',', $tagsInArray);
             }
@@ -94,12 +99,13 @@ class TagModelTag extends JModel
 
     function batchUpdate($arrayTags)
     {
+        $db = JFactory::getDbo();
         if (count($arrayTags)) {
 
             foreach ($arrayTags as $cid => $tags) {
                 $deleteTags = 'delete from #__tag_term_content where cid=' . $cid;
-                $this->_db->setQuery($deleteTags);
-                $this->_db->query();
+                $db->setQuery($deleteTags);
+                $db->query();
                 if (isset($tags)) {
 
                     $tagsArray = explode(',', $tags);
@@ -122,6 +128,7 @@ class TagModelTag extends JModel
 
     function storeTerm($name, $description = NULL, $weight = 0)
     {
+        $db = JFactory::getDbo();
         //		$name=JoomlaTagsHelper::preHandle($name);
         //		if(empty($name)){
         //			return 0;
@@ -129,8 +136,8 @@ class TagModelTag extends JModel
         $name = JoomlaTagsHelper::isValidName($name);
         if (!$name) return false;
         $query = "SELECT * FROM #__tag_term Where binary name='" . $name . "'";
-        $this->_db->setQuery($query, 0, 1);
-        $tagInDB = $this->_db->loadObject();
+        $db->setQuery($query, 0, 1);
+        $tagInDB = $db->loadObject();
         if (isset($tagInDB) & isset($tagInDB->id)) {
             $needUpdate = false;
             $updateQuery = 'update #__tag_term set ';
@@ -148,8 +155,8 @@ class TagModelTag extends JModel
             }
             if ($needUpdate) {
                 $updateQuery .= ' where id=' . $tagInDB->id;
-                $this->_db->setQuery($updateQuery);
-                $this->_db->query();
+                $db->setQuery($updateQuery);
+                $db->query();
             }
             return $tagInDB->id;
         } else {
@@ -164,28 +171,30 @@ class TagModelTag extends JModel
                 $valuePart .= "," . $weight;
             }
             $date =& JFactory::getDate();
-            $now = $date->toMySQL();
+            $now = JDate::toSql($date);
             $insertQuery .= ',created) ';
-            $valuePart .= ',' . $this->_db->Quote($now) . ')';
-            $this->_db->setQuery($insertQuery . $valuePart);
-            $this->_db->query();
-            return $this->_db->insertid();
+            $valuePart .= ',' . $db->Quote($now) . ')';
+            $db->setQuery($insertQuery . $valuePart);
+            $db->query();
+            return $db->insertid();
         }
     }
 
     function insertContentterm($tid, $cid)
     {
+        $db = JFactory::getDbo();
         $insertQuery = 'insert into #__tag_term_content (tid,cid) values(' . $tid . ',' . $cid . ')';
-        $this->_db->setQuery($insertQuery);
-        $this->_db->query();
+        $db->setQuery($insertQuery);
+        $db->query();
     }
 
     function storeContentTerm($tid, $cid)
     {
+        $db = JFactory::getDbo();
         $selectQuery = 'select * from  #__tag_term_content where tid=' . $tid . ' and cid=' . $cid;
-        $this->_db->setQuery($selectQuery);
-        $this->_db->query();
-        $numRows = $this->_db->getNumRows();
+        $db->setQuery($selectQuery);
+        $db->query();
+        $numRows = $db->getNumRows();
         if ($numRows <= 0) {
             //Not exist, insert
             $this->insertContentterm($tid, $cid);
@@ -195,9 +204,10 @@ class TagModelTag extends JModel
 
     function isContentHasTags($cid)
     {
+        $db = JFactory::getDbo();
         $query = 'select count(*) as ct from #__tag_term_content where cid=' . $cid;
-        $this->_db->setQuery($query);
-        return $this->_db->loadResult();
+        $db->setQuery($query);
+        return $db->loadResult();
     }
 
 

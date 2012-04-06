@@ -43,6 +43,8 @@ class plgSystemTagSef extends JPlugin
             return true;
         }
         $uir = $_SERVER['REQUEST_URI'];
+        //$uir	= JURI::getInstance()->;
+
         if (strpos($uir, '/tag/index.php') !== false) {
             return true;
         }

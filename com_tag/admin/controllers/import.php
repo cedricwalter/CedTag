@@ -44,7 +44,9 @@ class TagControllerImport extends JController
     {
         $model = $this->getModel('import');
         $ok = false;
-        $source = JRequest::getVar('source', 'meta-keys');
+
+        $jinput = JFactory::getApplication()->input;
+        $source = $jinput->get('source', 'meta-keys');
         if ($source == 'meta-keys') {
             $ok = $model->importTagsFromMetaKeys();
         } else if ($source == 'jtags') {

@@ -16,6 +16,8 @@ require_once (JPATH_COMPONENT . DS . 'controllers' . DS . 'import.php');
 $document = & JFactory::getDocument();
 $document->addStyleSheet(JURI::root(true) . '/administrator/components/com_tag/css/tag.css');
 
+$jinput = JFactory::getApplication()->input;
+
 $controller = JRequest::getVar('controller');
 // Require specific controller if requested
 // Create the controller

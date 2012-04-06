@@ -54,10 +54,11 @@ class TagControllerTerm extends JController
      */
     function save()
     {
-        $id = JRequest::getVar('cid', 0, 'POST');
-        $name = JRequest::getVar('name', '', 'POST');
-        $description = JRequest::getVar('description', '', 'POST', 'string', JREQUEST_ALLOWHTML);
-        $weight = JRequest::getVar('weight', '', 'POST');
+        $jinput = JFactory::getApplication()->input;
+        $id = $jinput->get('cid', 0, 'POST');
+        $name = $jinput->get('name', '', 'POST');
+        $description = $jinput->get('description', '', 'POST', 'string', JREQUEST_ALLOWHTML);
+        $weight = $jinput->get('weight', '', 'POST');
         $model = $this->getModel('term');
         $isok = true;
         if (isset($id[0]) && $id[0]) {
@@ -82,7 +83,8 @@ class TagControllerTerm extends JController
 
     function remove()
     {
-        $ids = JRequest::getVar('cid', 0, 'POST');
+        $jinput = JFactory::getApplication()->input;
+        $ids = $jinput->get('cid', 0, 'POST');
         $model = $this->getModel('term');
         if (!$model->remove($ids)) {
             $msg = JText::_('TERM COULD NOT BE REMOVED PLEASE CHECK');
@@ -102,8 +104,8 @@ class TagControllerTerm extends JController
 
     function batchSave()
     {
-
-        $terms = JRequest::getVar('names', '', 'POST');
+        $jinput = JFactory::getApplication()->input;
+        $terms = $jinput->get('names', '', 'POST');
         $msg = null;
         $terms = trim($terms);
         if (isset($terms) && $terms) {
