@@ -47,7 +47,7 @@ class TagController extends JController
      */
     function display()
     {
-        $view = JRequest::getVar('view');
+        $view = JFactory::getApplication()->input->get('view', 'tag', 'string');
         //Set default view
         if (!isset($view)) {
             JFactory::getApplication()->input->set('view', 'tag');
@@ -80,11 +80,10 @@ class TagController extends JController
     function save()
     {
 
-        $id = JRequest::getVar('cid');
-        $tags = JRequest::getVar('tags');
+        $id = JFactory::getApplication()->input->get('cid', 0, 'int');
+        $tags = JFactory::getApplication()->input->get('tags', '', 'string');
         $combined = array();
         $combined[$id] = $tags;
-
 
         JModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tag/models');
         $model = $this->getModel('tag');
@@ -96,7 +95,7 @@ class TagController extends JController
         }
 
         // echo('<script> alert("'.$msg.'"); window.history.go(-1); </script>');
-        $refresh = JRequest::getVar('refresh');
+        $refresh = JFactory::getApplication()->input->get('refresh', '', 'string');
         $script = "<script>window.parent.document.getElementById('sbox-window').close();";
         if ($refresh) {
             $script .= "window.parent.location.reload();";

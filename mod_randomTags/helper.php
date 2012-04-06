@@ -18,7 +18,7 @@ class modRandomTagsHelper
         $mainframe =& JFactory::getApplication();
         $db =& JFactory::getDBO();
         $count = intval($params->get('count', 25));
-        $query = 'select id,name,1 as sequence from #__tag_term ORDER BY RAND()';
+        $query = 'select count(*) as ct,id,name,hits, t.created from #__tag_term_content as tc inner join #__tag_term as t on t.id=tc.tid  group by(tid) ORDER BY RAND()';
         $db->setQuery($query, 0, $count);
         $rows = $db->loadObjectList();
 
@@ -51,16 +51,21 @@ class modRandomTagsHelper
                     $min_tags = $remaining_tags / $bucket_count;
                 }
                 $row->class = 'tag' . $bucket_count;
+                $row->size = 65 + ($row->ct * 10);
                 $bucket_items++;
                 $tags_set++;
                 $last_count = $tag_count;
                 $row->name = JoomlaTagsHelper::ucwords($row->name);
 
             }
-            usort($rows, array('JoomlaTagsHelper', 'tag_alphasort'));
-        }
-        return $rows;
+            usort($rows, array('JoomlaTagsHelper', $params->get('sorting', 'sizeasort')));
+
+            if (intval($params->get('reverse', 1))) {
+                $rows = array_reverse($rows);
+            }
     }
+return $rows;
+}
 
 
 }

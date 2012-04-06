@@ -52,14 +52,19 @@ class plgContentTags extends JPlugin
             return true;
         }
 
-
         $lang = & JFactory::getLanguage();
         $lang->load('com_tag', JPATH_SITE);
 
         //select t.id as tid,t.name, count(tc.cid) as ct from jos_tag_term_content as c left join jos_tag_term as t on c.tid=t.id left join jos_tag_term_content tc on c.tid=tc.cid where c.cid=1 group by t.id,tc.cid ;
 
-        $query = 'select t.id,t.name,t.hits from #__tag_term as t left join #__tag_term_content as c  on c.tid=t.id where c.cid=' . $article->id . ' order by t.weight desc,t.name';
-        //echo($query);
+        $query = 'select tagterm.id,tagterm.name,tagterm.hits from jos_tag_term as tagterm
+                        left join jos_tag_term_content as tagtermcontent
+                        on tagtermcontent.tid=tagterm.id
+                        where tagtermcontent.cid=' . $article->id . '
+                        group by(tid)
+                        order by tagterm.weight
+                        desc,tagterm.name';
+
         $db =& JFactory::getDBO();
         $db->setQuery($query);
         $terms = $db->loadObjectList();
@@ -78,10 +83,14 @@ class plgContentTags extends JPlugin
         if (isset($terms) && !empty($terms)) {
             $haveValidTags = false;
             foreach ($terms as $term) {
+
+                $countQuery = 'select count(cid) as ct from #__tag_term_content where tid=' . $term->id;
+                $db->setQuery($countQuery);
+                $ct = $db->loadResult();
+
+
                 if ($showRelatedArticles || $SuppresseSingleTerms) {
-                    $countQuery = 'select count(cid) as ct from #__tag_term_content where tid=' . $term->id;
-                    $db->setQuery($countQuery);
-                    $ct = $db->loadResult();
+
 
                     if (@intval($ct) <= 1) {
                         if ($SuppresseSingleTerms) {
@@ -102,10 +111,11 @@ class plgContentTags extends JPlugin
                 $link = JRoute::_($link);
 
                 $term->name = JoomlaTagsHelper::ucwords($term->name);
+
                 if ($HitsNumber) {
-                    $links .= '<li><a href="' . $link . '" rel="tag" title="' . $term->name . ';Hits:' . $term->hits . '" >' . $term->name . '</a></li> ';
+                    $links .= '<li><a href="' . $link . '" rel="tag" title="'.$ct.' items tagged with ' . $term->name . ' | Hits:' . $term->hits . '" >' . $term->name . '</a></li> ';
                 } else {
-                    $links .= '<li><a href="' . $link . '" rel="tag" title="' . $term->name . '" >' . $term->name . '</a></li> ';
+                    $links .= '<li><a href="' . $link . '" rel="tag" title="'.$ct.' items tagged with ' . $term->name . '" >' . $term->name . '</a></li> ';
                 }
                 $havingTags = true;
             }

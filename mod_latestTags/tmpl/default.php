@@ -13,6 +13,9 @@ defined('_JEXEC') or die('Restricted access'); ?>
 <div class="tagCloud<?php echo $moduleclass_sfx; ?>">
 
     <?php    foreach ($list as $item) { ?> <a
-    href="<?php echo $item->link; ?>" rel="tag" class="<?php echo $item->class; ?>">
+    href="<?php echo $item->link; ?>" rel="tag"
+    style="font-size: <?php echo $item->size; ?>%;"
+    class="<?php echo $item->class; ?>"
+    title="<?php echo $item->ct; ?> items tagged with <?php echo $item->name; ?> | <?php echo $item->created; ?> | <?php echo $item->hits; ?> hits">
     <?php echo $item->name; ?></a> <?php }?>
 </div><?php } ?>

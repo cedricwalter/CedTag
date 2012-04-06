@@ -68,13 +68,19 @@ class modCustomTagsCloudHelper
                     $min_tags = $remaining_tags / $bucket_count;
                 }
                 $row->class = 'tag' . $bucket_count;
+                $row->size = 9 * $bucket_count;
+
                 $bucket_items++;
                 $tags_set++;
                 $last_count = $tag_count;
                 $row->name = JoomlaTagsHelper::ucwords($row->name);
 
             }
-            usort($rows, array('JoomlaTagsHelper', 'tag_alphasort'));
+            usort($rows, array('JoomlaTagsHelper', $params->get('sorting', 'sizeasort')));
+
+            if (intval($params->get('reverse', 1))) {
+                $rows = array_reverse($rows);
+            }
         }
         return $rows;
     }

@@ -59,6 +59,15 @@ class JoomlaTagsHelper
         return ($tag1->hits < $tag2->hits) ? -1 : 1;
     }
 
+    static function sizeasort($tag1, $tag2)
+    {
+        if ($tag1->size == $tag2->size) {
+            return 0;
+        }
+        return ($tag1->size < $tag2->size) ? -1 : 1;
+    }
+
+
     static function getComponentVersion()
     {
         static $version;

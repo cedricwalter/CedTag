@@ -19,7 +19,10 @@ class modMostReadTagsHelper
         $mainframe =& JFactory::getApplication();
         $db =& JFactory::getDBO();
         $count = intval($params->get('count', 25));
-        $query = 'select name,hits from #__tag_term ORDER BY hits DESC';
+        //$query = 'select name,hits from #__tag_term ORDER BY hits DESC';
+        $query = 'select count(*) as ct,id,name,hits, t.created from #__tag_term_content as tc inner join #__tag_term as t on t.id=tc.tid  group by(tid) ORDER BY hits DESC';
+
+
         $db->setQuery($query, 0, $count);
         $rows = $db->loadObjectList();
 
@@ -48,13 +51,23 @@ class modMostReadTagsHelper
                     $min_tags = $remaining_tags / $bucket_count;
                 }
                 $row->class = 'tag' . $bucket_count;
+
+                //linear scaling
+                $row->size = 65 + ($row->ct * 10);
+
+                //expo scaling
+                //$row->size = 9 * $bucket_count;
                 $bucket_items++;
                 $tags_set++;
                 $last_count = $tag_count;
                 $row->name = JoomlaTagsHelper::ucwords($row->name);
 
             }
-            usort($rows, array('JoomlaTagsHelper', 'tag_alphasort'));
+            usort($rows, array('JoomlaTagsHelper', $params->get('sorting', 'sizeasort')));
+
+            if (intval($params->get('reverse', 1))) {
+                $rows = array_reverse($rows);
+            }
         }
         return $rows;
     }

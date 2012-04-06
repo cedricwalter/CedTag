@@ -16,10 +16,12 @@ class modLatestTagsHelper
 {
     function getList(&$params)
     {
-        $mainframe =& JFactory::getApplication();
-        $db =& JFactory::getDBO();
+        //$mainframe =& JFactory::getApplication();
         $count = intval($params->get('count', 25));
-        $query = 'select name,created from #__tag_term ORDER BY created DESC';
+
+        //Get the latest tag by creation date
+        $query = 'select count(*) as ct,name,hits, t.created from #__tag_term_content as tc inner join #__tag_term as t on t.id=tc.tid  group by(tid) order by created desc';
+        $db =& JFactory::getDBO();
         $db->setQuery($query, 0, $count);
         $rows = $db->loadObjectList();
 
@@ -34,8 +36,11 @@ class modLatestTagsHelper
             $bucket_count = 1;
             $bucket_items = 0;
             $tags_set = 0;
+
+            // for all tags
             for ($index = 0; $index < $total_tags; $index++) {
                 $row =& $rows[$index];
+
                 //$row->link=JRoute::_('index.php?option=com_tag&task=tag&tag='.urlencode($row->name));
                 $row->link = JRoute::_('index.php?option=com_tag&task=tag&tag=' . JoomlaTagsHelper::urlTagname($row->name));
                 $last_count = 0;
@@ -48,13 +53,21 @@ class modLatestTagsHelper
                     $min_tags = $remaining_tags / $bucket_count;
                 }
                 $row->class = 'tag' . $bucket_count;
+                $row->size = 65 + ($row->ct * 10);
+                $row->created = $row->created;
+
                 $bucket_items++;
                 $tags_set++;
                 $last_count = $tag_count;
                 $row->name = JoomlaTagsHelper::ucwords($row->name);
 
             }
-            usort($rows, array('JoomlaTagsHelper', 'tag_alphasort'));
+
+            usort($rows, array('JoomlaTagsHelper', $params->get('sorting', 'sizeasort')));
+
+            if (intval($params->get('reverse', 1))) {
+                $rows = array_reverse($rows);
+            }
         }
 
 
