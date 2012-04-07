@@ -7,21 +7,27 @@
  * @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
  **/
 defined('_JEXEC') or die('Restricted access');
+
 ?>
 
-<div align="center">
-    <h1><?php if (isset($this->tags) && !empty($this->tags)) {
-        echo(JText::_('EDIT TAGS'));
-    } else {
-        echo(JText::_('ADD TAGS'));
-    }?></h1>
-</div>
 <form action="index.php" method="post" name="addTags" id="addTags">
-    <div align="center">
+    <div style="float: left;">
+        <h1><?php if (isset($this->tags) && !empty($this->tags)) {
+            echo(JText::_('EDIT TAGS'));
+        } else {
+            echo(JText::_('ADD TAGS'));
+        }?></h1>
+    </div>
+
+    <div style="clear: both;"></div>
+
+    <div style="float: left;">
         <textarea id="tags" name="tags" rows="5" cols="60"><?php echo($this->tags);?></textarea>
     </div>
 
-    <div align="center">
+    <div style="clear: both;"></div>
+
+    <div style="float: left;">
         <input type="submit" name="Submit" value="<?php echo JText::_('SAVE');?>" class="button"/>
         <input type="button" name="cancel" value="<?php echo JText::_('CANCEL'); ?>"
                onClick="document.getElementById('sbox-window').close();" class="button"/>

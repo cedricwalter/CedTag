@@ -25,5 +25,4 @@ class TagViewAllTags extends JView
     {
         parent::display($tpl);
     }
-
 }

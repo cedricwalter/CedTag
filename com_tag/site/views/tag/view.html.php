@@ -46,6 +46,7 @@ class TagViewTag extends JView
         $pagination = & $this->get('Pagination');
         $tagDescription =& $this->get('TagDescription');
         $isTermExist = $this->get('TermExist');
+
         if (!$isTermExist) {
             //$layout=JFactory::getApplication()->input->set("layout","warning");
             //JFactory::getApplication()->input->set('tagsWarning','REQUEST_TAG_NOT_EXIST_WARNING');
@@ -94,7 +95,7 @@ class TagViewTag extends JView
             $db =& JFactory::getDBO();
             $query = 'select t.name from #__tag_term_content as tc left join #__tag_term as t on t.id=tc.tid where tc.cid=' . $db->quote($cid);
             $db->setQuery($query);
-            $tagsInArray = $db->loadResultArray();
+            $tagsInArray = $db->loadColumn();
             if (isset($tagsInArray) && !empty($tagsInArray)) {
                 return implode(',', $tagsInArray);
             }

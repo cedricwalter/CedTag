@@ -210,4 +210,8 @@ class TagModelTag extends JModel
     }
 
 
+    function format() {
+
+    }
+
 }

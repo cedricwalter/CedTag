@@ -75,21 +75,18 @@ if (isset($rows) && !empty($rows)) {
     //done restore
     //usort($rows, array('JoomlaTagsHelper','tag_alphasort'));
 }
-
-//TODO remove table layout
 ?>
+<?php if (isset($orderedRows) && !empty($orderedRows)) { ?>
+<!-- Tags for Joomla by www.waltercedric.com -->
+<div class="tagCloud">
+    <?php foreach ($orderedRows as $order => $item) { ?>
 
-<table class="contentpaneopen" border="0" cellpadding="0"
-       cellspacing="0" width="100%">
-    <!-- Tags for Joomla by www.waltercedric.com -->
-    <tr>
-        <td><?php if (isset($orderedRows) && !empty($orderedRows)) { ?>
-            <div class="tagCloud"><?php    foreach ($orderedRows as $order => $item) { ?> <a
-                href="<?php echo $item->link; ?>" rel="tag"
-                class="<?php echo $item->class; ?>"> <?php echo $item->name; ?></a> <?php }?>
-
-            </div>
-            <?php }     ?></td>
-    </tr>
-</table>
+    <a href="<?php echo $item->link; ?>"
+       rel="tag"
+       class="<?php echo $item->class; ?>">
+        <?php echo $item->name; ?>
+    </a>
+    <?php }?>
+</div>
+<?php } ?>
 

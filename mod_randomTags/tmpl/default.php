@@ -21,4 +21,5 @@ defined('_JEXEC') or die('Restricted access'); ?>
         <?php echo $item->name; ?>
     </a>
     <?php }?>
-</div><?php } ?>
+</div>
+<?php } ?>
