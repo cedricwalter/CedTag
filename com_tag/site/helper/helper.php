@@ -74,9 +74,7 @@ class JoomlaTagsHelper
 
         if (!isset($version)) {
             $xml = JFactory::getXMLParser('Simple');
-
-            $xmlFile = JPATH_ADMINISTRATOR . '/components/com_tag/manifest.xml';
-
+            $xmlFile = JPATH_ADMINISTRATOR . '/components/com_tag/tag.xml';
             if (file_exists($xmlFile)) {
                 if ($xml->loadFile($xmlFile)) {
                     $root =& $xml->document;
@@ -85,7 +83,6 @@ class JoomlaTagsHelper
                 }
             }
         }
-
         return $version;
     }
 

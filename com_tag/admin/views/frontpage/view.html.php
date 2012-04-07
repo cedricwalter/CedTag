@@ -14,9 +14,7 @@ class TagViewFrontpage extends JView
 
     function display($tpl = null)
     {
-
         $this->defaultTpl($tpl);
-
     }
 
     function defaultTpl($tpl = null)

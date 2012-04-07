@@ -81,7 +81,7 @@ if (isset($rows) && !empty($rows)) {
 
 <table class="contentpaneopen" border="0" cellpadding="0"
        cellspacing="0" width="100%">
-    <!-- Tags for Joomla by www.walttercedric.com -->
+    <!-- Tags for Joomla by www.waltercedric.com -->
     <tr>
         <td><?php if (isset($orderedRows) && !empty($orderedRows)) { ?>
             <div class="tagCloud"><?php    foreach ($orderedRows as $order => $item) { ?> <a

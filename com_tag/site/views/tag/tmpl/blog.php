@@ -73,32 +73,45 @@ function readmore($item, $user)
 
                     <div>
                         <div class="contentpaneopen">
-
-                            <h2 class="contentheading"><a
-                                href="<?php echo $result->readmore_link; ?>"
-                                class="contentpagetitle"> <?php echo $this->escape($result->title);?>
-                            </a></h2>
+                            <h2 class="contentheading">
+                                <a href="<?php echo $result->readmore_link; ?>"
+                                   class="contentpagetitle"> <?php echo $this->escape($result->title);?>
+                                </a>
+                            </h2>
                         </div>
+
                         <?php if ($showMeta) { ?>
                         <div class="article-tools">
-                            <div class="article-meta"><span
-                                class="createdate"> <?php echo JHTML::_('date', $result->created, JText::_('DATE_FORMAT_LC1')); ?></span>
-			<span class="createby"> <?php JText::_('Written by');
-                $author = $result->created_by_alias ? $result->created_by_alias : $result->author;
-                echo(' ' . $author);
-                ?> </span></div>
+                            <div class="article-meta">
+                                    <span class="createdate">
+                                        <?php echo JHTML::_('date', $result->created, JText::_('DATE_FORMAT_LC1')); ?></span>
+                                    <span class="createby">
+                                        <?php JText::_('Written by');
+                                        $author = $result->created_by_alias ? $result->created_by_alias : $result->author;
+                                        echo(' ' . $author);
+                                        ?>
+                                    </span>
+                            </div>
                         </div>
                         <?php };?>
+
                         <div class="article-content"><?php echo $result->text; ?></div>
+
                         <?php if ($readmore) {
                         //read more
-                        ?> <a href="<?php echo $result->readmore_link; ?>"
-                              class="readon"> <?php if ($result->readmore_register) {
+                        ?>
+                        <a href="<?php echo $result->readmore_link; ?>"
+                           class="readon"> <?php if ($result->readmore_register) {
                             echo JText::_('Register to read more...');
                         } else {
                             echo JText::sprintf('Read more...');
-                        } ?></a> <?php }?> <span class="article_separator">&nbsp;</span></div>
-                    <?php }
+                        } ?>
+                        </a>
+                        <?php }?>
+                        <span class="article_separator">&nbsp;</span>
+                    </div>
+                    <?php
+                }
             } ?></td>
     </tr>
     <tr>
@@ -124,7 +137,7 @@ if ($this->tagDescription) {
 } else {
     $document->setDescription(JoomlaTagsHelper::truncate($tag));
 }
-$document->setTitle($tag . ' | ' . $config->getValue('sitename'));
+$document->setTitle("Items tagged with " . $tag . ' | ' . $config->getValue('sitename'));
 $document->setMetadata('keywords', $tag);
 $document->addStyleSheet(JURI::base() . 'media/com_tag/css/tagcloud.css');
 ?>

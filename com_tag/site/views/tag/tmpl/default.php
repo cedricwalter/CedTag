@@ -66,7 +66,7 @@ if ($this->tagDescription) {
 } else {
     $document->setDescription(JoomlaTagsHelper::truncate($tag));
 }
-$document->setTitle($tag . ' | ' . $config->getValue('sitename'));
+$document->setTitle($tag . ' | ' . $config->get('sitename'));
 $document->setMetadata('keywords', $tag);
 $document->addStyleSheet(JURI::base() . 'media/com_tag/css/tagcloud.css');
 ?>

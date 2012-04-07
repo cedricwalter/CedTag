@@ -124,7 +124,7 @@
         </field>
         <field name="@spacer" type="spacer" default="&lt;h1&gt;Parameters for Import&lt;/h1&gt;" label=""
                description=""/>
-        <field name="IgnoeNumericTags" type="list" default="0" label="Ignoe numeric tags"
+        <field name="IgnoeNumericTags" type="list" default="0" label="Ignore numeric tags"
                description="Ignoe numeric tags, this option only applies to tags importing.">
             <option value="1">Yes</option>
             <option value="0">No</option>

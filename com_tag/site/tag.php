@@ -6,6 +6,7 @@
  * @copyright (C) 2012 http://www.waltercedric.com 2010- http://www.joomlatags.org
  * @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
  **/
+
 // no direct access
 defined('_JEXEC') or die('Restricted access');
 
@@ -15,8 +16,7 @@ jimport( 'joomla.application.input' );
 // Create the controller
 $controller = JController::getInstance('Tag');
 
-//$task = JInput::get('task', '', 'STRING');
-$task = JRequest::getCmd('task');
+$task = JFactory::getApplication()->input->get('task', 'default', 'string');
 
 // Perform the Request task
 $controller->execute($task);

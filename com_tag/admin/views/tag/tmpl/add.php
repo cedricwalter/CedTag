@@ -27,7 +27,7 @@ defined('_JEXEC') or die('Restricted access');
         <tr>
             <td><input type="submit" value="<?php echo JText::_('SAVE');?>"/>
                 <input type="button" name="cancel" value="<?php echo JText::_('CANCEL'); ?>"
-                       onClick="window.parent.document.getElementById('sbox-window').close();"/>
+                       onClick="document.getElementById('sbox-window').close();"/>
 
             </td>
         </tr>

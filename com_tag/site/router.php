@@ -7,10 +7,7 @@
  * @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
  **/
 require_once JPATH_SITE . '/components/com_tag/helper/helper.php';
-/**
- * @param    array
- * @return    array
- */
+
 function TagBuildRoute(&$query)
 {
     $segments = array();
@@ -33,17 +30,10 @@ function TagBuildRoute(&$query)
     return $segments;
 }
 
-/**
- * @param    array
- * @return    array
- */
 function TagParseRoute($segments)
 {
-    //print_r($segments);
-
     $vars = array();
     $tag = array_shift($segments);
-    //$vars['tag'] = $tag;
     $vars['tag'] = JoomlaTagsHelper::urlTagname($tag);
     $vars['view'] = 'tag';
     return $vars;

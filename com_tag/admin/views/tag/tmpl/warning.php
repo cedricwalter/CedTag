@@ -12,7 +12,7 @@ $firstWarning = JRequest::getVar('FirstWarning', true);
 $warning = JRequest::getVar('tagsWarning', 'FIRST_SAVE_WARNING');
 if ($firstWarning) {
     $document =& JFactory::getDocument();
-    $document->addStyleSheet(JURI::base() . 'components/com_tag/css/tag.css');
+    $document->addStyleSheet(JURI::root() . '/media/com_tag/css/tag.css');
 
     ?>
 

@@ -11,7 +11,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.controller');
-jimport( 'joomla.application.input' );
+jimport('joomla.application.input');
 
 class TagController extends JController
 {
@@ -39,12 +39,6 @@ class TagController extends JController
         }
     }
 
-    /**
-     * Method to show the search view
-     *
-     * @access    public
-     * @since    1.5
-     */
     function display()
     {
         $view = JFactory::getApplication()->input->get('view', 'tag', 'string');
@@ -72,21 +66,18 @@ class TagController extends JController
     {
         JFactory::getApplication()->input->set('view', 'tag');
         JFactory::getApplication()->input->set('layout', 'add');
-        JFactory::getApplication()->input->set('tmpl', 'component');
-        $document = & JFactory::getDocument();
         parent::display();
     }
 
     function save()
     {
-
         $id = JFactory::getApplication()->input->get('cid', 0, 'int');
         $tags = JFactory::getApplication()->input->get('tags', '', 'string');
         $combined = array();
         $combined[$id] = $tags;
 
-        JModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tag/models');
-        $model = $this->getModel('tag');
+        JModel::addIncludePath(JPATH_SITE . '/administrator/components/com_tag/models', 'TagModel');
+        $model = JModel::getInstance('tag', 'TagModel', array('ignore_request' => true));
         $ok = $model->batchUpdate($combined);
 
         $message = JText::_('Tags successfully saved!');
@@ -94,7 +85,6 @@ class TagController extends JController
             $message = JText::_('Tags could not be Saved, please check!');
         }
 
-        // echo('<script> alert("'.$msg.'"); window.history.go(-1); </script>');
         $refresh = JFactory::getApplication()->input->get('refresh', '', 'string');
         $script = "<script>window.parent.document.getElementById('sbox-window').close();";
         if ($refresh) {

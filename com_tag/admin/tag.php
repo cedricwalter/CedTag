@@ -8,39 +8,30 @@
  **/
 defined('_JEXEC') or die('Restricted access');
 
+// Include dependencies
+jimport('joomla.application.component.controller');
+require_once (JPATH_COMPONENT . '/controller.php');
+require_once (JPATH_COMPONENT . '/controllers/tag.php');
+require_once (JPATH_COMPONENT . '/controllers/term.php');
+require_once (JPATH_COMPONENT . '/controllers/css.php');
+require_once (JPATH_COMPONENT . '/controllers/import.php');
 
-require_once (JPATH_COMPONENT . DS . 'controller.php');
-require_once (JPATH_COMPONENT . DS . 'controllers' . DS . 'tag.php');
-require_once (JPATH_COMPONENT . DS . 'controllers' . DS . 'term.php');
-require_once (JPATH_COMPONENT . DS . 'controllers' . DS . 'css.php');
-require_once (JPATH_COMPONENT . DS . 'controllers' . DS . 'import.php');
 $document = & JFactory::getDocument();
-$document->addStyleSheet(JURI::root(true) . '/administrator/components/com_tag/css/tag.css');
+$document->addStyleSheet(JURI::root() . '/media/com_tag/css/tag.css');
+
+$jinput = JFactory::getApplication()->input;
 
 $controller = JRequest::getVar('controller');
 // Require specific controller if requested
 // Create the controller
-$className = 'TagController' . $controller;
+$classname = 'TagController' . $controller;
 
-$controller = new $className();
+$controller = new $classname();
 
 // Perform the Request task
 $controller->execute(JRequest::getVar('task'));
 
 // Redirect if set by the controller
 $controller->redirect();
-
-/*
-// Include dependancies
-jimport('joomla.application.component.controller');
-
-$document = & JFactory::getDocument();
-$document->addStyleSheet(JURI::root(true) . '/administrator/components/com_tag/css/tag.css');
-
-$controller	= JController::getInstance('Tag');
-$task = JRequest::getCmd('task');
-$controller->execute($task);
-$controller->redirect();
-*/
 
 ?>

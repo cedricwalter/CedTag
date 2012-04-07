@@ -12,13 +12,13 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.view');
 jimport('joomla.application.pathway');
 jimport( 'joomla.application.input' );
-
+require_once JPATH_SITE . '/components/com_tag/helper/helper.php';
 
 class TagViewTag extends JView
 {
     function display($tpl = null)
     {
-        $layout = JInput::get('layout', 'default', 'STRING');
+        $layout = JFactory::getApplication()->input->get('layout', null, 'string');
         switch ($layout) {
             case 'add':
                 $this->add($tpl);
@@ -34,8 +34,8 @@ class TagViewTag extends JView
 
     function defaultTpl($tpl = null)
     {
-
-        $tag = JRequest::getString('tag', null);
+        $tag = JFactory::getApplication()->input->get('tag', null, 'string');
+        //$tag = JRequest::getString('tag', null);
         //$tag=URLDecode($tag);
         $tag = JoomlaTagsHelper::unUrlTagname($tag);
 
@@ -89,19 +89,18 @@ class TagViewTag extends JView
 
     function getTagsForArticle()
     {
-        $cid = JRequest::getString('article_id');
+        $cid = JFactory::getApplication()->input->get('article_id', null, 'int');
         if (isset($cid)) {
             $db =& JFactory::getDBO();
-            $query = 'select t.name from #__tag_term_content as tc left join #__tag_term as t on t.id=tc.tid where tc.cid=' . $cid;
+            $query = 'select t.name from #__tag_term_content as tc left join #__tag_term as t on t.id=tc.tid where tc.cid=' . $db->quote($cid);
             $db->setQuery($query);
             $tagsInArray = $db->loadResultArray();
             if (isset($tagsInArray) && !empty($tagsInArray)) {
                 return implode(',', $tagsInArray);
             }
-            return '';
-        } else {
-            return '';
         }
+
+        return '';
     }
 
 

@@ -8,12 +8,12 @@
  * @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
  **/
 defined('_JEXEC') or die('Restricted access');
+
 $firstWarning = JRequest::getVar('FirstWarning', true);
 $warning = JRequest::getVar('tagsWarning', 'FIRST_SAVE_WARNING');
 if ($firstWarning) {
     $document =& JFactory::getDocument();
     $document->addStyleSheet(JURI::base() . 'media/com_tag/css/tagcloud.css');
-
     ?>
 
 <div class="warning">
