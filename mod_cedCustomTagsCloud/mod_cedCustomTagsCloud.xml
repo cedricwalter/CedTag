@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension
+        type="module"
+        version="2.5"
+        client="site"
+        method="upgrade">
+    <name>Ced Custom Tags Cloud</name>
+    <author>Cedric Walter</author>
+    <creationDate>05 April 2012</creationDate>
+    <copyright>Copyright (C)2009 joomlatags.org (C)2012 waltercedric.com All rights
+        reserved.
+    </copyright>
+    <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+    <authorEmail>cedric.walter@gmail.com - joomlatags@gmail.com</authorEmail>
+    <authorUrl>www.waltercedric.org - www.joomlatags.org</authorUrl>
+    <version>2.5</version>
+    <description>CedCustomTags module show tags just as you wish.</description>
+    <files>
+        <filename module="mod_cedCustomTagsCloud">mod_cedCustomTagsCloud.php</filename>
+        <filename>helper.php</filename>
+        <filename>index.html</filename>
+        <filename>tmpl/default.php</filename>
+        <filename>tmpl/index.html</filename>
+    </files>
+    <config>
+        <fields name="params">
+            <fieldset name="basic">
+                <field name="tagsForSelection" type="sql"
+                       query="select id,concat(id,'  ',name) as name from #__tag_term;" key_field="id"
+                       value_field="name" label="Tags Look Up"
+                       description="Look up tags id, and input them into Custom Tags Ids" rows="8"
+                       cols="40"/>
+                <field name="tagIds" type="text" default="" label="Custom Tags Ids"
+                       description="Put the important tags in front, seperator with comma ','."
+                       size="60"/>
+
+                <field
+                        name="sorting"
+                        type="list"
+                        default="1"
+                        label="Tag Sorting"
+                        description="COM_MODULES_FIELD_CACHING_DESC">
+                    <option value="tag_alphasort">Aphabetical</option>
+                    <option value="sizeasort">By size</option>
+                </field>
+
+                <field
+                        name="reverse"
+                        type="radio"
+                        default="0"
+                        label="Reverse"
+                        description="Reverse Result">
+                    <option value="0">JNO</option>
+                    <option value="1">JYES</option>
+                </field>
+            </fieldset>
+
+            <fieldset
+                    name="advanced">
+                <field
+                        name="layout"
+                        type="modulelayout"
+                        label="Style"
+                        description="JFIELD_ALT_MODULE_LAYOUT_DESC"/>
+                <field
+                        name="moduleclass_sfx"
+                        type="text"
+                        label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+                        description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
+                <field
+                        name="cache"
+                        type="list"
+                        default="1"
+                        label="COM_MODULES_FIELD_CACHING_LABEL"
+                        description="COM_MODULES_FIELD_CACHING_DESC">
+                    <option
+                            value="1">JGLOBAL_USE_GLOBAL
+                    </option>
+                    <option
+                            value="0">COM_MODULES_FIELD_VALUE_NOCACHING
+                    </option>
+                </field>
+                <field
+                        name="cache_time"
+                        type="text"
+                        default="900"
+                        label="COM_MODULES_FIELD_CACHE_TIME_LABEL"
+                        description="COM_MODULES_FIELD_CACHE_TIME_DESC"/>
+                <field
+                        name="cachemode"
+                        type="hidden"
+                        default="static">
+                    <option
+                            value="static"></option>
+                </field>
+            </fieldset>
+        </fields>
+    </config>
+
+</extension>
