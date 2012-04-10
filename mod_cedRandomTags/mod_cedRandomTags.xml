@@ -5,6 +5,7 @@
         client="site"
         method="upgrade">
     <name>Ced Random Tags</name>
+    <element>mod_cedRandomTags</element>
     <author>waltercedric.com</author>
     <creationDate>March 2009</creationDate>
     <copyright>Copyright (C)2012 waltercedric.com. Copyright (C)2009 joomlatags.org. All rights reserved.</copyright>
@@ -20,6 +21,14 @@
         <filename>tmpl/default.php</filename>
         <filename>tmpl/index.html</filename>
     </files>
+
+    <!-- Extension Update Specification -->
+    <!-- Note: No spaces or linebreaks allowed between the server tags -->
+    <updateservers>
+        <server type="extension" priority="1" name="Extension Update Site">http://updates.waltercedric.com/update/modules/mod_cedRandomTags/extension.xml</server>
+        <server type="collection" priority="2" name="Collection Update Site">http://updates.waltercedric.com/update.xml</server>
+    </updateservers>
+
     <config>
         <fields name="params">
             <fieldset name="basic">

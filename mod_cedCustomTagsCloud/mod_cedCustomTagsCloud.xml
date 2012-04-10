@@ -5,6 +5,7 @@
         client="site"
         method="upgrade">
     <name>Ced Custom Tags Cloud</name>
+    <element>mod_cedCustomTagsCloud</element>
     <author>Cedric Walter</author>
     <creationDate>05 April 2012</creationDate>
     <copyright>Copyright (C)2009 joomlatags.org (C)2012 waltercedric.com All rights
@@ -13,7 +14,7 @@
     <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
     <authorEmail>cedric.walter@gmail.com - joomlatags@gmail.com</authorEmail>
     <authorUrl>www.waltercedric.org - www.joomlatags.org</authorUrl>
-    <version>2.5</version>
+    <version>2.4.9</version>
     <description>CedCustomTags module show tags just as you wish.</description>
     <files>
         <filename module="mod_cedCustomTagsCloud">mod_cedCustomTagsCloud.php</filename>
@@ -22,6 +23,14 @@
         <filename>tmpl/default.php</filename>
         <filename>tmpl/index.html</filename>
     </files>
+
+    <!-- Extension Update Specification -->
+    <!-- Note: No spaces or linebreaks allowed between the server tags -->
+    <updateservers>
+        <server type="extension" priority="1" name="Extension Update Site">http://updates.waltercedric.com/update/modules/mod_cedCustomTagsCloud/extension.xml</server>
+        <server type="collection" priority="2" name="Collection Update Site">http://updates.waltercedric.com/update.xml</server>
+    </updateservers>
+
     <config>
         <fields name="params">
             <fieldset name="basic">
