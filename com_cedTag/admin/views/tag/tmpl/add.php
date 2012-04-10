@@ -24,7 +24,8 @@ defined('_JEXEC') or die('Restricted access');
             <td><textarea id="tags" name="tags" rows="5" cols="60"><?php echo($this->tags);?></textarea></td>
         </tr>
         <tr>
-            <td><input type="submit" value="<?php echo JText::_('SAVE');?>"/>
+            <td>
+                <input type="submit" value="<?php echo JText::_('SAVE');?>"/>
                 <input type="button" name="cancel" value="<?php echo JText::_('CANCEL'); ?>"
                        onClick="document.getElementById('sbox-window').close();"/>
 

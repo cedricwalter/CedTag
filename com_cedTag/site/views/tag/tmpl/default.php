@@ -7,7 +7,8 @@
  **/
 defined('_JEXEC') or die('Restricted access');
 
-$tag = JRequest::getVar('tag', null);
+$tag = JFactory::getApplication()->input->get('tag', null, 'string');
+
 $tagKeyword = JText::_('TAG:') . $tag;
 
 $params = JComponentHelper::getParams('com_cedtag');
@@ -36,20 +37,21 @@ $config =& JFactory::getConfig();
             ?>
             <tr class="sectiontableentry<?php echo($odd + 1);?>">
                 <td>
-                    <div><span class="small"><?php echo (++$count) . '. ';?></span> <a
-                        href="<?php echo JRoute::_(ContentHelperRoute::getArticleRoute($result->slug, $result->catslug)); ?>">
-                        <?php echo $this->escape($result->title);?> </a></div>
+                    <div>
+                        <span class="small">
+                            <?php echo (++$count) . '. ';?>
+                        </span>
+                        <a href="<?php echo JRoute::_(ContentHelperRoute::getArticleRoute($result->slug, $result->catslug)); ?>">
+                            <?php echo $this->escape($result->title);?>
+                        </a>
+                    </div>
                 </td>
             </tr>
             <?php
             $odd = 1 - $odd;
         }
     } ?>
-    <tr>
-        <td>
-            <div class="pagination"><?php echo $this->pagination->getPagesLinks(); ?></div>
-        </td>
-    </tr>
+
     <?php
     if (isset($bottomAds) && $bottomAds) {
         echo('<tr><td>' . $bottomAds . '</td></tr>');
@@ -57,6 +59,14 @@ $config =& JFactory::getConfig();
     ?>
     <!-- Tags for Joomla by www.waltercedric.com -->
 </table>
+<div class="pagination">
+    <p class="counter">
+        <?php echo $this->pagination->getPagesCounter(); ?>
+    </p>
+    <?php echo $this->pagination->getPagesLinks(); ?>
+</div>
+
+
 
 <?php
 $document =& JFactory::getDocument();

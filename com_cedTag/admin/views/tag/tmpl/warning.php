@@ -7,24 +7,25 @@
  **/
 
 defined('_JEXEC') or die('Restricted access');
-$firstWarning = JRequest::getVar('FirstWarning', true);
-$warning = JRequest::getVar('tagsWarning', 'FIRST_SAVE_WARNING');
+
+$firstWarning = JFactory::getApplication()->input->get('FirstWarning', true, 'boolean');
+$warning = JFactory::getApplication()->input->get('tagsWarning', 'FIRST_SAVE_WARNING', 'string');
+
 if ($firstWarning) {
     $document =& JFactory::getDocument();
     $document->addStyleSheet(JURI::root() . '/media/com_cedtag/css/tag.css');
-
     ?>
 
 <div class="warning">
-    <h1><?php echo JText::_('WARNING');?></h1>
-
+    <h1>
+        <?php echo JText::_('WARNING');?>
+    </h1>
     <h2>
         <?php echo JText::_('FIRST_SAVE_WARNING');?>
     </h2>
 </div>
 <?php
 }
-;
 JFactory::getApplication()->input->set('FirstWarning', false);
 ?>
 

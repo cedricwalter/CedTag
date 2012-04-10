@@ -10,7 +10,7 @@ defined('_JEXEC') or die();
 
 jimport('joomla.application.input');
 
-class CedTagControllerCedTag extends JController
+class CedTagControllerTag extends JController
 {
 
     function execute($task)
@@ -77,11 +77,13 @@ class CedTagControllerCedTag extends JController
 
     function save()
     {
-        $id = JRequest::getVar('cid');
-        $tags = JRequest::getVar('tags');
+        $id = JFactory::getApplication()->input->get('cid');
+        $tags = JFactory::getApplication()->input->get('tags');
+        //$id = JRequest::getVar('cid');
+        //$tags = JRequest::getVar('tags');
+
         $combined = array();
         $combined[$id] = $tags;
-
 
         $model = $this->getModel('tag');
         $msg = "";
@@ -91,7 +93,6 @@ class CedTagControllerCedTag extends JController
         } else {
             $msg = JText::_('TAGS SUCCESSFULLY SAVED');
         }
-
         // echo('<script> alert("'.$msg.'"); window.history.go(-1); </script>');
 
         echo "<script>window.parent.document.getElementById('sbox-window').close()</script>";
@@ -123,8 +124,6 @@ class CedTagControllerCedTag extends JController
         }
         return $result;
     }
-
-
 }
 
 ?>

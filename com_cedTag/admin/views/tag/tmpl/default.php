@@ -39,9 +39,12 @@ $javascript = 'onchange="document.adminForm.submit();"';
         //alert(tag.style);
     }
 </script>
-<form action="index.php?controller=tag&option=com_cedtag" method="post"
-      name="adminForm" id="adminForm" class="adminForm" autocomplete="off">
-
+<form action="index.php?controller=tag&option=com_cedtag"
+      method="post"
+      name="adminForm"
+      id="adminForm"
+      class="adminForm"
+      autocomplete="off">
 
     <table>
         <tr>
@@ -64,14 +67,9 @@ $javascript = 'onchange="document.adminForm.submit();"';
             <th class="title" width="20%"><?php echo JText::_('ARTICLE');?></th>
             <th class="title" width="10%"><?php echo JText::_('CATEGORY');?></th>
             <th><?php echo JText::_('TAGS');?></th>
-
         </tr>
         </thead>
-        <tfoot>
-        <tr>
-            <td colspan="13"><?php echo $this->tagList->page->getPagesLinks(); ?></td>
-        </tr>
-        </tfoot>
+
         <tbody>
         <?php
         $k = 0;
@@ -107,13 +105,17 @@ $javascript = 'onchange="document.adminForm.submit();"';
                 <td><?php echo $row->category; ?></td>
 
                 <!-- TODO cedric size 400px css driven -->
-                <td class="order"><span><input type="hidden" name="id[]"
-                                               value="<?php echo $row->id;?>"/><input name="tag[]"
-                                                                                      value="<?php echo $row->tag; ?>"
-                                                                                      id="<?php echo 'tag_' . $row->id;?>"
-                                                                                      type="text" size="100"
-                                                                                      style="width: 400px;"
-                                                                                      onclick="autofill(<?php echo 'tag_' . $row->id;?>)"/></span>
+                <td class="order">
+                    <span>
+                        <input type="hidden" name="id[]"
+                               value="<?php echo $row->id;?>"/>
+                        <input name="tag[]"
+                               value="<?php echo $row->tag; ?>"
+                               id="<?php echo 'tag_' . $row->id;?>"
+                               type="text" size="100"
+                               style="width: 400px;"
+                               onclick="autofill(<?php echo 'tag_' . $row->id;?>)"/>
+                    </span>
                 </td>
                 <?php
             }
@@ -132,11 +134,26 @@ $javascript = 'onchange="document.adminForm.submit();"';
 
         ?>
         </tbody>
-    </table>
-    <input type="hidden" name="currenttag" id="currenttag"/><input
-    type="hidden" name="boxchecked" value="0"/> <input type="hidden"
-                                                       name="task" value=""> <input type="hidden" name="controller"
-                                                                                    value="tag">
 
+        <tfoot>
+        <tr>
+            <td colspan="13">
+                <p class="counter">
+                            <?php echo $this->pagination->getPagesCounter(); ?>
+                        </p>
+                <?php echo $this->pagination->getListFooter(); ?>
+            </td>
+        </tr>
+        </tfoot>
+
+    </table>
+
+
+
+    <input type="hidden" name="currenttag" id="currenttag"/>
+    <input type="hidden" name="boxchecked" value="0"/>
+    <input type="hidden" name="task" value="">
+    <input type="hidden" name="controller" value="tag">
     <?php echo JHTML::_('form.token'); ?>
-    <input type="hidden" name="limitstart"/></form>
+    <input type="hidden" name="limitstart"/>
+</form>

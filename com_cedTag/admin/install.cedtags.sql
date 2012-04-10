@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS `#__cedtag_term` (
   `id` int(10) unsigned NOT NULL auto_increment,  
   `name` varchar(255) NOT NULL default '',
+  `alias` varchar(255) NOT NULL default '',
   `description` text,
   `weight` tinyint(4) NOT NULL default '0',
   `hits` int(10) NOT NULL default '0',

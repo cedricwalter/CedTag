@@ -20,15 +20,16 @@ $document->addStyleSheet(JURI::root() . '/media/com_cedtag/css/tag.css');
 
 $jinput = JFactory::getApplication()->input;
 
-$controller = JRequest::getVar('controller');
-// Require specific controller if requested
+$controller = JFactory::getApplication()->input->get('controller');
+$task = JFactory::getApplication()->input->get('task');
+
 // Create the controller
 $classname = 'CedTagController' . $controller;
 
 $controller = new $classname();
 
 // Perform the Request task
-$controller->execute(JRequest::getVar('task'));
+$controller->execute($task);
 
 // Redirect if set by the controller
 $controller->redirect();

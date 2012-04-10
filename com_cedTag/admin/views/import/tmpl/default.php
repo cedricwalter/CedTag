@@ -19,7 +19,6 @@ defined('_JEXEC') or die('Restricted access');
                 <option value="jtags">JTags</option>
                 <option value="joomlatags">Joomla tags</option>
             </select></td>
-
         </tr>
         <tr>
             <td>&nbsp;</td>
@@ -28,9 +27,8 @@ defined('_JEXEC') or die('Restricted access');
         </tr>
 
     </table>
-    <input type="hidden" name="task" value="import"> <input
-    type="hidden" name="controller" value="import">
-
+    <input type="hidden" name="task" value="import">
+    <input type="hidden" name="controller" value="import">
     <?php echo JHTML::_('form.token'); ?>
 
 </form>

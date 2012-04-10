@@ -16,10 +16,9 @@ class CedTagController extends JController
 {
     protected $default_view = 'frontpage';
 
-
     function display()
     {
-        $view = JRequest::getVar('view');
+        $view = JFactory::getApplication()->input->get('view');
         if (!isset($view)) {
             JFactory::getApplication()->input->set('view', 'frontpage');
         }

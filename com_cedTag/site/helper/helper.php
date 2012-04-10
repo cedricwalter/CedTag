@@ -165,9 +165,10 @@ class CedTagsHelper
     static function  isValidName($name)
     {
         $valid = true;
-
         $name = CedTagsHelper::preHandle($name);
-        if (empty($name)) $valid = false;
+        if (empty($name)) {
+            $valid = false;
+        }
 
         if ($valid) {
             return $name;

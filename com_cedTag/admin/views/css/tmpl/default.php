@@ -41,9 +41,7 @@ defined('_JEXEC') or die('Restricted access');
         </tr>
 
     </table>
-
-    <input type="hidden" name="task" value="save"> <input type="hidden"
-                                                          name="controller"
-                                                          value="css"> <?php echo JHTML::_('form.token'); ?>
-
+    <input type="hidden" name="task" value="save">
+    <input type="hidden" name="controller" value="css">
+    <?php echo JHTML::_('form.token'); ?>
 </form>

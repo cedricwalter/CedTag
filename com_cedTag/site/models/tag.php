@@ -69,8 +69,7 @@ class CedTagModelTag extends JModel
     {
         $query = $this->_buildQuery();
         if ($this->_termExist) {
-            $limitstart = JRequest::getVar('limitstart', 0, '', 'int');
-
+            $limitstart = JFactory::getApplication()->input->get('limitstart', 0 , 'int');
             $this->_data = $this->_getList($query, $limitstart, $this->_defaultLimit);
         }
     }
@@ -80,11 +79,11 @@ class CedTagModelTag extends JModel
         return $this->_total;
     }
 
-    function getPagination()
+    public function getPagination()
     {
         // Lets load the content if it doesn't already exist
         if (empty($this->_pagination)) {
-            $limitstart = JRequest::getVar('limitstart', 0, '', 'int');
+            $limitstart = JFactory::getApplication()->input->get('limitstart', 0 , 'int');
             jimport('joomla.html.pagination');
             $this->_pagination = new JPagination($this->getTotal(), $limitstart, $this->_defaultLimit);
         }

@@ -13,9 +13,12 @@ jimport( 'joomla.application.input' );
 
 class CedTagViewTag extends JView
 {
+    var $pagination = null;
+
 
     function display($tpl = null)
     {
+        $this->pagination	= $this->get('Pagination');
         $layout = JInput::get('layout', "default", 'STRING');
         switch ($layout) {
             case 'add':
@@ -27,8 +30,6 @@ class CedTagViewTag extends JView
             default:
                 $this->defaultTpl($tpl);
         }
-
-
     }
 
     function defaultTpl($tpl = null)
@@ -39,13 +40,17 @@ class CedTagViewTag extends JView
         JToolBarHelper::custom('clearall', 'delete', '', JText::_('CLEAR ALL'), false);
         JToolBarHelper::spacer();
         JToolBarHelper::back(JText::_('CONTROL PANEL'), 'index.php?option=com_cedtag');
+
         //get params
         $params = JComponentHelper::getParams('com_cedtag');
         $this->assignRef('params', $params);
+
         //get data
         $tagList =& $this->get('tagList');
-
         $this->assignRef('tagList', $tagList);
+
+        $this->pagination = $this->get('Pagination');
+
 
         parent::display($tpl);
     }

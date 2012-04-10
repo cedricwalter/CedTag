@@ -35,7 +35,6 @@ class CedTagControllerCss extends JController
         parent::display();
     }
 
-
     function save()
     {
         $updatedCss = JFactory::getApplication()->input->get('csscontent', '', 'STRING');
@@ -58,7 +57,5 @@ class CedTagControllerCss extends JController
         JFactory::getApplication()->input->set('view', 'css');
         parent::display();
     }
-
 }
-
 ?>

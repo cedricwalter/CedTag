@@ -14,6 +14,17 @@ jimport('joomla.filesystem.file');
 
 class CedTagModelTag extends JModel
 {
+    var $_pagination = null;
+    var $_total = null;
+    var $_defaultLimit = 10;
+
+    function __construct()
+    {
+        parent::__construct();
+
+        $this->_defaultLimit = CedTagsHelper::param('page_limit', 10);
+        //$this->_loadData();
+    }
 
     function clearAll()
     {
@@ -46,16 +57,20 @@ class CedTagModelTag extends JModel
         $db->query();
         $total = $db->loadResult();
 
-        $jinput = JFactory::getApplication()->input;
-        $limitstart = $jinput->get('limitstart', 0, '', 'int');
+        $limitstart = JFactory::getApplication()->input->get('limitstart', 0, '', 'int');
         $params = JComponentHelper::getParams('com_cedtag');
-        $limit = $params->get('tag_page_limit', 30);
+        $defaultLimit = $params->get('tag_page_limit', 30);
         $contentQuery = 'select id from #__content as c where 1=1' . $where;
 
-        $db->setQuery($contentQuery, $limitstart, $limit);
+        $db->setQuery($contentQuery, $limitstart, $defaultLimit);
+
         jimport('joomla.html.pagination');
         $result = null;
-        $result->page = new JPagination($total, $limitstart, $limit);
+
+        $this->_total = $total;
+        //pagination = new JPagination($total, $limitstart, $limit);
+
+
         $contentIdsArray = $db->loadColumn();
 
         $contentIds = implode(',', $contentIdsArray);
@@ -210,5 +225,22 @@ class CedTagModelTag extends JModel
 
     function format()
     {
+    }
+
+    function getTotal()
+    {
+        return $this->_total;
+    }
+
+    public function getPagination()
+    {
+        // Lets load the content if it doesn't already exist
+        if (empty($this->_pagination)) {
+            $limitstart = JRequest::getVar('limitstart', 0, '', 'int');
+            jimport('joomla.html.pagination');
+            $this->_pagination = new JPagination($this->getTotal(), $limitstart, $this->_defaultLimit);
+        }
+
+        return $this->_pagination;
     }
 }

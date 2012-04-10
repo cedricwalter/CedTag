@@ -10,7 +10,6 @@ jimport('joomla.application.component.view');
 
 class CedTagViewFrontpage extends JView
 {
-
     function display($tpl = null)
     {
         $this->defaultTpl($tpl);
@@ -21,6 +20,4 @@ class CedTagViewFrontpage extends JView
         JToolBarHelper::title(JText::_('JOOMLA TAGS'), 'tag.png');
         parent::display($tpl);
     }
-
-
 }

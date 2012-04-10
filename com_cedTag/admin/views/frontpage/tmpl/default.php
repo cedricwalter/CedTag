@@ -17,7 +17,7 @@ require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
 <div class="tagpanel">
 
     <div style="float: left;">
-        <div class="icon"><a href="index.php?option=com_cedtag&controller=cedtag"
+        <div class="icon"><a href="index.php?option=com_cedtag&controller=tag"
                              title="<?php echo JText::_('TAG　MANAGER');?>"> <img
             src="<? echo JURI::root() ?>/media/com_cedtag/images/tag.png"
             alt="<?php echo JText::_('TAG　MANAGER');?>"/> <span><?php echo JText::_('TAG　MANAGER');?></span></a>
