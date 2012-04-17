@@ -12,7 +12,7 @@ defined('_JEXEC') or die('Restricted access');
 <form action="<?php echo JRoute::_('index.php'); ?>" method="post" name="adminForm" id="adminForm">
     <div class="width-60 fltlft">
         <fieldset class="adminform">
-            <legend><?php echo JText::_('Batch add terms, comma seaparated');?></legend>
+            <legend><?php echo JText::_('Batch add terms, comma separated');?></legend>
             <ul class="adminformlist">
                 <li>
                     <textarea id="names" name="names" rows="5" cols="60"></textarea>

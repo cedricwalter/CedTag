@@ -49,11 +49,11 @@ class CedTagModelTerm extends JModel
             return false;
         }
         $db = JFactory::getDbo();
-        $query = "SELECT * FROM #__cedtag_term where binary name=" .$db->quote($name).";";
-        $db->setQuery($query, 0, 1);
+        $query = "SELECT id as id FROM #__cedtag_term where binary name=" .$db->quote($name).";";
+        $db->setQuery($query);
+        $tagAlreadyExisting = $db->loadObject();
 
-        $tagInDB = $db->loadObject();
-        if (isset($tagInDB) & isset($tagInDB->id)) {
+        if (isset($tagAlreadyExisting) & isset($tagAlreadyExisting->id)) {
             $needUpdate = false;
             $updateQuery = 'update #__cedtag_term set ';
             if (isset($description) && !empty($description)) {
@@ -69,11 +69,11 @@ class CedTagModelTerm extends JModel
                 }
             }
             if ($needUpdate) {
-                $updateQuery .= ' where id=' . $tagInDB->id;
+                $updateQuery .= ' where id=' . $tagAlreadyExisting->id;
                 $db->setQuery($updateQuery);
                 $db->query();
             }
-            return $tagInDB->id;
+            return $tagAlreadyExisting->id;
         } else {
             $insertQuery = "insert into #__cedtag_term (name";
             $valuePart = " values('" . $name . "'";
