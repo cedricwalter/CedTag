@@ -8,8 +8,7 @@
 defined('_JEXEC') or die('Restricted access');
 ?>
 
-<form action="index.php?controller=import&option=com_cedtag" method="post"
-      name="adminForm" id="adminForm" class="adminForm">
+<form action="<?php echo JRoute::_('index.php?controller=import&option=com_cedtag'); ?>" method="post" name="adminForm" id="adminForm" autocomplete="off">
     <table class="admintable">
         <tr>
             <td class="key"><label for="source"><?php echo JText::_('SOURCE');?>:</label></td>

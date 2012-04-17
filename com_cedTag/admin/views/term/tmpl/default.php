@@ -13,8 +13,7 @@ $search = JString::strtolower($search);
 $rows = $this->termList->list;
 ?>
 
-<form action="index.php?controller=term&option=com_cedtag" method="post"
-      name="adminForm" id="adminForm" class="adminForm">
+<form action="<?php echo JRoute::_('index.php?controller=term&option=com_cedtag'); ?>" method="post" name="adminForm" id="adminForm">
     <table>
         <tr>
             <td width="100%"><?php echo JText::_('Filter'); ?>: <input

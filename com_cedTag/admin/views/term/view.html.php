@@ -14,7 +14,8 @@ class CedTagViewTerm extends JView
 
     function display($tpl = null)
     {
-        $layout = JInput::get('layout', "default", 'STRING');
+        $layout = JRequest::getVar("layout");
+            //TODO JInput::get('layout', "", 'STRING'); <- dont work
         switch ($layout) {
             case 'edit':
                 $this->edit($tpl);
@@ -49,15 +50,18 @@ class CedTagViewTerm extends JView
         } else {
             JToolBarHelper::title(JText::_('TERM ADD'), 'tag.png');
         }
-        JToolBarHelper::save('save', JText::_('SAVE'));
+        JToolBarHelper::save();
         JToolBarHelper::spacer();
         JToolBarHelper::back();
         //get params
         $params = JComponentHelper::getParams('com_cedtag');
         $this->assignRef('params', $params);
         //get data
-
         $this->assignRef('term', $term);
+
+        $editor = JFactory::getEditor();
+   		$this->assignRef('editor',		$editor);
+
         parent::display($tpl);
     }
 

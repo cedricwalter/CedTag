@@ -10,8 +10,8 @@ defined('_JEXEC') or die('Restricted access');
 ?>
 
 <h1>Joomla cedtag</h1>
-<form action="index.php" method="post"
-      name="adminForm" id="adminForm" class="adminForm">
+
+<form action="<?php echo JRoute::_('index.php'); ?>" method="post" name="adminForm" id="adminForm">
     <table class="adminlist">
         <thead>
         <tr>

@@ -8,8 +8,7 @@
 defined('_JEXEC') or die('Restricted access');
 ?>
 
-<form action="index.php?controller=css&option=com_cedtag" method="post"
-      name="adminForm" id="adminForm" class="adminForm">
+<form action="<?php echo JRoute::_('index.php?controller=css&option=com_cedtag'); ?>" method="post" name="adminForm" id="adminForm" autocomplete="off">
     <table border="0" cellpadding="1" cellspacing="1" width="100%">
         <tr>
             <td width="220"><span class="componentheading"><?php echo JText::_('TAG CSS FILE');?>

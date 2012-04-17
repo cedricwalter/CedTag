@@ -7,7 +7,6 @@
  **/
 defined('_JEXEC') or die('Restricted access');
 
-$editor =& JFactory::getEditor();
 $createdate =& JFactory::getDate();
 $limitstart =
     JRequest::getVar('limitstart', '0', '', 'int');
@@ -39,12 +38,8 @@ $javascript = 'onchange="document.adminForm.submit();"';
         //alert(tag.style);
     }
 </script>
-<form action="index.php?controller=tag&option=com_cedtag"
-      method="post"
-      name="adminForm"
-      id="adminForm"
-      class="adminForm"
-      autocomplete="off">
+
+<form action="<?php echo JRoute::_('index.php?controller=tag&option=com_cedtag'); ?>" method="post" name="adminForm" id="adminForm" autocomplete="off">
 
     <table>
         <tr>

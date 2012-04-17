@@ -6,13 +6,7 @@
  * @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
  **/
 defined('_JEXEC') or die('Restricted access');
-$params = array(
-    'smilies' => 0,
-    'style' => 0,
-    'layer' => 0,
-    'table' => 0,
-    'clear_entities' => 0
-);
+
 
 if (isset($this->term)) {
     $name = $this->term->name;
@@ -25,11 +19,8 @@ if (isset($this->term)) {
     $description = '';
     $id = false;
 }
-$editor =& JFactory::getEditor();
 ?>
-
-<form action="index.php" method="post" name="adminForm" id="adminForm"
-      class="adminForm" onsubmit="<?php echo $editor->save('description'); ?>">
+<form action="<?php echo JRoute::_('index.php'); ?>" method="post" name="adminForm" id="adminForm">
     <table width="75%" align="left">
         <tr>
             <td>
@@ -47,7 +38,16 @@ $editor =& JFactory::getEditor();
         </tr>
         <tr>
             <td>
-                <?php echo $editor->display('description', $description, '100%', '400px', '150', '20', true, $params); ?>
+                <?php
+                $params = array(
+                            'smilies' => 0,
+                            'style' => 0,
+                            'layer' => 0,
+                            'table' => 0,
+                            'clear_entities' => 0
+                        );
+
+                echo $this->editor->display('description', $description, '100%', '400px', '150', '20', true, $params); ?>
             </td>
         </tr>
 

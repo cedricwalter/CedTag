@@ -71,6 +71,8 @@ class CedTagControllerTerm extends JController
             $msg = JText::_('TERM SUCCESSFULLY CREATED');
         }
         $this->setRedirect("index.php?option=com_cedtag&controller=term", $msg);
+
+        //$this->getEditor()->save($this->description);
     }
 
     function edit()
