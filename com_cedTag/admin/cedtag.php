@@ -14,6 +14,7 @@ require_once (JPATH_COMPONENT . '/controllers/tag.php');
 require_once (JPATH_COMPONENT . '/controllers/term.php');
 require_once (JPATH_COMPONENT . '/controllers/css.php');
 require_once (JPATH_COMPONENT . '/controllers/import.php');
+require_once (JPATH_COMPONENT . '/controllers/export.php');
 
 $document = & JFactory::getDocument();
 $document->addStyleSheet(JURI::root() . '/media/com_cedtag/css/tag.css');

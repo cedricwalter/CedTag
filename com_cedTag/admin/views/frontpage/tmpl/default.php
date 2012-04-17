@@ -57,6 +57,15 @@ require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
             <img src="<? echo JURI::root() ?>/media/com_cedtag/images/import.png"/>
             <span><?php echo JText::_('IMPORT TAGS');?></span></a></div>
     </div>
+
+    <div style="float: left;">
+        <div class="icon"><a href="index.php?option=com_cedtag&controller=export"
+                             title="<?php echo JText::_('EXPORT TAGS TO OTHER COMPONENTS');?>">
+            <img src="<? echo JURI::root() ?>/media/com_cedtag/images/import.png"/>
+            <span><?php echo JText::_('EXPORT TAGS');?></span></a></div>
+    </div>
+
+
     <div style="float: left;">
         <div class="icon"><a href="http://www.waltercedric.com" target="_blank"
                              title="<?php echo JText::_('CedTags HOME PAGE');?>"> <img

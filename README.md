@@ -9,11 +9,14 @@ migration from http://extensions.joomla.org/extensions/search-&-indexing/tags-&-
 ### A real free tag system for Joomla.
 Front end features:
 * Show tags at the bottom of each article.
+
+## Joomla Modules
 * Tag list view
 * Tag blog view
 * Most popular tags.
 * Most hits tags.
 * Latest tags.
+
 * SEF support, compatible with sh404SEF,ARTIO JoomSEF,AceSEF
 * XMap Plugin
 * Language file support
@@ -23,7 +26,9 @@ Front end features:
 
 
 ### Back end features:
-* Import Tags from Meta keywords
+
+* Import Tags from Meta keywords / JTags / Joomla Tags
+* Export Tags back to Joomla Meta keywords
 * Term editable.
 * Batch term add.
 * Batch tag management.
