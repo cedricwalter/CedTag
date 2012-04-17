@@ -36,7 +36,7 @@ require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
             <a class="modal"
                rel="{handler: 'iframe', size: {x: 875, y: 550}, onClose: function() {}}"
                href="index.php?option=com_config&view=component&component=com_cedtag&path=&tmpl=component"
-               title="<?php echo JText::_('CONFIGURATION FOR JOOMLA TAGS');?>"> <img
+               title="<?php echo JText::_('CONFIGURATION FOR CedTags');?>"> <img
                 src="<? echo JURI::root() ?>/media/com_cedtag/images/config.png"
                 alt="<?php echo JText::_('CONFIGURATION');?>"/>
                 <span><?php echo JText::_('CONFIGURATION');?></span></a></div>
@@ -59,7 +59,7 @@ require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
     </div>
     <div style="float: left;">
         <div class="icon"><a href="http://www.waltercedric.com" target="_blank"
-                             title="<?php echo JText::_('JOOMLA TAGS HOME PAGE');?>"> <img
+                             title="<?php echo JText::_('CedTags HOME PAGE');?>"> <img
             src="<? echo JURI::root() ?>/media/com_cedtag/images/frontpage.png"/>
             <span><?php echo JText::_('HOME PAGE');?></span></a>
         </div>
@@ -68,7 +68,7 @@ require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
         <div class="icon"><a
             href="http://wiki.waltercedric.com/index.php?title=Taxonomies_and_Tags_support_for_Joomla"
             target="_blank"
-            title="<?php echo JText::_('JOOMLA TAGS MANUAL');?>"> <img
+            title="<?php echo JText::_('CedTags MANUAL');?>"> <img
             src="<? echo JURI::root() ?>/media/com_cedtag/images/manual.png"/>
             <span><?php echo JText::_('MANUAL');?></span></a>
         </div>
@@ -77,7 +77,7 @@ require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
         <div class="icon"><a
             href="http://forums.waltercedric.com"
             target="_blank"
-            title="<?php echo JText::_('JOOMLA TAGS FORUM');?>"> <img
+            title="<?php echo JText::_('CedTags FORUM');?>"> <img
             src="<? echo JURI::root() ?>/media/com_cedtag/images/forum.png"/>
             <span><?php echo JText::_('FORUM');?></span></a>
         </div>

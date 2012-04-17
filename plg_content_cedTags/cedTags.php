@@ -73,7 +73,7 @@ class plgContentCedTags extends JPlugin
         CedTagsHelper::addCss();
 
         $havingTags = false;
-        $links = '';
+        $htmlList = '';
         $link = '';
         $maxTagsNumber = CedTagsHelper::param('MaxTagsNumber', 10);
         $showRelatedArticles = CedTagsHelper::param('RelatedArticlesByTags', 0);
@@ -112,15 +112,15 @@ class plgContentCedTags extends JPlugin
                 $term->name = CedTagsHelper::ucwords($term->name);
 
                 if ($HitsNumber) {
-                    $links .= '<li><a href="' . $link . '" rel="tag" title="'.$ct.' items tagged with ' . $term->name . ' | Hits:' . $term->hits . '" >' . $term->name . '</a></li> ';
+                    $htmlList .= '<li><a href="' . $link . '" rel="tag" title="'.$ct.' items tagged with ' . $term->name . ' | Hits:' . $term->hits . '" >' . $term->name . '</a></li> ';
                 } else {
-                    $links .= '<li><a href="' . $link . '" rel="tag" title="'.$ct.' items tagged with ' . $term->name . '" >' . $term->name . '</a></li> ';
+                    $htmlList .= '<li><a href="' . $link . '" rel="tag" title="'.$ct.' items tagged with ' . $term->name . '" >' . $term->name . '</a></li> ';
                 }
                 $havingTags = true;
             }
             //$article->text.='<div class="tag">Tags:<ul>'.$links.'</ul></div>';
             if ($havingTags) {
-                $tagResult = '<div class="clearfix"></div><div class="tag">' . JText::_('TAGS:') . '<ul>' . $links . '</ul></div>';
+                $tagResult = '<div class="clearfix"></div><div class="tag">' . JText::_('TAGS:') . '<ul>' . $htmlList . '</ul></div>';
                 $position = CedTagsHelper::param('TagPosition');
                 if ($position == 1) {
                     $article->text = $tagResult . $article->text;
@@ -162,36 +162,35 @@ class plgContentCedTags extends JPlugin
         //$max=max(intval($relatedArticlesCount),array_count_values($termIds));
         $relatedArticlesCount = 0;
         $max = max(intval($relatedArticlesCount), count($termIds));
+
         $termIds = array_slice($termIds, 0, $max);
         $termIdsCondition = @implode(',', $termIds);
+
         //find the unique article ids
-        $query = ' select distinct cid from #__tag_term_content where tid in (' . $termIdsCondition . ') and cid<>' . $articleId;
-        $db =& JFactory::getDBO();
-        $db->setQuery($query);
+        $query = ' select distinct cid from #__cedtag_term_content where tid in (' . $termIdsCondition . ') and cid<>' . $articleId;
 
-        $cids = $db->loadResultArray(0);
+        $dbo =& JFactory::getDBO();
+        $dbo->setQuery($query);
+        $cids = $dbo->loadColumn(0);
 
-
-        $nullDate = $db->getNullDate();
+        $nullDate = $dbo->getNullDate();
         $date =& JFactory::getDate();
-        $now = $date->toMySQL();
+        $now = JDate::getInstance()->toSql($date);
 
         $where = ' a.id in(' . @implode(',', $cids) . ') AND a.state = 1'
-            . ' AND ( a.publish_up = ' . $db->Quote($nullDate) . ' OR a.publish_up <= ' . $db->Quote($now) . ' )'
-            . ' AND ( a.publish_down = ' . $db->Quote($nullDate) . ' OR a.publish_down >= ' . $db->Quote($now) . ' )';
+            . ' AND ( a.publish_up = ' . $dbo->Quote($nullDate) . ' OR a.publish_up <= ' . $dbo->Quote($now) . ' )'
+            . ' AND ( a.publish_down = ' . $dbo->Quote($nullDate) . ' OR a.publish_down >= ' . $dbo->Quote($now) . ' )';
 
         // Content Items only
-        $query = 'SELECT a.id,a.title, a.alias,a.access,a.sectionid, ' .
+        $query = 'SELECT a.id,a.title, a.alias,a.access, ' .
             ' CASE WHEN CHAR_LENGTH(a.alias) THEN CONCAT_WS(":", a.id, a.alias) ELSE a.id END as slug,' .
             ' CASE WHEN CHAR_LENGTH(cc.alias) THEN CONCAT_WS(":", cc.id, cc.alias) ELSE cc.id END as catslug' .
             ' FROM #__content AS a' .
             ' INNER JOIN #__categories AS cc ON cc.id = a.catid' .
-            ' INNER JOIN #__sections AS s ON s.id = a.sectionid' .
-            ' WHERE ' . $where . ' AND s.id > 0' .
-            ' AND s.published = 1' .
+            ' WHERE ' . $where .
             ' AND cc.published = 1';
-        $db->setQuery($query, 0, $count);
-        $rows = $db->loadObjectList();
+        $dbo->setQuery($query, 0, $count);
+        $rows = $dbo->loadObjectList();
 
         if (empty($rows)) {
             return '';
@@ -252,7 +251,6 @@ class plgContentCedTags extends JPlugin
             return true;
         }
 
-
         // No one else is allowed to add articles
         return false;
     }
@@ -269,12 +267,11 @@ class plgContentCedTags extends JPlugin
         $url = JRoute::_($url);
         $icon_url = JURI::Base() . 'components/com_cedtag/images/logo.png';
 
-        $add_tag_txt = null;
+        $add_tag_txt = $add_tag_txt = JText::_('ADD TAGS');
         if ($havingTags) {
             $add_tag_txt = JText::_('EDIT TAGS');
-        } else {
-            $add_tag_txt = JText::_('ADD TAGS');
         }
+
         $ahead = '<a class="modal" type="button" href="' . $url . '" ';
         $ahead .= "rel=\"{handler: 'iframe', size: {x: 500, y: 260}}\">";
         $links = "$ahead<img src=\"$icon_url\" /></a>";
@@ -312,6 +309,4 @@ class plgContentCedTags extends JPlugin
 
 
 }
-
-//end class
 ?>

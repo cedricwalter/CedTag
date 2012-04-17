@@ -13,6 +13,9 @@ require_once JPATH_SITE . '/components/com_cedtag/helper/helper.php';
 
 class modCedMostPopularTagsHelper
 {
+
+
+
     function getList(&$params)
     {
         //$mainframe =& JFactory::getApplication();

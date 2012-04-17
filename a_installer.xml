@@ -19,7 +19,7 @@
     </files>
 
     <cogs>
-        <cog type="component" client="site" access="0" enabled="true" protected="false" remove_admin_menu="true">
+        <cog type="component" client="administrator" access="0" enabled="true" protected="false">
             com_cedtag
             <name>Component Tag</name>
 			<description>A real free tag system for joomla 2.5</description>
