@@ -48,9 +48,10 @@ class CedTagModelTerm extends JModel
         if (!$name) {
             return false;
         }
-        $query = "SELECT * FROM #__cedtag_term where binary name='" . $name . "'";
         $db = JFactory::getDbo();
-        $$db->setQuery($query, 0, 1);
+        $query = "SELECT * FROM #__cedtag_term where binary name=" .$db->quote($name).";";
+        $db->setQuery($query, 0, 1);
+
         $tagInDB = $db->loadObject();
         if (isset($tagInDB) & isset($tagInDB->id)) {
             $needUpdate = false;
@@ -85,7 +86,7 @@ class CedTagModelTerm extends JModel
                 $valuePart .= "," . $weight;
             }
             $date =& JFactory::getDate();
-            $now = JDate::toSql($date);
+            $now = JDate::getInstance()->toSql($date);
             $insertQuery .= ',created) ';
             $valuePart .= ',' . $db->Quote($now) . ')';
             $db->setQuery($insertQuery . $valuePart);
@@ -96,7 +97,7 @@ class CedTagModelTerm extends JModel
 
     function insertTerms($terms)
     {
-        $terms = CedTagsHelper::isValidName($terms);
+        //$terms = CedTagsHelper::isValidName($terms);
         if (!$terms) {
             return false;
         }

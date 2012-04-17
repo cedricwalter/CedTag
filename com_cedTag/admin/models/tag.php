@@ -185,7 +185,7 @@ class CedTagModelTag extends JModel
                 $valuePart .= "," . $weight;
             }
             $date =& JFactory::getDate();
-            $now = JDate::toSql($date);
+            $now = JDate::getInstance()->toSql($date);
             $insertQuery .= ',created) ';
             $valuePart .= ',' . $db->Quote($now) . ')';
             $db->setQuery($insertQuery . $valuePart);

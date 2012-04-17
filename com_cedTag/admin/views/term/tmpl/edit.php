@@ -7,7 +7,7 @@
  **/
 defined('_JEXEC') or die('Restricted access');
 
-
+# to reuse same view for edit and add term
 if (isset($this->term)) {
     $name = $this->term->name;
     $weight = $this->term->weight;
@@ -21,37 +21,33 @@ if (isset($this->term)) {
 }
 ?>
 <form action="<?php echo JRoute::_('index.php'); ?>" method="post" name="adminForm" id="adminForm">
-    <table width="75%" align="left">
-        <tr>
-            <td>
-                <?php echo JText::_('TERM NAME');?>:
-                <input style="margin: 0 2em;" class="inputbox" type="text" size="30" maxlength="100" name="name"
-                       value="<?php echo $name;?>">
-
-                <?php echo JText::_('WEIGHT');?>:
-                <input class="inputbox" type="text" size="10" maxlength="10" name="weight"
-                       value="<?php echo $weight;?>">
-            </td>
-        </tr>
-        <tr>
-            <td><?php echo JText::_('TERM DESCRIPTION');?>:</td>
-        </tr>
-        <tr>
-            <td>
+    <div class="width-60 fltlft">
+        <fieldset class="adminform">
+            <legend><?php echo JText::_('Editing the term ') . $name;?></legend>
+            <ul class="adminformlist">
+                <li>
+                    <?php echo JText::_('TERM NAME');?>
+                    <input style="margin: 0 2em;" class="inputbox" type="text" size="30" maxlength="100" name="name"
+                           value="<?php echo $name;?>">
+                    <?php echo JText::_('WEIGHT');?>
+                    <input class="inputbox" type="text" size="10" maxlength="10" name="weight"
+                           value="<?php echo $weight;?>">
+                </li>
+                <li>
+                <?php echo JText::_('TERM DESCRIPTION');?>:
                 <?php
                 $params = array(
-                            'smilies' => 0,
-                            'style' => 0,
-                            'layer' => 0,
-                            'table' => 0,
-                            'clear_entities' => 0
-                        );
-
+                    'smilies' => 0,
+                    'style' => 0,
+                    'layer' => 0,
+                    'table' => 0,
+                    'clear_entities' => 0
+                );
                 echo $this->editor->display('description', $description, '100%', '400px', '150', '20', true, $params); ?>
-            </td>
-        </tr>
-
-    </table>
+                </li>
+            </ul>
+        </fieldset>
+    </div>
 
     <input type="hidden" name="controller" value="term"/>
     <input type="hidden" name="task" value="save">

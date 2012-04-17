@@ -10,16 +10,16 @@ defined('_JEXEC') or die('Restricted access');
 ?>
 
 <form action="<?php echo JRoute::_('index.php'); ?>" method="post" name="adminForm" id="adminForm">
-    <table>
-
-        <tr>
-            <td colspan="5"><?php echo JText::_('Batch add terms, seperator with comma.');?></td>
-        </tr>
-        <tr>
-            <td colspan="5"><textarea id="names" name="names" rows="5" cols="60"></textarea></td>
-        </tr>
-
-    </table>
+    <div class="width-60 fltlft">
+        <fieldset class="adminform">
+            <legend><?php echo JText::_('Batch add terms, comma seaparated');?></legend>
+            <ul class="adminformlist">
+                <li>
+                    <textarea id="names" name="names" rows="5" cols="60"></textarea>
+                </li>
+            </ul>
+        </fieldset>
+    </div>
 
     <input type="hidden" name="task" value="batchsave">
     <input type="hidden" name="controller" value="term">
