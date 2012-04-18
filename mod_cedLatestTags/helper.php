@@ -19,7 +19,7 @@ class modCedLatestTagsHelper
         $count = intval($params->get('count', 25));
 
         //Get the latest tag by creation date
-        $query = 'select count(*) as ct,name,hits, t.created from #__cedtag_term_content as tc inner join #__cedtag_term as t on t.id=tc.tid  group by(tid) order by created desc';
+        $query = "select count(*) as ct,name,hits, t.created from #__cedtag_term_content as tc inner join #__cedtag_term as t on t.id=tc.tid where t.published='1' group by(tid) order by created desc";
         $db =& JFactory::getDBO();
         $db->setQuery($query, 0, $count);
         $rows = $db->loadObjectList();

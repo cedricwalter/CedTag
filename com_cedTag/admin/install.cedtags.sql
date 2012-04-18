@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS `#__cedtag_term` (
   `weight` tinyint(4) NOT NULL default '0',
   `hits` int(10) NOT NULL default '0',
   `created` datetime NOT NULL default '0000-00-00 00:00:00',
+  `published` int(10) unsigned NOT NULL default '1',
   PRIMARY KEY  (`id`),  
   KEY `id_tag` (`id`,`name`),
   KEY `id_hits` (`id`,`hits`),

@@ -51,7 +51,7 @@
         <folder>images</folder>
     </files>
     <administration>
-        <menu>cedTags</menu>
+        <menu link="option=com_cedtag">cedTag</menu>
 
         <files folder="admin">
             <filename>controller.php</filename>

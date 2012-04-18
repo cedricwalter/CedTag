@@ -64,7 +64,7 @@ class plgCedSearchTags extends JPlugin
         }
 
         $text = $db->Quote('%' . $db->escape($text, true) . '%', false);
-        $query = 'select name,name as title,description as text from #__cedtag_term  where name like ' . $text . ' order by weight desc,name';
+        $query = "select name,name as title,description as text from #__cedtag_term as t where t.name like " . $text . " and t.published='1' order by weight desc,name";
 
         $db->setQuery($query, 0, $limit);
         $rows = $db->loadObjectList();

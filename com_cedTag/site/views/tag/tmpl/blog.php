@@ -9,7 +9,7 @@ defined('_JEXEC') or die('Restricted access');
 require_once (JPATH_SITE . '/components/com_content/helpers/route.php');
 $tag = JRequest::getVar('tag', null);
 
-$tagKeyword = JText::_('TAG:') . $tag;
+$tagKeyword = JText::_('Posts Tagged ').JText::_('‘') . $tag.JText::_('’');
 $config =& JFactory::getConfig();
 
 $params = JComponentHelper::getParams('com_cedtag');
@@ -39,7 +39,8 @@ function readmore($item, $user)
 }
 
 ?>
-<h1><?php echo($tag);?></h1>
+
+<h1><?php echo JText::_('Posts Tagged')." ".JText::_('‘') . $tag.JText::_('’') ?></h1>
 
 <table class="blog" cellpadding="0" cellspacing="0">
     <tbody>
@@ -94,7 +95,14 @@ function readmore($item, $user)
                         </div>
                         <?php };?>
 
-                        <div class="article-content"><?php echo $result->text; ?></div>
+                        <div class="article-content">
+                            <?php echo $result->text; ?>
+
+                            <?php
+                              //echo $this->loadTemplate('item');
+                            ?>
+
+                        </div>
 
                         <?php if ($readmore) {
                         //read more
@@ -124,7 +132,7 @@ function readmore($item, $user)
             </div>
         </td>
     </tr>
-    <!-- Tags for Joomla by www.walttercedric.com -->
+    <!-- Tags for Joomla by www.waltercedric.com -->
     </tbody>
 
 </table>
@@ -136,7 +144,7 @@ if ($this->tagDescription) {
 } else {
     $document->setDescription(CedTagsHelper::truncate($tag));
 }
-$document->setTitle("Items tagged with " . $tag . ' | ' . $config->getValue('sitename'));
+$document->setTitle( JText::_('Items tagged with ') . $tag . ' | ' . $config->getValue('sitename'));
 $document->setMetadata('keywords', $tag);
 $document->addStyleSheet(JURI::base() . 'media/com_cedtag/css/tagcloud.css');
 ?>

@@ -32,6 +32,7 @@ $rows = $this->termList->list;
             <th width="20"><input type="checkbox" name="toggle" value=""
                                   onclick="checkAll(<?php echo count($rows);?>);"/></th>
             <th class="title"><?php echo JText::_('TERM');?></th>
+            <th class="title"><?php echo JText::_('STATE');?></th>
             <th width="40%"><?php echo JText::_('DESCRIPTION');?></th>
             <th width="3%"><?php echo JText::_('WEIGHT');?></th>
             <th width="7%"><?php echo JText::_('HITS');?></th>
@@ -65,6 +66,7 @@ $rows = $this->termList->list;
 			<td><?php echo $limitstart + $i + 1  ?></td>
                 <td><?php echo $checked; ?></td>
                 <td><a href="<?php echo JRoute::_($link); ?>"> <?php echo $row->name; ?></a></td>
+                <td class="order"><?php echo $row->published; ?></td>
                 <td class="order"><?php echo $row->description; ?></td>
                 <td align="center"><?php echo $row->weight; ?></td>
                 <td align="center"><?php echo $row->hits; ?></td>

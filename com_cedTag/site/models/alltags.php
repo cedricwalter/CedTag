@@ -17,7 +17,7 @@ class CedTagModelAllTags extends JModel
     {
         $order = CedTagsHelper::param('tagOrder');
         $orderby = $this->_buildOrderBy($order);
-        $query = 'select count(*) as ct,name from #__cedtag_term_content as tc inner join #__cedtag_term as t on t.id=tc.tid  group by(tid) order by ' . $orderby;
+        $query = 'select count(*) as ct,name from #__cedtag_term_content as tc inner join #__cedtag_term as t on t.id=tc.tid where t.published=\'1\' group by(tid) order by ' . $orderby;
         return $this->_getList($query);
     }
 

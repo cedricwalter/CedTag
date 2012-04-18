@@ -18,12 +18,11 @@ class modCedMostPopularTagsHelper
 
     function getList(&$params)
     {
-        //$mainframe =& JFactory::getApplication();
-        $db =& JFactory::getDBO();
+        $dbo = JFactory::getDBO();
         $count = intval($params->get('count', 25));
-        $query = 'select count(*) as ct,name,hits from #__cedtag_term_content as tc inner join #__cedtag_term as t on t.id=tc.tid  group by(tid) order by ct desc';
-        $db->setQuery($query, 0, $count);
-        $rows = $db->loadObjectList();
+        $query = "select count(*) as ct,name,hits from #__cedtag_term_content as tc inner join #__cedtag_term as t on t.id=tc.tid where t.published='1' group by(tid) order by ct desc";
+        $dbo->setQuery($query, 0, $count);
+        $rows = $dbo->loadObjectList();
 
         if (isset($rows) && !empty($rows)) {
 

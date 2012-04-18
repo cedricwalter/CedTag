@@ -11,6 +11,9 @@ jimport('joomla.application.component.model');
 
 require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
 
+//TODO see \components\com_content\models\category.php
+
+
 class CedTagModelTag extends JModel
 {
     /**
@@ -102,38 +105,35 @@ class CedTagModelTag extends JModel
 
         JFactory::getApplication()->input->set('tag', $tag);
         $tag = trim($tag);
-        $db =& JFactory::getDBO();
+        $dbo =& JFactory::getDBO();
         $tagObj = null;
         $ids = $this->_ids;
         if (!isset($this->_tagDescription)) {
+            $tagDescriptionQuery = "select id,description from #__cedtag_term as t where binary t.name=" .$dbo->quote($tag) . " and t.published='1';";
 
-            $tagDescriptionQuery = "select id,description from #__cedtag_term where binary name='" . $tag . "'";
-
-            $db->setQuery($tagDescriptionQuery);
-            $db->query();
-            $this->_tagDescription = $db->loadResult();
-            $tagObj = $db->loadObject();
+            $dbo->setQuery($tagDescriptionQuery);
+            $dbo->query();
+            $this->_tagDescription = $dbo->loadResult();
+            $tagObj = $dbo->loadObject();
             if (isset($tagObj) && $tagObj->id) {
                 $this->_termExist = true;
             } else {
                 $this->_termExist = false;
                 return '';
             }
-            $updateHitsQuery = "update #__cedtag_term set hits=hits+1 where id=" . $tagObj->id;
-            $db->setQuery($updateHitsQuery);
-            $db->query();
+            $updateHitsQuery = "update #__cedtag_term set hits=hits+1 where id=" . $dbo->quote($tagObj->id);
+            $dbo->setQuery($updateHitsQuery);
+            $dbo->query();
             $this->_tagDescription = $tagObj->description;
-            $totalQuery = "select count(c.cid) from #__cedtag_term_content as c where c.tid=" . $tagObj->id;
-            $db->setQuery($totalQuery);
-            $db->query();
 
-            $this->_total = $db->loadResult();
+            $totalQuery = "select count(c.cid) from #__cedtag_term_content as c where c.tid=" . $dbo->quote($tagObj->id);
+            $dbo->setQuery($totalQuery);
+            $dbo->query();
+            $this->_total = $dbo->loadResult();
 
-            $tagQuery = "select  c.cid from #__cedtag_term_content as c  where c.tid=" . $tagObj->id;
-
-
-            $db->setQuery($tagQuery);
-            $contentIds = $db->loadResultArray();
+            $tagQuery = "select c.cid from #__cedtag_term_content as c where c.tid=" . $dbo->quote($tagObj->id);
+            $dbo->setQuery($tagQuery);
+            $contentIds = $dbo->loadResultArray();
 
             $ids = implode(',', $contentIds);
             $this->_ids = $ids;
@@ -144,7 +144,7 @@ class CedTagModelTag extends JModel
         }
 
 
-        $nullDate = $db->getNullDate();
+        $nullDate = $dbo->getNullDate();
         jimport('joomla.utilities.date');
         $date = new JDate();
         $now = $date->toMySQL();
@@ -165,10 +165,14 @@ class CedTagModelTag extends JModel
             ' INNER JOIN #__users AS u ON u.id=a.created_by' .
             ' WHERE (a.id in (' . $ids . ') AND ' .
             '(' . $state . '))' .
-            ' AND ( a.publish_up = ' . $db->Quote($nullDate) . ' OR a.publish_up <= ' . $db->Quote($now) . ' )' .
-            ' AND ( a.publish_down = ' . $db->Quote($nullDate) . ' OR a.publish_down >= ' . $db->Quote($now) . ' )' .
+            ' AND ( a.publish_up = ' . $dbo->Quote($nullDate) . ' OR a.publish_up <= ' . $dbo->Quote($now) . ' )' .
+            ' AND ( a.publish_down = ' . $dbo->Quote($nullDate) . ' OR a.publish_down >= ' . $dbo->Quote($now) . ' )' .
             ' AND cc.published = 1' .
             ' GROUP BY(a.id)  ORDER BY  ' . $this->_buildOrderBy($order);
+
+        // TODO
+        //$this->setState('filter.language', $app->getLanguageFilter());
+
 
         return $query;
 

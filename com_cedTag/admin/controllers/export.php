@@ -59,7 +59,7 @@ class CedTagControllerExport extends JController
         try {
             $executionMessages .= JText::_('Fill Table with the metadata');
             $query = 'INSERT INTO #__' . $tmpTable . ' SELECT c.id, GROUP_CONCAT(t.name SEPARATOR ",") FROM #__content';
-            $query .= 'AS c LEFT JOIN #__cedtag_term_content AS t2c ON t2c.cid=c.id LEFT JOIN jos_tag_term AS t ON t.id=t2c.tid GROUP BY c.id;';
+            $query .= 'AS c LEFT JOIN #__cedtag_term_content AS t2c ON t2c.cid=c.id LEFT JOIN #__cedtag_term AS t ON t.id=t2c.tid and t.pusblished=\'1\' GROUP BY c.id;';
             $dbo->setQuery($query);
             $dbo->query();
             $executionMessages .= JText::_('-OK');

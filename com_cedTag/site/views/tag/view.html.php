@@ -63,9 +63,11 @@ class CedTagViewTag extends JView
             $layout = JInput::get('layout', $defaultLayout, 'STRING');
 
             $this->setLayout($layout);
+
             $showMeta = $params->get('contentMeta', '1');
             $description = $params->get('description', '1');
             $ads =& $params->get('ads', '');
+
             $this->assign('showMeta', $showMeta);
             $this->assign('showDescription', $description);
             $this->assignRef('ads', $ads);
@@ -91,15 +93,14 @@ class CedTagViewTag extends JView
     {
         $cid = JFactory::getApplication()->input->get('article_id', null, 'int');
         if (isset($cid)) {
-            $db =& JFactory::getDBO();
-            $query = 'select t.name from #__cedtag_term_content as tc left join #__cedtag_term as t on t.id=tc.tid where tc.cid=' . $db->quote($cid);
-            $db->setQuery($query);
-            $tagsInArray = $db->loadColumn();
+            $dbo =& JFactory::getDBO();
+            $query = 'select t.name from #__cedtag_term_content as tc left join #__cedtag_term as t on t.id=tc.tid where tc.cid=' . $dbo->quote($cid). ' and t.published=\'1\';';
+            $dbo->setQuery($query);
+            $tagsInArray = $dbo->loadColumn();
             if (isset($tagsInArray) && !empty($tagsInArray)) {
                 return implode(',', $tagsInArray);
             }
         }
-
         return '';
     }
 

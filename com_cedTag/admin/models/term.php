@@ -32,26 +32,26 @@ class CedTagModelTerm extends JModel
 
     function update($id, $name, $description, $weight)
     {
+        $dbo = JFactory::getDbo();
         $name = CedTagsHelper::isValidName($name);
         if (!$name) {
             return false;
         }
-        $updateQuery = 'update #__cedtag_term set name="' . $name . '", weight="' . $weight . '", description="' . $description . '" where id=' . $id;
-        $db = JFactory::getDbo();
-        $db->setQuery($updateQuery);
-        return $db->query();
+        $updateQuery = 'update #__cedtag_term set name=' . $dbo->quote($name) . ', weight=' . $dbo->quote($weight) . ', description=' . $dbo->quote($description) . ' where id=' . $dbo->quote($id);
+        $dbo->setQuery($updateQuery);
+        return $dbo->query();
     }
 
     function store($name, $description = NULL, $weight = 0)
     {
+        $dbo = JFactory::getDbo();
         $name = CedTagsHelper::isValidName($name);
         if (!$name) {
             return false;
         }
-        $db = JFactory::getDbo();
-        $query = "SELECT id as id FROM #__cedtag_term where binary name=" .$db->quote($name).";";
-        $db->setQuery($query);
-        $tagAlreadyExisting = $db->loadObject();
+        $query = "SELECT id as id FROM #__cedtag_term where binary name=" .$dbo->quote($name).";";
+        $dbo->setQuery($query);
+        $tagAlreadyExisting = $dbo->loadObject();
 
         if (isset($tagAlreadyExisting) & isset($tagAlreadyExisting->id)) {
             $needUpdate = false;
@@ -70,8 +70,8 @@ class CedTagModelTerm extends JModel
             }
             if ($needUpdate) {
                 $updateQuery .= ' where id=' . $tagAlreadyExisting->id;
-                $db->setQuery($updateQuery);
-                $db->query();
+                $dbo->setQuery($updateQuery);
+                $dbo->query();
             }
             return $tagAlreadyExisting->id;
         } else {
@@ -88,10 +88,10 @@ class CedTagModelTerm extends JModel
             $date =& JFactory::getDate();
             $now = JDate::getInstance()->toSql($date);
             $insertQuery .= ',created) ';
-            $valuePart .= ',' . $db->Quote($now) . ')';
-            $db->setQuery($insertQuery . $valuePart);
-            $db->query();
-            return $db->insertid();
+            $valuePart .= ',' . $dbo->Quote($now) . ')';
+            $dbo->setQuery($insertQuery . $valuePart);
+            $dbo->query();
+            return $dbo->insertid();
         }
     }
 
@@ -115,10 +115,10 @@ class CedTagModelTerm extends JModel
 
     function deleteContentTerms($cid)
     {
-        $db = JFactory::getDbo();
-        $deleteQuery = 'delete from #__cedtag_term_content where cid=' . $cid;
-        $db->setQuery($deleteQuery);
-        $db->query();
+        $dbo = JFactory::getDbo();
+        $deleteQuery = 'delete from #__cedtag_term_content where cid=' . $dbo->quote($cid);
+        $dbo->setQuery($deleteQuery);
+        $dbo->query();
     }
 
     function insertContentTerms($cid, $tids)
@@ -138,16 +138,17 @@ class CedTagModelTerm extends JModel
 
     function termsForContent($cid)
     {
-        $db = JFactory::getDbo();
+        $dbo = JFactory::getDbo();
         $query = 'select t.id as tid,t.name from #__cedtag_term as t';
         $query .= ' left join #__cedtag_term_content as c  on c.tid=t.id';
-        $query .= ' where c.cid=' . $cid . ' order by t.weight desc,t.name';
-        $db->setQuery($query);
-        return $db->loadColumn();
+        $query .= ' where c.cid=' . $dbo->quote($cid) . ' and t.published=\'1\' order by t.weight desc,t.name';
+        $dbo->setQuery($query);
+        return $dbo->loadColumn();
     }
 
     function getTermList()
     {
+        $dbo = JFactory::getDbo();
         $mainframe =& JFactory::getApplication();
         $search = $mainframe->getUserStateFromRequest('articleelement.search', 'search', '', 'string');
         $search = JString::strtolower($search);
@@ -155,35 +156,34 @@ class CedTagModelTerm extends JModel
         if (!is_null($search)) {
             $where = " where name like'%" . $search . "%' ";
         }
-        $db = JFactory::getDbo();
-        $query = "select count(*) as ct from #__cedtag_term " . $where;
-        $db->setQuery($query);
-        $db->query();
-        $total = $db->loadResult();
+        $query = "select count(*) as ct from #__cedtag_term as t " . $where;
+        $dbo->setQuery($query);
+        $dbo->query();
+        $total = $dbo->loadResult();
 
         $jinput = JFactory::getApplication()->input;
         $limitstart = $jinput->get('limitstart', 0, '', 'int');
         $params = JComponentHelper::getParams('com_cedtag');
         $limit = $params->get('tag_page_limit', 30);
 
-        $query = 'select t.id,t.name,t.description,t.weight,t.created,t.hits,count(c.cid)as count from #__cedtag_term';
+        $query = 'select t.id,t.name,t.description,t.weight,t.created,t.hits,count(c.cid) as count, t.published from #__cedtag_term';
         $query .= ' as t  left join  #__cedtag_term_content as c  on c.tid=t.id ' . $where . ' group by(t.id) order by t.name';
-        $db->setQuery($query, $limitstart, $limit);
+        $dbo->setQuery($query, $limitstart, $limit);
         jimport('joomla.html.pagination');
 
         $this->page = new JPagination($total, $limitstart, $limit);
-        $this->list = $db->loadObjectList();
+        $this->list = $dbo->loadObjectList();
         return $this;
     }
 
     function getTerm()
     {
-        $db = JFactory::getDbo();
+        $dbo = JFactory::getDbo();
         $jinput = JFactory::getApplication()->input;
         $id = $jinput->get('cid', array(0), '', 'array');
         $query = 'select * from #__cedtag_term  where id=' . $id[0];
-        $db->setQuery($query);
-        return $db->loadObject();
+        $dbo->setQuery($query);
+        return $dbo->loadObject();
     }
 
 }

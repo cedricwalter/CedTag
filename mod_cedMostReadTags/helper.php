@@ -15,15 +15,11 @@ class modCedMostReadTagsHelper
 {
     function getList(&$params)
     {
-        $mainframe =& JFactory::getApplication();
-        $db =& JFactory::getDBO();
+        $dbo =& JFactory::getDBO();
         $count = intval($params->get('count', 25));
-        //$query = 'select name,hits from #__cedtag_term ORDER BY hits DESC';
-        $query = 'select count(*) as ct,id,name,hits, t.created from #__cedtag_term_content as tc inner join #__cedtag_term as t on t.id=tc.tid  group by(tid) ORDER BY hits DESC';
-
-
-        $db->setQuery($query, 0, $count);
-        $rows = $db->loadObjectList();
+        $query = "select count(*) as ct,id,name,hits, t.created from #__cedtag_term_content as tc inner join #__cedtag_term as t on t.id=tc.tid where t.published='1' group by(tid) ORDER BY hits DESC";
+        $dbo->setQuery($query, 0, $count);
+        $rows = $dbo->loadObjectList();
 
         if (isset($rows) && !empty($rows)) {
             usort($rows, array('CedTagsHelper', 'hitsasort'));

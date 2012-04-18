@@ -25,7 +25,6 @@ class plgContentCedTags extends JPlugin
 
     public function onContentPrepare($context, &$article, &$params, $limitstart)
     {
-
         //$regex = "#{tag\s*(.*?)}(.*?){/tag}#s";
         //$article->text=preg_replace($regex,' ',$article->text);
         $app =& JFactory::getApplication();
@@ -35,7 +34,6 @@ class plgContentCedTags extends JPlugin
         If (isset($article) && (!isset($article->id) || is_null($article->id))) {
             return true;
         }
-
 
         $FrontPageTag = CedTagsHelper::param('FrontPageTag');
         $BlogTag = CedTagsHelper::param('BlogTag');
@@ -55,18 +53,18 @@ class plgContentCedTags extends JPlugin
         $lang->load('com_cedtag', JPATH_SITE);
 
         //select t.id as tid,t.name, count(tc.cid) as ct from #__cedtag_term_content as c left join jos_tag_term as t on c.tid=t.id left join jos_tag_term_content tc on c.tid=tc.cid where c.cid=1 group by t.id,tc.cid ;
-
+        $dbo =& JFactory::getDBO();
         $query = 'select tagterm.id,tagterm.name,tagterm.hits from #__cedtag_term as tagterm
                         left join #__cedtag_term_content as tagtermcontent
                         on tagtermcontent.tid=tagterm.id
-                        where tagtermcontent.cid=' . $article->id . '
+                        where tagtermcontent.cid=' . $dbo->quote($article->id) . '
+                        and tagterm.published=\'1\'
                         group by(tid)
                         order by tagterm.weight
                         desc,tagterm.name';
 
-        $db =& JFactory::getDBO();
-        $db->setQuery($query);
-        $terms = $db->loadObjectList();
+        $dbo->setQuery($query);
+        $terms = $dbo->loadObjectList();
         $SuppresseSingleTerms = CedTagsHelper::param('SuppresseSingleTerms');
         $HitsNumber = CedTagsHelper::param('HitsNumber');
 
@@ -82,11 +80,9 @@ class plgContentCedTags extends JPlugin
         if (isset($terms) && !empty($terms)) {
             $haveValidTags = false;
             foreach ($terms as $term) {
-
-                $countQuery = 'select count(cid) as ct from #__cedtag_term_content where tid=' . $term->id;
-                $db->setQuery($countQuery);
-                $ct = $db->loadResult();
-
+                $countQuery = 'select count(cid) as ct from #__cedtag_term_content where tid=' . $dbo->quote($term->id);
+                $dbo->setQuery($countQuery);
+                $ct = $dbo->loadResult();
 
                 if ($showRelatedArticles || $SuppresseSingleTerms) {
 
@@ -120,7 +116,7 @@ class plgContentCedTags extends JPlugin
             }
             //$article->text.='<div class="tag">Tags:<ul>'.$links.'</ul></div>';
             if ($havingTags) {
-                $tagResult = '<div class="clearfix"></div><div class="tag">' . JText::_('TAGS:') . '<ul>' . $htmlList . '</ul></div>';
+                $tagResult = '<div class="clearfix"></div><div class="tag">' . JText::_('TAGS:') . '<ul class="tag">' . $htmlList . '</ul></div>';
                 $position = CedTagsHelper::param('TagPosition');
                 if ($position == 1) {
                     $article->text = $tagResult . $article->text;
@@ -132,10 +128,10 @@ class plgContentCedTags extends JPlugin
             }
 
         }
+
         $showAddTagButton = CedTagsHelper::param('ShowAddTagButton');
         if ($showAddTagButton) {
             $user =& JFactory::getUser();
-
             $canEdit = $this->canUserAddTags($user, $article->id);
             if ($canEdit) {
                 $Itemid = JRequest::getVar('Itemid', false);
@@ -198,7 +194,7 @@ class plgContentCedTags extends JPlugin
         $user =& JFactory::getUser();
         $aid = $user->get('aid', 0);
 
-        $html = '<div class="relateditemsbytags"><h3>' . $relatedArticlesTitle . '</h3><ul class="relateditems">';
+        $html = '<div class="relateditemsbytags">' . $relatedArticlesTitle . '</div><ul class="relateditems">';
         $link = "";
         foreach ($rows as $row)
         {

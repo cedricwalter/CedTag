@@ -16,7 +16,7 @@
         3.Auto extract meta keywords as tags.
     </description>
     <files>
-        <filename plugin="cedtags">cedtags.php</filename>
+        <filename plugin="cedtags">cedTags.php</filename>
     </files>
 
     <!-- Extension Update Specification -->

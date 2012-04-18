@@ -52,7 +52,7 @@ class CedTagModelImport extends CedTagModelTag
                             }
                         }
                         unset($keys);
-                        $deleteTags = 'delete from #__cedtag_term_content where cid=' . $cid;
+                        $deleteTags = 'delete from #__cedtag_term_content where cid=' . $this->_db->quote($cid);
                         $this->_db->setQuery($deleteTags);
                         $this->_db->query();
                         foreach ($keysProcessed as $key) {

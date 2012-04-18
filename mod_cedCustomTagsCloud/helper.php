@@ -14,18 +14,16 @@ class modCedCustomTagsCloudHelper
 {
     function getList(&$params)
     {
-        $mainframe =& JFactory::getApplication();
-        $db =& JFactory::getDBO();
+        $dbo =& JFactory::getDBO();
         $termIds = $params->get("tagIds");
 
         $idsArray = @explode(',', $termIds);
         if (empty($idsArray)) {
             return array();
         }
-        $query = 'select id,name, 1 as sequence from #__cedtag_term where id in(' . @implode(',', $idsArray) . ')';
-
-        $db->setQuery($query);
-        $rows = $db->loadObjectList();
+        $query = 'select id,name, 1 as sequence from #__cedtag_term as t where t.id in(' . @implode(',', $idsArray) . ') and t.published=\'1\'';
+        $dbo->setQuery($query);
+        $rows = $dbo->loadObjectList();
 
 
         if (isset($rows) && !empty($rows)) {
