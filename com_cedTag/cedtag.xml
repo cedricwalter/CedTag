@@ -61,6 +61,7 @@
             <filename>install.cedtags.sql</filename>
             <filename>uninstall.cedtags.sql</filename>
             <folder>views</folder>
+			<folder>stopwords</folder>
             <folder>models</folder>
             <folder>controllers</folder>
         </files>
