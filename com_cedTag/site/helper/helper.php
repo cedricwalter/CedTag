@@ -9,6 +9,95 @@
 defined('_JEXEC') or die('Restricted access');
 class CedTagsHelper
 {
+    static function addTagcanvasJavascript($uuid1, $uuid2)
+    {
+        static $added;
+
+        $document =& JFactory::getDocument();
+        $document->addScript(JURI::base() . 'media/com_cedtag/js/tagcanvas.js?1.15');
+
+        if (!isset($added)) {
+            $added = true;
+            $document->addScriptDeclaration("
+                            var oopts = {
+                                interval: " . CedTagsHelper::param('interval', 20) . ",
+                                maxSpeed: " . CedTagsHelper::param('maxSpeed', 0.05) . ",
+                                minSpeed: " . CedTagsHelper::param('minSpeed', 0.0) . ",
+                                decel: " . CedTagsHelper::param('decel', 0.95) . ",
+                                minBrightness: " . CedTagsHelper::param('minBrightness', 0.1) . ",
+                                textColour: '" . CedTagsHelper::param('textColour', '#ff99ff') . "',
+                                textHeight: " . CedTagsHelper::param('textHeight', 15) . ",
+                                textFont: '" . CedTagsHelper::param('textFont', 'Helvetica, Arial, sans-serif') . "',
+                                outlineColour: '" . CedTagsHelper::param('outlineColour', '#ffff99') . "',
+                                outlineMethod: '" . CedTagsHelper::param('outlineMethod', 'outline') . "',
+                                outlineThickness: " . CedTagsHelper::param('outlineThickness', 2) . ",
+                                outlineOffset: " . CedTagsHelper::param('outlineOffset', 5) . ",
+                                pulsateTo: " . CedTagsHelper::param('pulsateTo', 1.0) . ",
+                                pulsateTime: " . CedTagsHelper::param('pulsateTime', 3) . ",
+                                depth: " . CedTagsHelper::param('depth', 0.5) . ",
+                                initial: " . CedTagsHelper::param('initial', null) . ",
+                                freezeActive: " . CedTagsHelper::param('freezeActive', false) . ",
+                                activeCursor: '" . CedTagsHelper::param('activeCursor', 'pointer') . "',
+                                frontSelect: " . CedTagsHelper::param('frontSelect', false) . ",
+                                txtOpt: " . CedTagsHelper::param('txtOpt', true) . ",
+                                txtScale: " . CedTagsHelper::param('txtScale', 2) . ",
+                                reverse: " . CedTagsHelper::param('reverse', false) . ",
+                                hideTags: " . CedTagsHelper::param('hideTags', true) . ",
+                                zoom: " . CedTagsHelper::param('zoom', 1.0) . ",
+                                wheelZoom: " . CedTagsHelper::param('wheelZoom', true) . ",
+                                zoomStep: " . CedTagsHelper::param('zoomStep', 0.05) . ",
+                                zoomMax: " . CedTagsHelper::param('zoomMax', 3.0) . ",
+                                zoomMin: " . CedTagsHelper::param('zoomMin', 0.3) . ",
+                                shadow: '" . CedTagsHelper::param('shadow', '#000000') . "',
+                                shadowBlur: " . CedTagsHelper::param('shadowBlur', 0) . ",
+                                shadowOffset: " . CedTagsHelper::param('shadowOffset', '[0,0]') . ",
+                                weight: " . CedTagsHelper::param('weight', false) . ",
+                                weightMode: '" . CedTagsHelper::param('weightMode', 'size') . "',
+                                weightSize: " . CedTagsHelper::param('weightSize', 1.0) . ",
+                                weightGradient: " . CedTagsHelper::param('weightGradient', "{0:'#f00', 0.33:'#ff0', 0.66:'#0f0', 1:'#00f'}") . ",
+                                weightFrom: " . CedTagsHelper::param('weightFrom', null) . ",
+                                shape: '" . CedTagsHelper::param('shape', 'sphere') . "',
+                                lock: " . CedTagsHelper::param('lock', null) . ",
+                                tooltip: " . CedTagsHelper::param('tooltip', null) . ",
+                                tooltipClass: '" . CedTagsHelper::param('tooltipClass', 'tctooltip') . "',
+                                radiusX: " . CedTagsHelper::param('radiusX', 1) . ",
+                                radiusY: " . CedTagsHelper::param('radiusY', 1) . ",
+                                radiusZ: " . CedTagsHelper::param('radiusZ', 1) . ",
+                                stretchX: " . CedTagsHelper::param('stretchX', 1) . ",
+                                stretchY: " . CedTagsHelper::param('stretchY', 1) . ",
+                                shuffleTags: " . CedTagsHelper::param('shuffleTags', false) . ",
+                                noSelect: " . CedTagsHelper::param('noSelect', false) . ",
+                                noMouse: " . CedTagsHelper::param('noMouse', false) . ",
+                                imageScale: " . CedTagsHelper::param('imageScale', 1) . ",
+                                freezeActive: " . CedTagsHelper::param('freezeActive', false) . "
+                            };");
+
+
+        }
+
+
+        $document =& JFactory::getDocument();
+        $document->addScriptDeclaration("
+                window.onload = function() {
+                try {
+                  TagCanvas.Start('" . $uuid1 . "','" . $uuid2 . "', oopts);
+
+
+                } catch(e) {
+
+                  // something went wrong, hide the canvas container
+                  document.getElementById('myCanvasContainer').style.display = 'none';
+                }
+              };");
+        //TagCanvas.Start('cedLatestTags1','cedLatestTags2', oopts);
+        //TagCanvas.Start('cedMostPopularTags1','cedMostPopularTags2', oopts);
+        //TagCanvas.Start('cedCustomTagsCloud1','cedCustomTagsCloud2', oopts);
+        //TagCanvas.Start('cedMostReadTags1','cedMostReadTags2', oopts);
+        //TagCanvas.Start('cedMostPopularTags1','cedMostPopularTags2', oopts);
+
+    }
+
+
     static function param($name, $default = '')
     {
         static $params;
@@ -90,10 +179,13 @@ class CedTagsHelper
         $tag = CedTagsHelper::tripChars($tag);
         $tag = JString::trim($tag);
         $tag = CedTagsHelper::unUrlTagname($tag);
+
+
         $toLowerCase = CedTagsHelper::param('lowcase', 1);
         if ($toLowerCase) {
             $tag = JString::strtolower($tag);
         }
+
         return $tag;
     }
 
@@ -162,19 +254,36 @@ class CedTagsHelper
         return $name;
     }
 
-    static function  isValidName($name)
+    static function getExcludedWordList()
     {
-        $valid = true;
-        $name = CedTagsHelper::preHandle($name);
-        if (empty($name)) {
-            $valid = false;
+        static $excludedArray;
+        if (!isset($excludedArray)) {
+            $lang = JFactory::getLanguage()->getDefault();
+            $file = JPATH_ADMINISTRATOR . '/components/com_cedtag/stopwords/stopwords_' . $lang . '.php';
+            if (!is_file($file)) {
+                JFile::copy(JPATH_ADMINISTRATOR . '/components/com_cedtag/stopwords/stopwords_en-GB-default.php', $file);
+            }
+            $FileContent = trim(JFile::read($file));
+            $excludedArray = explode(",", $FileContent);
         }
 
-        if ($valid) {
-            return $name;
-        } else {
+        return $excludedArray;
+    }
+
+
+    static function isValidName($name)
+    {
+        $name = CedTagsHelper::preHandle($name);
+
+        if (empty($name)) {
             return false;
         }
+        if (in_array($name,CedTagsHelper::getExcludedWordList())) {
+            return false;
+        }
+
+        return $name;
+
     }
 }
 

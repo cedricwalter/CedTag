@@ -42,5 +42,7 @@ defined('_JEXEC') or die('Restricted access');
     </table>
     <input type="hidden" name="task" value="save">
     <input type="hidden" name="controller" value="css">
+    <input type="hidden" name="option" value="com_cedtag">
+
     <?php echo JHTML::_('form.token'); ?>
 </form>

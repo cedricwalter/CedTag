@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
 
-    <fieldset name="General" label="General">
+    <fieldset name="General" label="Tags">
 
         <field name="capitalize" type="radio" default="0" label="Capitalize"
                description="Capitalize tags before showing to user.">
@@ -18,7 +18,11 @@
             <option value="0">No</option>
             <option value="1">Yes</option>
         </field>
-        <field name="StripCharacters" type="text" default="-|_|,|~|!|@|%|^|(|)|&lt;|&gt;|:|;|{|}|[|]|&amp;|`|&quot;|#|*"
+        <field name="StripCharacters"
+               type="textarea"
+               rows="3"
+               cols="30"
+               default="-|_|,|~|!|?|@|%|^|(|)|&lt;|&gt;|:|;|{|}|[|]|&amp;|`|&quot;|#|*"
                label="Strip Characters" description="Characters to strip from the tag name, seperate with |">
         </field>
     </fieldset>
@@ -27,7 +31,9 @@
                description="How many tags/terms to show on each page.">
         </field>
     </fieldset>
+
     <fieldset name="Parameters for Frontend" label="Frontend">
+
         <field name="page_limit" type="text" size="20" default="10" label="Page Limit"
                description="How many articles to show on each page.">
         </field>
@@ -53,6 +59,11 @@
                description="Show Archive Articles">
             <option value="1">Yes</option>
             <option value="0">No</option>
+        </field>
+        <field name="showCategory" type="radio" default="1" label="Show Articles Category"
+                       description="Show Articles Category">
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
         </field>
         <field name="Order" type="list" default="" label="Order"
                description="Order that the articles will be displayed in.">

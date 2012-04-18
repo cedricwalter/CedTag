@@ -38,57 +38,67 @@ class CedTagControllerExport extends JController
         parent::display();
     }
 
-
     function export()
     {
-        $db = JFactory::getDbo();
-        $ok = true;
-        try {
-            echo "First create a temp table 'tmpcontent'";
-            $query = 'CREATE TABLE #__tmpcontent (cid INTEGER(11) UNSIGNED NOT NULL, metakey TEXT NOT NULL);';
-            $db->setQuery($query);
-            $db->query();
-        }
-        catch (Exception $e) {
-            $ok = false;
-        }
-        try {
-            echo "Fill 'tmpcontent' with the metadata";
-            $query = "INSERT INTO #__tmpcontent SELECT c.id, GROUP_CONCAT(t.name SEPARATOR ',') FROM #__content AS c LEFT JOIN #__cedtag_term_content AS t2c ON t2c.cid=c.id LEFT JOIN jos_tag_term AS t ON t.id=t2c.tid GROUP BY c.id";
-            $db->setQuery($query);
-            $db->query();
-        }
-        catch (Exception $e) {
-            $ok = false;
-        }
-        try {
-            echo "Copy the metadata to the content";
-            $query = "UPDATE #__content AS c, #__tmpcontent AS t SET c.metakey=t.metakey WHERE c.id=t.cid;";
-            $db->setQuery($query);
-            $db->query();
-        }
-        catch (Exception $e) {
-            $ok = false;
-        }
-        try {
-                    echo "Copy the metadata to the content";
-                    $query = "DROP TABLE #__tmpcontent;";
-                    $db->setQuery($query);
-                    $db->query();
-                }
-                catch (Exception $e) {
-                    $ok = false;
-                }
+        $dbo = JFactory::getDbo();
+        $executionResult = true;
+        $executionMessages = "";
+        $tmpTable = "tmpcontent" . uniqid();
 
+        try {
+            $executionMessages .= JText::_('First create a temp table ') . $tmpTable;
+            $query = 'CREATE TABLE #__' . $tmpTable . ' (cid INTEGER(11) UNSIGNED NOT NULL, metakey TEXT NOT NULL);';
+            $dbo->setQuery($query);
+            $dbo->query();
+            $executionMessages .= JText::_('-OK');
+        }
+        catch (Exception $e) {
+            $executionResult = false;
+            $executionMessages .= JText::_('-FAIL');
+        }
+        try {
+            $executionMessages .= JText::_('Fill Table with the metadata');
+            $query = 'INSERT INTO #__' . $tmpTable . ' SELECT c.id, GROUP_CONCAT(t.name SEPARATOR ",") FROM #__content';
+            $query .= 'AS c LEFT JOIN #__cedtag_term_content AS t2c ON t2c.cid=c.id LEFT JOIN jos_tag_term AS t ON t.id=t2c.tid GROUP BY c.id;';
+            $dbo->setQuery($query);
+            $dbo->query();
+            $executionMessages .= JText::_('-OK');
+        }
+        catch (Exception $e) {
+            $executionResult = false;
+            $executionMessages .= JText::_('-FAIL');
+        }
+        try {
+            $executionMessages .= JText::_('Copy the metadata to the content');
+            $query = 'UPDATE #__content AS c, #__' . $tmpTable . ' AS t SET c.metakey=t.metakey WHERE c.id=t.cid;';
+            $dbo->setQuery($query);
+            $dbo->query();
+            $executionMessages .= JText::_('-OK');
+        }
+        catch (Exception $e) {
+            $executionResult = false;
+            $executionMessages .= JText::_('-FAIL');
+        }
+        try {
+            $executionMessages .= JText::_('Copy the metadata to the content');
+            $query = 'DROP TABLE #__' . $tmpTable . ';';
+            $dbo->setQuery($query);
+            $dbo->query();
+            $executionMessages .= JText::_('-OK');
+        }
+        catch (Exception $e) {
+            $executionResult = false;
+            $executionMessages .= JText::_('-FAIL');
+        }
 
         $msg = JText::_('Tags are successfully imported!');
-        if (!$ok) {
+        if (!$executionResult) {
             $msg = JText::_('We met some problems while exporting tags, please check!');
+            $msg .= $executionMessages;
         }
 
         //parent::display();
-        $this->setRedirect("index.php?option=com_cedtag&controller=export", $msg);
-
+        $this->setRedirect(JRoute::_('index.php?option=com_cedtag&controller=export'), $msg);
     }
 
 }

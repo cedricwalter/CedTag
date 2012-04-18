@@ -21,7 +21,7 @@ class CedTagViewCss extends JView
     function defaultTpl($tpl = null)
     {
         JToolBarHelper::title(JText::_('TEMPLATE MANAGER'), 'tag.png');
-        JToolBarHelper::save('save', JText::_('SAVE'));
+        JToolBarHelper::save();
         JToolBarHelper::spacer();
         JToolBarHelper::custom('restore', 'default', '', JText::_('RESTORE DEFAULT'), false);
         JToolBarHelper::spacer();

@@ -17,6 +17,7 @@ defined('_JEXEC') or die('Restricted access');
                 <option value="meta-keys"><?php echo JText::_('META KEYWORDS');?></option>
                 <option value="jtags">JTags</option>
                 <option value="joomlatags">Joomla tags</option>
+                <option value="acesef">AceSef meta keywords</option>
             </select></td>
         </tr>
         <tr>

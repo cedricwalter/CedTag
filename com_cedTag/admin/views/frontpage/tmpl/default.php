@@ -50,6 +50,14 @@ require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
             <span><?php echo JText::_('TEMPLATE MANAGER');?></span></a></div>
     </div>
 
+    <div style="float: left;">
+        <div class="icon"><a href="index.php?option=com_cedtag&controller=stopwords"
+                             title="<?php echo JText::_('STOPWORDS');?>"> <img
+            src="<? echo JURI::root() ?>/media/com_cedtag/images/gear_forbidden.png"
+            alt="<?php echo JText::_('STOPWORDS');?>"/>
+            <span><?php echo JText::_('STOPWORDS');?></span></a></div>
+    </div>
+
 
     <div style="float: left;">
         <div class="icon"><a href="index.php?option=com_cedtag&controller=import"

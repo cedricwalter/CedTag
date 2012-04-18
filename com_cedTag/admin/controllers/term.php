@@ -114,9 +114,9 @@ class CedTagControllerTerm extends JController
             $isok = $model->insertTerms($terms);
 
             if (!$isok) {
-                $msg = JText::_('TERMS COULD NOT BE CREATED PLEASE CHECK');
+                $msg = JText::_('TERMS COULD NOT BE CREATED PLEASE CHECK, Tems <').$terms.JText::_('> IS/ARE INVALID OR IN EXCLUDED LIST');
             } else {
-                $msg = JText::_('TERMS SUCCESSFULLY CREATED');
+                $msg = JText::_('TERMS <').$terms.JText::_('> SUCCESSFULLY CREATED');
             }
         } else {
             $msg = JText::_('TERMS CAN NOT BE BLANK');

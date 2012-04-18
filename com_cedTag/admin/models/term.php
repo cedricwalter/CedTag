@@ -108,7 +108,7 @@ class CedTagModelTerm extends JModel
         }
         $isok = true;
         foreach ($termsInArray as $term) {
-            $this->store($term);
+            $isok = $this->store($term);
         }
         return $isok;
     }
