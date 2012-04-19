@@ -9,6 +9,59 @@
 defined('_JEXEC') or die('Restricted access');
 class CedTagsHelper
 {
+
+    function getPopularTagModel($count = 25, $sorting = 'sizeasort', $reverse = 1) {
+        $dbo = JFactory::getDBO();
+
+                $query = "select count(*) as ct,name,hits from #__cedtag_term_content as tc inner join #__cedtag_term as t on t.id=tc.tid where t.published='1' group by(tid) order by ct desc";
+                $dbo->setQuery($query, 0, $count);
+                $rows = $dbo->loadObjectList();
+
+                if (isset($rows) && !empty($rows)) {
+
+                    usort($rows, array('CedTagsHelper', 'tag_popularasort'));
+
+                    CedTagsHelper::addCss();
+
+                    $tag_sizes = 7;
+                    $total_tags = count($rows);
+                    $min_tags = $total_tags / $tag_sizes;
+                    $bucket_count = 1;
+                    $bucket_items = 0;
+                    $tags_set = 0;
+                    for ($index = 0; $index < $total_tags; $index++) {
+                        $row =& $rows[$index];
+                        //$row->link=JRoute::_('index.php?option=com_cedtag&task=tag&tag='.urlencode($row->name));
+                        $row->link = JRoute::_('index.php?option=com_cedtag&task=tag&tag=' . CedTagsHelper::urlTagname($row->name));
+                        $last_count = 0;
+                        $tag_count = $row->ct;
+                        if (($bucket_items >= $min_tags) and $last_count != $tag_count and $bucket_count < $tag_sizes) {
+                            $bucket_count++;
+                            $bucket_items = 0;
+                            // Calculate a new minimum number of tags for the remaining classes.
+                            $remaining_tags = $total_tags - $tags_set;
+                            $min_tags = $remaining_tags / $bucket_count;
+                        }
+                        $row->class = 'tag' . $bucket_count;
+                        $row->size = 65 + ($tag_count * 10);
+                        $bucket_items++;
+                        $tags_set++;
+                        $last_count = $tag_count;
+                        $row->name = CedTagsHelper::ucwords($row->name);
+
+                    }
+                    usort($rows, array('CedTagsHelper', $sorting));
+
+                    if ($reverse) {
+                        $rows = array_reverse($rows);
+                    }
+                }
+
+                return $rows;
+    }
+
+
+
     static function addTagcanvasJavascript($uuid1, $uuid2)
     {
         static $added;

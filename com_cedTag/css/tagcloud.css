@@ -7,6 +7,62 @@
     height: 0;
 }
 
+/***********************************************************************************************
+*	All tags component page
+* access with index.php?option=com_cedtag&view=alltags or by defining a menu
+***********************************************************************************************/
+.alltags .title {
+    font-size: 120%;
+}
+
+.alltags .legend {
+    /* display: hidden; uncomment to hide the legend*/
+    color: gray;
+    font-size: 90%;
+    padding-bottom: 15px;
+}
+
+.alltags .cloud {
+    /*   border: 1px solid #2484B0;*/
+    /*   border-radius: 9px;*/
+}
+
+.alltags .cloud a:hover {
+    -webkit-transition-delay: 0s;
+    -webkit-transition-duration: 0.5s;
+    -webkit-transition-property: color;
+    -webkit-transition-timing-function: linear;
+    color: #2484B0;
+}
+
+.alltags .copyright {
+    text-align: center;
+}
+
+/***********************************************************************************************
+*	Wordle component page
+* access with index.php?option=com_cedtag&view=alltags&layout=wordle or by defining a menu
+***********************************************************************************************/
+.wordle .title {
+    font-size: 120%;
+}
+
+.wordle .legend {
+    /* display: hidden; uncomment to hide the legend*/
+    color: gray;
+    font-size: 90%;
+    padding-bottom: 15px;
+}
+
+.wordle .cloud {
+    /*   border: 1px solid #2484B0;*/
+    /*   border-radius: 9px;*/
+}
+
+.wordle .copyright {
+    text-align: center;
+}
+
 /************************************************
 *	Frontend inline edit Tag
 ************************************************/
@@ -27,8 +83,9 @@
 .tag li {
     list-style-type: none;
     display: inline;
-    background: -moz-linear-gradient(center top , #FFFFFF, #CCCCCC) repeat scroll 0 0 transparent;
+    background: -moz-linear-gradient(center top, #FFFFFF, #CCCCCC) repeat scroll 0 0 transparent;
 }
+
 .tag li a {
     padding: 0px 6px 0px 6px !important;
     border: 1px solid #AAAAAA;
@@ -55,12 +112,11 @@
     /*content: ", "; *//* you can place here a , or any character to clearly separate tags */
     padding-right: 2px;
 }
+
 .tag li:last-child {
     content: " "; /* but leave the last child empty */
     padding-right: 2px;
 }
-
-
 
 /*************************************************
 *   Add Tags

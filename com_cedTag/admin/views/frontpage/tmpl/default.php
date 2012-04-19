@@ -145,6 +145,8 @@ require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
     </p>
 
     <p>
-        &copy; 2012 <a href="www.waltercedric.com">www.waltercedric.com</a>
+        &copy; 2012 <a href="http://www.waltercedric.com">www.waltercedric.com</a> GNU-GPL v3.0<br/>
+        &copy; 2011 <a href="http://www.dreamcraft.ch">www.dreamcraft.ch</a> MIT for WordCloud<br/>
+        &copy; 2010 <a href="http://www.joomlatags.org">www.joomlatags.org</a> GNU-GPL v2.0<br/>
     </p>
 </div>

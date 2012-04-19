@@ -21,10 +21,9 @@ class modCedCustomTagsCloudHelper
         if (empty($idsArray)) {
             return array();
         }
-        $query = 'select id,name, 1 as sequence from #__cedtag_term as t where t.id in(' . @implode(',', $idsArray) . ') and t.published=\'1\'';
+        $query = "select id,name, 1 as sequence from #__cedtag_term as t where t.id in(" . @implode(',', $idsArray) . ");";
         $dbo->setQuery($query);
         $rows = $dbo->loadObjectList();
-
 
         if (isset($rows) && !empty($rows)) {
             $rowsMap = array();

@@ -10,15 +10,76 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.model');
 
 require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
+require_once JPATH_SITE . '/components/com_cedtag/wordcloud/tagcloud.php';
+
 
 class CedTagModelAllTags extends JModel
 {
+
+    function getWordle()
+    {
+        $CedTagsHelper = new CedTagsHelper();
+
+        $app = JFactory::getApplication();
+        $input = $app->input;
+        $params = $app->getParams();
+
+        /*
+        $count = intval($params->get('count', 25));
+        $sorting = $params->get('sorting', 'sizeasort');
+        $reverse = intval($params->get('reverse', 1));
+        */
+        $rows = $CedTagsHelper->getPopularTagModel();
+
+        $full_text = array();
+        foreach ($rows as $row) {
+            $line = array('word' => $row->name, 'count' => $row->size, 'title' => $row->name, 'link' => $row->link);
+            $full_text[] = $line;
+        }
+
+        $yellowRed = array('FFA700', 'FFDF00', 'FF4F00', 'FFEE73');
+
+        $font = JPATH_SITE . './components/com_cedtag/wordcloud/Arial.ttf';
+        $width = 700;
+        $height = 700;
+        $cloud = new WordCloud($width, $height, $font, $full_text);
+        $palette = Palette::get_palette_from_hex($cloud->get_image(), array('CC6600', 'FFFBD0', 'FF9900', 'C13100'));
+        $cloud->render($palette);
+
+        // Render the cloud in a temporary file, and return its base64-encoded content
+        $file = tempnam(getcwd(), 'img');
+        imagepng($cloud->get_image(), $file);
+        $img64 = base64_encode(file_get_contents($file));
+        unlink($file);
+        imagedestroy($cloud->get_image());
+
+        $result = array();
+        $result['cloud'] = $cloud;
+        $result['img64'] = $img64;
+
+        return $result;
+    }
+
     function getAllTags()
     {
-        $order = CedTagsHelper::param('tagOrder');
-        $orderby = $this->_buildOrderBy($order);
-        $query = 'select count(*) as ct,name from #__cedtag_term_content as tc inner join #__cedtag_term as t on t.id=tc.tid where t.published=\'1\' group by(tid) order by ' . $orderby;
-        return $this->_getList($query);
+        $document =& JFactory::getDocument();
+
+        $description = CedTagsHelper::param('metaDescription');
+        $document->setDescription(CedTagsHelper::truncate($description));
+
+        $keywords = CedTagsHelper::param('metaKeywords');
+        $document->setMetadata('keywords', $keywords);
+
+        $title = CedTagsHelper::param('title');
+        $document->setTitle($title);
+
+        $CedTagsHelper = new CedTagsHelper();
+
+        $count = null; //intval($params->get('count', 25));
+        $sorting = null; //$params->get('sorting', 'sizeasort');
+        $reverse = null; //intval($params->get('reverse', 1));
+
+        return $CedTagsHelper->getPopularTagModel();
     }
 
     function _buildOrderBy($order)
