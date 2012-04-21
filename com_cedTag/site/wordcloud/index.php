@@ -17,16 +17,17 @@ EOT;
 
 $full_text =
     array(
-        array('word' => "cedric", 'count' => "25", 'title' => "cedric"),
-        array('word' => "walter", 'count' => "5", 'title' => "cedric"),
-        array('word' => "toto", 'count' => "25", 'title' => "1"),
+        array('word' => "cedric", 'count' => "25", 'title' => "cedric", 'link' => "cedric"),
+        array('word' => "walter", 'count' => "5", 'title' => "cedric", 'link' => "cedric"),
+        array('word' => "toto", 'count' => "25", 'title' => "1", 'link' => "cedric")
 );
+
 
 $yellowRed = array('FFA700', 'FFDF00', 'FF4F00', 'FFEE73');
 
 $font = dirname(__FILE__) . '/Arial.ttf';
-$width = 1000;
-$height = 1000;
+$width = 600;
+$height = 600;
 $cloud = new WordCloud($width, $height, $font, $full_text);
 $palette = Palette::get_palette_from_hex($cloud->get_image(), array('CC6600', 'FFFBD0', 'FF9900', 'C13100'));
 $cloud->render($palette);
@@ -39,3 +40,9 @@ unlink($file);
 imagedestroy($cloud->get_image());
 ?>
 
+<img usemap="#mymap" src="data:image/png;base64,<?php echo $img64 ?>" border="0"/>
+<map name="mymap">
+<?php foreach($cloud->get_image_map() as $map): ?>
+<area shape="rect" coords="<?php echo $map[1]->get_map_coords() ?>" onclick="alert('You clicked: <?php echo $map[0] ?>');" />
+<?php endforeach ?>
+</map>

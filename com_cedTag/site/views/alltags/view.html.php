@@ -13,6 +13,7 @@ jimport('joomla.application.pathway');
 
 class CedTagViewAllTags extends JView
 {
+
     function display($tpl = null)
     {
         $layout = Jrequest::getVar('layout');
@@ -21,7 +22,7 @@ class CedTagViewAllTags extends JView
                 $this->wordle($tpl);
                 break;
             default:
-                $this->defaultTpl($tpl);
+                $this->allTags($tpl);
         }
     }
 
@@ -29,20 +30,26 @@ class CedTagViewAllTags extends JView
     {
         //Get data from getWordle() in /models/allTags.php
         $result = $this->get('Wordle');
+        $state = $this->get('State');
 
         //Make Data available to view
         $this->assignRef('cloud', $result['cloud']);
         $this->assignRef('img64', $result['img64']);
+        $this->assignRef('params', $state->params);
+
         parent::display($tpl);
     }
 
-    function defaultTpl($tpl = null)
+    function allTags($tpl = null)
     {
         //Get data from getAllTags() in /models/allTags.php
         $allTags = $this->get('AllTags');
+        $state = $this->get('State');
 
         //Make Data available to view
         $this->assignRef('list', $allTags);
+        $this->assignRef('params', $state->params);
+
         parent::display($tpl);
     }
 }

@@ -49,7 +49,7 @@
         <folder>models</folder>
         <folder>helper</folder>
         <folder>images</folder>
-        <folder>wordcloud</folder>
+        <folder>wordle</folder>
     </files>
     <administration>
         <menu link="option=com_cedtag">cedTag</menu>

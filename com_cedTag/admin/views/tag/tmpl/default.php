@@ -1,154 +1,181 @@
 <?php
 /**
- * @package Component cedTag for Joomla! 2.5
- * @author waltercedric.com
- * @copyright (C) 2012 http://www.waltercedric.com 2010- http://www.joomlatags.org
- * @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
- **/
-defined('_JEXEC') or die('Restricted access');
+ * @package		Joomla.Administrator
+ * @subpackage	com_content
+ * @copyright	Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
+ * @license		GNU General Public License version 2 or later; see LICENSE.txt
+ */
 
-$createdate =& JFactory::getDate();
-$limitstart =
-    JRequest::getVar('limitstart', '0', '', 'int');
+// no direct access
+defined('_JEXEC') or die;
 
+JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
+JHtml::_('behavior.tooltip');
+JHtml::_('behavior.multiselect');
 
-$mainframe =& JFactory::getApplication();
-
-// Initialize variables
-$db = &JFactory::getDBO();
-
-// Get some variables from the request
-$catid = $mainframe->getUserStateFromRequest('articleelement.catid', 'catid', 0, 'int');
-$search = $mainframe->getUserStateFromRequest('articleelement.search', 'search', '', 'string');
-$search = JString::strtolower($search);
-
-// get list of categories for dropdown filter
-$categoryQuery = 'SELECT cc.id AS value, cc.title AS text' .
-    ' FROM #__categories AS cc';
-$categories[] = JHTML::_('select.option', '0', '- ' . JText::_('Select Category') . ' -');
-$db->setQuery($categoryQuery);
-$categories = array_merge($categories, $db->loadObjectList());
-$catidFilter = JHTML::_('select.genericlist', $categories, 'catid', 'class="inputbox" size="1" onchange="document.adminForm.submit( );"', 'value', 'text', $catid);
-
-$javascript = 'onchange="document.adminForm.submit();"';
-
+$user		= JFactory::getUser();
+$userId		= $user->get('id');
+$listOrder	= $this->escape($this->state->get('list.ordering'));
+$listDirn	= $this->escape($this->state->get('list.direction'));
+$saveOrder	= $listOrder == 'a.ordering';
 ?>
-<script type="text/javascript">
-    function autofill(tag) {
-        //alert(tag.style);
-    }
-</script>
+<form action="<?php echo JRoute::_('index.php?option=com_cedtag&controller=tag');?>" method="post" name="adminForm" id="adminForm">
+	<fieldset id="filter-bar">
+		<div class="filter-search fltlft">
+			<label class="filter-search-lbl" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
+			<input type="text" name="filter_search" id="filter_search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_CONTENT_FILTER_SEARCH_DESC'); ?>" />
 
-<form action="<?php echo JRoute::_('index.php?controller=tag&option=com_cedtag'); ?>" method="post" name="adminForm" id="adminForm" autocomplete="off">
+			<button type="submit" class="btn"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
+			<button type="button" onclick="document.id('filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
+		</div>
+		<div class="filter-select fltrt">
+			<select name="filter_published" class="inputbox" onchange="this.form.submit()">
+				<option value=""><?php echo JText::_('JOPTION_SELECT_PUBLISHED');?></option>
+				<?php echo JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), 'value', 'text', $this->state->get('filter.published'), true);?>
+			</select>
 
-    <table>
-        <tr>
-            <td width="100%"><?php echo JText::_('Filter'); ?>: <input
-                type="text" name="search" id="search" value="<?php echo($search);?>"
-                class="text_area" onchange="document.adminForm.submit();"/>
-                <button onclick="this.form.submit();"><?php echo JText::_('Go'); ?></button>
-                <button
-                    onclick="document.getElementById('search').value='';this.form.submit();"><?php echo JText::_('Reset'); ?></button>
-            </td>
-            <td nowrap="nowrap"><?php
-                echo $catidFilter;
-                ?></td>
-        </tr>
-    </table>
-    <table class="adminlist">
-        <thead>
-        <tr>
-            <th width="10" align="left"><?php echo JText::_('Num'); ?></th>
-            <th class="title" width="20%"><?php echo JText::_('ARTICLE');?></th>
-            <th class="title" width="10%"><?php echo JText::_('CATEGORY');?></th>
-            <th><?php echo JText::_('TAGS');?></th>
-        </tr>
-        </thead>
+			<select name="filter_category_id" class="inputbox" onchange="this.form.submit()">
+				<option value=""><?php echo JText::_('JOPTION_SELECT_CATEGORY');?></option>
+				<?php echo JHtml::_('select.options', JHtml::_('category.options', 'com_content'), 'value', 'text', $this->state->get('filter.category_id'));?>
+			</select>
 
-        <tbody>
-        <?php
-        $k = 0;
-        $rows = $this->tagList->list;
-        if (count($rows)) {
-            $combined = array();
-            for ($i = 0, $n = count($rows); $i < $n; $i++) {
-                $row = &$rows[$i];
-                if (isset($combined[$row->cid])) {
-                    $combined[$row->cid]->tag .= ',' . $row->name;
-                } else {
-                    if (isset($row->name)) {
-                        $obj->tag = $row->name;
-                    } else {
-                        $obj->tag = '';
-                    }
-                    $obj->title = $row->title;
-                    $obj->id = $row->cid;
-                    $obj->category = $row->category;
-                    $combined[$row->cid] = $obj;
-                }
-                unset($obj);
-            }
-            unset($rows);
-            $rows = array_values($combined);
-            for ($i = 0, $n = count($rows); $i < $n; $i++) {
-                $row = &$rows[$i];
-                JFilterOutput::objectHtmlSafe($row);
-                ?>
-		<tr class="<?php echo "row$k"; ?>">
-			<td><?php echo  $limitstart + $i + 1  ?></td>
-                <td><?php echo $row->title; ?></td>
-                <td><?php echo $row->category; ?></td>
+			<select name="filter_level" class="inputbox" onchange="this.form.submit()">
+				<option value=""><?php echo JText::_('JOPTION_SELECT_MAX_LEVELS');?></option>
+				<?php echo JHtml::_('select.options', $this->f_levels, 'value', 'text', $this->state->get('filter.level'));?>
+			</select>
 
-                <!-- TODO cedric size 400px css driven -->
-                <td class="order">
-                    <span>
-                        <input type="hidden" name="id[]"
-                               value="<?php echo $row->id;?>"/>
-                        <input name="tag[]"
-                               value="<?php echo $row->tag; ?>"
-                               id="<?php echo 'tag_' . $row->id;?>"
-                               type="text" size="100"
-                               style="width: 400px;"
-                               onclick="autofill(<?php echo 'tag_' . $row->id;?>)"/>
-                    </span>
+			<select name="filter_access" class="inputbox" onchange="this.form.submit()">
+				<option value=""><?php echo JText::_('JOPTION_SELECT_ACCESS');?></option>
+				<?php echo JHtml::_('select.options', JHtml::_('access.assetgroups'), 'value', 'text', $this->state->get('filter.access'));?>
+			</select>
+
+			<select name="filter_author_id" class="inputbox" onchange="this.form.submit()">
+				<option value=""><?php echo JText::_('JOPTION_SELECT_AUTHOR');?></option>
+				<?php echo JHtml::_('select.options', $this->authors, 'value', 'text', $this->state->get('filter.author_id'));?>
+			</select>
+
+			<select name="filter_language" class="inputbox" onchange="this.form.submit()">
+				<option value=""><?php echo JText::_('JOPTION_SELECT_LANGUAGE');?></option>
+				<?php echo JHtml::_('select.options', JHtml::_('contentlanguage.existing', true, true), 'value', 'text', $this->state->get('filter.language'));?>
+			</select>
+		</div>
+	</fieldset>
+	<div class="clr"> </div>
+
+	<table class="adminlist">
+		<thead>
+			<tr>
+				<th>
+					<?php echo JHtml::_('grid.sort', 'JGLOBAL_TITLE', 'a.title', $listDirn, $listOrder); ?>
+				</th>
+				<th width="5%">
+					<?php echo JHtml::_('grid.sort', 'JSTATUS', 'a.state', $listDirn, $listOrder); ?>
+				</th>
+				<th width="5%">
+					<?php echo JHtml::_('grid.sort', 'JFEATURED', 'a.featured', $listDirn, $listOrder, NULL, 'desc'); ?>
+				</th>
+				<th width="10%">
+					<?php echo JHtml::_('grid.sort', 'JCATEGORY', 'category_title', $listDirn, $listOrder); ?>
+				</th>
+				<th width="10%">
+					<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ACCESS', 'access_level', $listDirn, $listOrder); ?>
+				</th>
+				<th width="10%">
+					<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_CREATED_BY', 'a.created_by', $listDirn, $listOrder); ?>
+				</th>
+				<th width="5%">
+					<?php echo JHtml::_('grid.sort', 'JDATE', 'a.created', $listDirn, $listOrder); ?>
+				</th>
+				<th width="5%">
+					<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_LANGUAGE', 'language', $listDirn, $listOrder); ?>
+				</th>
+				<th width="1%" class="nowrap">
+					<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>
+				</th>
+                <th width="10%">
+                    Tags
+                </th>
+			</tr>
+		</thead>
+		<tfoot>
+			<tr>
+				<td colspan="15">
+					<?php echo $this->pagination->getListFooter(); ?>
+				</td>
+			</tr>
+		</tfoot>
+		<tbody>
+		<?php foreach ($this->items as $i => $item) :
+			$item->max_ordering = 0; //??
+			$ordering	= ($listOrder == 'a.ordering');
+			$canCreate	= false;
+			$canEdit	= false;
+			$canCheckin	= false;
+			$canEditOwn	= false;
+			$canChange	= false;
+			?>
+			<tr class="row<?php echo $i % 2; ?>">
+
+				<td>
+					<?php if ($item->checked_out) : ?>
+						<?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'articles.', $canCheckin); ?>
+					<?php endif; ?>
+					<?php echo $this->escape($item->title); ?>
+					<p class="smallsub">
+						<?php echo JText::sprintf('JGLOBAL_LIST_ALIAS', $this->escape($item->alias));?></p>
+				</td>
+				<td class="center">
+					<?php
+                    echo JHtml::_('jgrid.published', $item->state, $i, 'articles.', $canChange, 'cb', $item->publish_up, $item->publish_down); ?>
+				</td>
+				<td class="center">
+					<?php echo JHtml::_('contentadministrator.featured', $item->featured, $i, $canEdit); ?>
+				</td>
+				<td class="center">
+					<?php echo $this->escape($item->category_title); ?>
+				</td>
+				<td class="center">
+					<?php echo $this->escape($item->access_level); ?>
+				</td>
+				<td class="center">
+					<?php echo $this->escape($item->author_name); ?>
+				</td>
+				<td class="center nowrap">
+					<?php echo JHtml::_('date', $item->created, JText::_('DATE_FORMAT_LC4')); ?>
+				</td>
+				<td class="center">
+					<?php if ($item->language=='*'):?>
+						<?php echo JText::alt('JALL', 'language'); ?>
+					<?php else:?>
+						<?php echo $item->language_title ? $this->escape($item->language_title) : JText::_('JUNDEFINED'); ?>
+					<?php endif;?>
+				</td>
+				<td class="center">
+					<?php echo (int) $item->id; ?>
+				</td>
+                <td class="center">
+
+                    <?php
+                    // TODO megre both model
+                    $tag = $item; ?>
+
+                    <input type="hidden" name="id[]" value="<?php echo $tag->tagid;?>"/>
+                    <input name="tag[]"
+                           value="<?php echo $tag->tag; ?>"
+                           id="<?php echo 'tag_' . $tag->tagid;?>"
+                           type="text" size="100"
+                           style="width: 400px;"/>
                 </td>
-                <?php
-            }
-            $k = 1 - $k;
-            ?>
-		</tr>
+			</tr>
+			<?php endforeach; ?>
+		</tbody>
+	</table>
 
-		<?php
-        } else {
-            ?>
-        <tr>
-            <td colspan="8"><?php echo JText::_('There are no Articles'); ?></td>
-        </tr>
-            <?php
-        }
-
-        ?>
-        </tbody>
-
-        <tfoot>
-        <tr>
-            <td colspan="13">
-                <p class="counter">
-                            <?php echo $this->pagination->getPagesCounter(); ?>
-                        </p>
-                <?php echo $this->pagination->getListFooter(); ?>
-            </td>
-        </tr>
-        </tfoot>
-
-    </table>
-
-
-
-    <input type="hidden" name="currenttag" id="currenttag"/>
-    <input type="hidden" name="boxchecked" value="0"/>
-    <input type="hidden" name="task" value="">
-    <input type="hidden" name="controller" value="tag">
-    <?php echo JHTML::_('form.token'); ?>
-    <input type="hidden" name="limitstart"/>
+	<div>
+		<input type="hidden" name="task" value="" />
+		<input type="hidden" name="boxchecked" value="0" />
+		<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />
+		<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>" />
+		<?php echo JHtml::_('form.token'); ?>
+	</div>
 </form>
