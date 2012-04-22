@@ -52,6 +52,8 @@ class CedTagControllerImport extends JController
             $ok = $model->importTagsFromJTags();
         } else if ($source == 'joomlatags') {
             $ok = $model->importTagsFromJoomlaTags();
+        } else if ($source == 'joomlatags') {
+            $ok = $model->joomlatagsPhil();
         }
 
 
