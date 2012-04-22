@@ -96,47 +96,9 @@ class CedTagModelAllTags extends JModel
         //$sorting = $params->get('wordleTagOrder', 'sizeasort');
         $reverse = intval($params->get($paramPrefixName . 'Reverse', 1));
 
-        $rows = $CedTagsHelper->getPopularTagModel($count, 'sizeasort', $reverse);
-
+        $rows = $CedTagsHelper->getAllTagModel();
         return $rows;
     }
 
-    function _buildOrderBy($order)
-    {
-        switch ($order)
-        {
-            case 'random':
-                $orderBy = 'RAND()';
-                break;
-            case 'date' :
-                $orderBy = 't.created';
-                break;
 
-            case 'rdate' :
-                $orderBy = 't.created DESC';
-                break;
-
-            case 'alpha' :
-                $orderBy = 't.name';
-                break;
-
-            case 'ralpha' :
-                $orderBy = 't.name DESC';
-                break;
-
-            case 'hits' :
-                $orderBy = 't.hits DESC';
-                break;
-
-            case 'rhits' :
-                $orderBy = 't.hits';
-                break;
-
-            default :
-                $orderBy = 'RAND()';
-                break;
-
-        }
-        return $orderBy;
-    }
 }

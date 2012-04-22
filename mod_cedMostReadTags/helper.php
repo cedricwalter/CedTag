@@ -48,7 +48,8 @@ class modCedMostReadTagsHelper
                 $row->class = 'tag' . $bucket_count;
 
                 //linear scaling
-                $row->size = 65 + ($row->ct * 10);
+                $row->size = 65 + ($bucket_count* 10); //65 + ($tag_count * 10);
+                //$row->size = 65 + ($row->ct * 10);
 
                 //expo scaling
                 //$row->size = 9 * $bucket_count;

@@ -25,6 +25,14 @@
                default="-|_|,|~|!|?|@|%|^|(|)|&lt;|&gt;|:|;|{|}|[|]|&amp;|`|&quot;|#|*"
                label="Strip Characters" description="Characters to strip from the tag name, seperate with |">
         </field>
+        <field name="mappingFrequencyToSizeAlgorithm" type="radio" default="pareto" label="Mapping frequency"
+               description="Mapping frequency of terms to font size">
+            <option value="pareto">Pareto distribution</option>
+            <option value="dynamicbuckets">Dynamic Bucketizing by Frequency</option>
+            <!--<option value="fixedbuckets">Fixed number of Bucket by Frequency</option> -->
+        </field>
+
+
     </fieldset>
     <fieldset name="Backend" label="Backend">
         <field name="tag_page_limit" type="text" default="30" label="Tag/Term Page Limit" size="4"
@@ -61,10 +69,11 @@
             <option value="0">No</option>
         </field>
         <field name="showCategory" type="radio" default="1" label="Show Articles Category"
-                       description="Show Articles Category">
-                    <option value="1">Yes</option>
-                    <option value="0">No</option>
+               description="Show Articles Category">
+            <option value="1">Yes</option>
+            <option value="0">No</option>
         </field>
+
         <field name="Order" type="list" default="" label="Order"
                description="Order that the articles will be displayed in.">
             <option value="">Default</option>

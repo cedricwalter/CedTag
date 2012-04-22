@@ -52,7 +52,8 @@ class modCedLatestTagsHelper
                     $min_tags = $remaining_tags / $bucket_count;
                 }
                 $row->class = 'tag' . $bucket_count;
-                $row->size = 65 + ($row->ct * 10);
+                $row->size = 65 + ($bucket_count* 10); //65 + ($tag_count * 10);
+                //$row->size = 65 + ($row->ct * 10);
                 $row->created = $row->created;
 
                 $bucket_items++;

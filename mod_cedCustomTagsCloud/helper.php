@@ -12,7 +12,7 @@ require_once JPATH_SITE . '/components/com_content/helpers/route.php';
 require_once JPATH_BASE . '/components/com_cedtag/helper/helper.php';
 class modCedCustomTagsCloudHelper
 {
-    function getList(&$params)
+    public function getList(&$params)
     {
         $dbo =& JFactory::getDBO();
         $termIds = $params->get("tagIds");
