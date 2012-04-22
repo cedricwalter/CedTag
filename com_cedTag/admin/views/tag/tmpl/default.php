@@ -20,6 +20,10 @@ $listDirn	= $this->escape($this->state->get('list.direction'));
 $saveOrder	= $listOrder == 'a.ordering';
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_cedtag&controller=tag');?>" method="post" name="adminForm" id="adminForm">
+    <legend>
+          <?php echo JText::_('Term that are not published will be never displayed here or after hitting save.');?><br/>
+          <?php echo JText::_('New Terms that are not existing will be automatically created.');?>
+    </legend>
 	<fieldset id="filter-bar">
 		<div class="filter-search fltlft">
 			<label class="filter-search-lbl" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>

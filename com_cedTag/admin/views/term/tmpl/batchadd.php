@@ -26,3 +26,4 @@ defined('_JEXEC') or die('Restricted access');
     <input type="hidden" name="option" value="com_cedtag">
     <?php echo JHTML::_('form.token'); ?>
 </form>
+

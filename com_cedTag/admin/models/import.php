@@ -32,9 +32,11 @@ class CedTagModelImport extends CedTagModelTag
 
     function importTagsFromMetaKeys()
     {
+        $dbo = JFactory::getDbo();
         $query = 'select id,metakey from #__content';
-        $this->_db->setQuery($query);
-        $metaKeys = $this->_db->loadObjectList();
+        $dbo->setQuery($query);
+        $metaKeys = $dbo->loadObjectList();
+
         if (!empty($metaKeys)) {
             foreach ($metaKeys as $meta) {
                 if (isset($meta->metakey) && empty($meta->metakey) == false) {
@@ -52,9 +54,9 @@ class CedTagModelImport extends CedTagModelTag
                             }
                         }
                         unset($keys);
-                        $deleteTags = 'delete from #__cedtag_term_content where cid=' . $this->_db->quote($cid);
-                        $this->_db->setQuery($deleteTags);
-                        $this->_db->query();
+                        $deleteTags = 'delete from #__cedtag_term_content where cid=' . $dbo->quote($cid);
+                        $dbo->setQuery($deleteTags);
+                        $dbo->query();
                         foreach ($keysProcessed as $key) {
                             $pass = $this->termCheck($key);
                             if ($pass) {
@@ -69,29 +71,56 @@ class CedTagModelImport extends CedTagModelTag
         return true;
     }
 
+
     function importTagsFromJoomlaTags()
     {
-        $db = JFactory::getDbo();
+        $dbo = JFactory::getDbo();
         $query1 = "INSERT INTO #__cedtag_term_content SELECT * FROM #__tag_term_content;";
         $query2 = "INSERT INTO #__cedtag_term SELECT * FROM #__tag_term;";
 
         try {
-            $db->setQuery($query1);
-            $db->query();
-            $db->setQuery($query2);
-            $db->query();
+            $dbo->setQuery($query1);
+            $dbo->query();
+
+            $dbo->setQuery($query2);
+            $dbo->query();
         } catch (Exception $e) {
-            error_log("importTagsFromJoomlaTags".$e);
+            error_log("importTagsFromJoomlaTags" . $e);
             return false;
         }
         return true;
     }
 
+
+    function joomlatagsPhil()
+    {
+        $dbo = JFactory::getDbo();
+
+        $queryCopyTagsIntoTerm = "INSERT INTO j17_cedtag_term (id,name,hits,weight,created) SELECT id, tagname, hits, weight, created FROM jos_tag_tags;";
+        $queryTagsAssociationToContentInfoTermContent = "INSERT INTO j17_cedtag_term_content (tid,cid) SELECT tagid,contentid FROM jos_tag_category_map having count( Col1) > 1);";
+
+        try {
+            $dbo->setQuery($queryCopyTagsIntoTerm);
+            $dbo->query();
+
+            $dbo->setQuery($queryTagsAssociationToContentInfoTermContent);
+            $dbo->query();
+        } catch (Exception $e) {
+            error_log("joomlatagsPhil" . $e);
+            return false;
+        }
+        return true;
+    }
+
+
     function importTagsFromJTags()
     {
+        $dbo = JFactory::getDbo();
+
         $jtagsQuery = "select tag_id,item_id from #__jtags_items where component='com_content'";
-        $this->_db->setQuery($jtagsQuery);
-        $jtagTags = $this->_db->loadObjectList();
+        $dbo->setQuery($jtagsQuery);
+        $jtagTags = $dbo->loadObjectList();
+
         $jtags = array();
         if (!empty($jtagTags)) {
             foreach ($jtagTags as $jtag) {
@@ -103,8 +132,8 @@ class CedTagModelImport extends CedTagModelTag
             }
         }
         $jtermsQuery = 'select tag_id,name from #__jtags_tags';
-        $this->_db->setQuery($jtermsQuery);
-        $jtagterms = $this->_db->loadObjectList();
+        $dbo->setQuery($jtermsQuery);
+        $jtagterms = $dbo->loadObjectList();
         if (!empty($jtagterms)) {
             foreach ($jtagterms as $jterm) {
                 $pass = $this->termCheck($jterm->name);
@@ -121,6 +150,5 @@ class CedTagModelImport extends CedTagModelTag
         }
 
     }
-
 
 }

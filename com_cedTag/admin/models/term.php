@@ -25,9 +25,9 @@ class CedTagModelTerm extends JModel
             return false;
         }
         $query = 'delete from #__cedtag_term where ' . $where;
-        $db = JFactory::getDbo();
-        $db->setQuery($query);
-        return $db->query();
+        $dbo = JFactory::getDbo();
+        $dbo->setQuery($query);
+        return $dbo->query();
     }
 
     function update($id, $name, $description, $weight)

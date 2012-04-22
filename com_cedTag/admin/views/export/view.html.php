@@ -19,6 +19,12 @@ class CedTagViewExport extends JView
 
     function defaultTpl($tpl = null)
     {
+        $this->addToolbar();
+        parent::display($tpl);
+    }
+
+    function addToolbar()
+    {
         JToolBarHelper::title(JText::_('EXPORT TAGS TO OTHER COMPONENTS'), 'tag.png');
 
         JToolBarHelper::spacer();
@@ -26,7 +32,6 @@ class CedTagViewExport extends JView
         JToolBarHelper::spacer();
         JToolBarHelper::back(JText::_('CONTROL PANEL'), 'index.php?option=com_cedtag');
 
-        parent::display($tpl);
     }
 
 

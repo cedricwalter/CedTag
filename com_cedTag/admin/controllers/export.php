@@ -43,11 +43,11 @@ class CedTagControllerExport extends JController
         $dbo = JFactory::getDbo();
         $executionResult = true;
         $executionMessages = "";
-        $tmpTable = "tmpcontent" . uniqid();
+        $tmpTable = "#__cedtag_export";
 
         try {
             $executionMessages .= JText::_('First create a temp table ') . $tmpTable;
-            $query = 'CREATE TABLE #__' . $tmpTable . ' (cid INTEGER(11) UNSIGNED NOT NULL, metakey TEXT NOT NULL);';
+            $query = "CREATE TABLE " . $tmpTable . " (cid INTEGER(11) UNSIGNED NOT NULL, metakey TEXT NOT NULL default '');";
             $dbo->setQuery($query);
             $dbo->query();
             $executionMessages .= JText::_('-OK');
@@ -58,8 +58,8 @@ class CedTagControllerExport extends JController
         }
         try {
             $executionMessages .= JText::_('Fill Table with the metadata');
-            $query = 'INSERT INTO #__' . $tmpTable . ' SELECT c.id, GROUP_CONCAT(t.name SEPARATOR ",") FROM #__content';
-            $query .= 'AS c LEFT JOIN #__cedtag_term_content AS t2c ON t2c.cid=c.id LEFT JOIN #__cedtag_term AS t ON t.id=t2c.tid and t.pusblished=\'1\' GROUP BY c.id;';
+            $query = 'INSERT INTO ' . $tmpTable . ' SELECT c.id, GROUP_CONCAT(t.name SEPARATOR ",") FROM #__content';
+            $query .= 'AS c LEFT JOIN #__cedtag_term_content AS t2c ON t2c.cid=c.id LEFT JOIN #__cedtag_term AS t ON t.id=t2c.tid and t.published=\'1\' GROUP BY c.id;';
             $dbo->setQuery($query);
             $dbo->query();
             $executionMessages .= JText::_('-OK');
@@ -70,7 +70,7 @@ class CedTagControllerExport extends JController
         }
         try {
             $executionMessages .= JText::_('Copy the metadata to the content');
-            $query = 'UPDATE #__content AS c, #__' . $tmpTable . ' AS t SET c.metakey=t.metakey WHERE c.id=t.cid;';
+            $query = 'UPDATE #__content AS c, ' . $tmpTable . ' AS t SET c.metakey=t.metakey WHERE c.id=t.cid;';
             $dbo->setQuery($query);
             $dbo->query();
             $executionMessages .= JText::_('-OK');
@@ -81,7 +81,7 @@ class CedTagControllerExport extends JController
         }
         try {
             $executionMessages .= JText::_('Copy the metadata to the content');
-            $query = 'DROP TABLE #__' . $tmpTable . ';';
+            $query = 'DROP TABLE ' . $tmpTable . ';';
             $dbo->setQuery($query);
             $dbo->query();
             $executionMessages .= JText::_('-OK');
@@ -91,13 +91,13 @@ class CedTagControllerExport extends JController
             $executionMessages .= JText::_('-FAIL');
         }
 
-        $msg = JText::_('Tags are successfully imported!');
+        $msg = JText::_('Tags are successfully exported to all Joomla articles Meta Keywords');
+
         if (!$executionResult) {
             $msg = JText::_('We met some problems while exporting tags, please check!');
             $msg .= $executionMessages;
         }
 
-        //parent::display();
         $this->setRedirect(JRoute::_('index.php?option=com_cedtag&controller=export'), $msg);
     }
 

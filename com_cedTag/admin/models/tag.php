@@ -360,7 +360,7 @@ class CedTagModelTag extends JModelList
             $query = 'select c.id as cid,cc.title as category, c.title,t.name from ';
             $query .= ' #__content as c left join #__cedtag_term_content as tc on c.id=tc.cid';
             $query .= ' left join #__categories as cc on c.catid=cc.id';
-            $query .= ' left join #__tag_term as t on tc.tid=t.id where c.id in(' . $contentIds . ') ';
+            $query .= ' left join #__cedtag_term as t on tc.tid=t.id where c.id in(' . $contentIds . ') ';
             $dbo->setQuery($query);
             $result->list = $dbo->loadObjectList();
 

@@ -13,7 +13,7 @@
     <description>
         1.Show tags at the bottom of the articles.
         2.Show Related articles by tags at the bottom of the artilces.
-        3.Auto extract meta keywords as tags.
+        3.Auto extract meta keywords as tags when saving articles.
     </description>
     <files>
         <filename plugin="cedtags">cedTags.php</filename>

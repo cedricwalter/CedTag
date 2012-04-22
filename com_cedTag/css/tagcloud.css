@@ -1,3 +1,10 @@
+/*
+ * @package Package cedTag for Joomla! 2.5 by http://www.waltercedric.com
+ * @author waltercedric.com
+ * @copyright (C) 2012 http://www.waltercedric.com
+ * @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
+ * @documentation at http://wiki.waltercedric.com/index.php?title=Main_Page#Taxonomies_and_Tags_support_for_Joomla
+*/
 .clearfix {
     clear: both;
     display: block;
@@ -7,9 +14,33 @@
     height: 0;
 }
 
-/***********************************************************************************************
+/************************************************
 *	All tags component page
 * access with index.php?option=com_cedtag&view=alltags or by defining a menu
+************************************************/
+.alltags .title {
+    font-size: 120%;
+}
+
+.alltags .legend {
+    /* display: hidden; uncomment to hide the legend*/
+    color: gray;
+    font-size: 90%;
+    padding-bottom: 15px;
+}
+
+.alltags .cloud {
+    /*   border: 1px solid #2484B0;*/
+    /*   border-radius: 9px;*/
+}
+
+.alltags .copyright {
+    text-align: center;
+}
+
+/***********************************************************************************************
+*	Wordle component page
+* access with index.php?option=com_cedtag&view=alltags&layout=wordle or by defining a menu
 ***********************************************************************************************/
 .alltags .title {
     font-size: 120%;
@@ -27,39 +58,7 @@
     /*   border-radius: 9px;*/
 }
 
-.alltags .cloud a:hover {
-    -webkit-transition-delay: 0s;
-    -webkit-transition-duration: 0.5s;
-    -webkit-transition-property: color;
-    -webkit-transition-timing-function: linear;
-    color: #2484B0;
-}
-
 .alltags .copyright {
-    text-align: center;
-}
-
-/***********************************************************************************************
-*	Wordle component page
-* access with index.php?option=com_cedtag&view=alltags&layout=wordle or by defining a menu
-***********************************************************************************************/
-.wordle .title {
-    font-size: 120%;
-}
-
-.wordle .legend {
-    /* display: hidden; uncomment to hide the legend*/
-    color: gray;
-    font-size: 90%;
-    padding-bottom: 15px;
-}
-
-.wordle .cloud {
-    /*   border: 1px solid #2484B0;*/
-    /*   border-radius: 9px;*/
-}
-
-.wordle .copyright {
     text-align: center;
 }
 
@@ -109,12 +108,16 @@
 }
 
 .tag li:after {
-    /*content: ", "; *//* you can place here a , or any character to clearly separate tags */
+    content: " "; /* you can place here a , or any character to clearly separate tags */
     padding-right: 2px;
 }
 
-.tag li:last-child {
-    content: " "; /* but leave the last child empty */
+.tag li:last-child:before {
+    /*content: "and ";*/
+}
+
+.tag li:last-child:after {
+    content: " "; /* you can use a dot here */
     padding-right: 2px;
 }
 
@@ -206,4 +209,4 @@ div.joomlatags {
 *******************************************************************/
 .button2-left .add_Tags {
     background: url(../images/addTags.png) 100% 0 no-repeat;
-}				                        
+}

@@ -8,54 +8,51 @@
 
 
 defined('_JEXEC') or die();
-jimport( 'joomla.application.input' );
-jimport( 'joomla.filesystem.file' );
+jimport('joomla.application.input');
+jimport('joomla.filesystem.file');
 
-class CedTagControllerCss extends JController
+require_once (JPATH_COMPONENT . '/controllers/file.php');
+
+
+class CedTagControllerCss extends CedTagControllerFile
 {
-
-    function execute($task)
+    /**
+     * @Override
+     * @return string
+     */
+    public function getDefaultFile()
     {
-        switch ($task) {
-            case 'save':
-                $this->save();
-                break;
-            case 'restore':
-                $this->restore();
-                break;
-
-            default:
-                $this->display();
-        }
+        return JPATH_SITE . '/media/com_cedtag/css/tagcloud.default.css';
     }
 
-    function display()
+    /**
+     * @Override
+     * @return string
+     */
+    public function getFile()
     {
-        JFactory::getApplication()->input->set('view', 'css');
+        return JPATH_SITE . '/media/com_cedtag/css/tagcloud.css';
+    }
+
+    /**
+     * @Override
+     * @return string
+     */
+    public function getDefaultView()
+    {
+        return 'css';
+    }
+
+    public function save()
+    {
+        $updatedFileContent = JFactory::getApplication()->input->get('content', '', 'STRING');
+        JFile::write($this->getFile(), trim($updatedFileContent));
+        JFactory::getApplication()->input->set('view', $this->getDefaultView());
         parent::display();
     }
 
-    function save()
-    {
-        $updatedCss = JFactory::getApplication()->input->get('csscontent', '', 'STRING');
-        $tagCssFile = JPATH_SITE.'/media/com_cedtag/css/tagcloud.css';
 
-        JFile::write($tagCssFile, $updatedCss);
 
-        JFactory::getApplication()->input->set('view', 'css');
-        parent::display();
-    }
-
-    function restore()
-    {
-        $defaultCssFile = JPATH_SITE . '/media/com_cedtag/css/tagcloud.default.css';
-        $defaultCssFileContent = JFile::read($defaultCssFile);
-
-        $tagCssFile = JPATH_SITE.'/media/com_cedtag/css/tagcloud.css';
-        JFile::write($tagCssFile, $defaultCssFileContent);
-
-        JFactory::getApplication()->input->set('view', 'css');
-        parent::display();
-    }
 }
+
 ?>

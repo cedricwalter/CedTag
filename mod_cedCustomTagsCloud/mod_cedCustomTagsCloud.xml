@@ -35,7 +35,7 @@
         <fields name="params">
             <fieldset name="basic">
                 <field name="tagsForSelection" type="sql"
-                       query="select id,concat(id,'  ',name) as name from #__tag_term;" key_field="id"
+                       query="select id,concat(id,'  ',name) as name from #__cedtag_term;" key_field="id"
                        value_field="name" label="Tags Look Up"
                        description="Look up tags id, and input them into Custom Tags Ids" rows="8"
                        cols="40"/>

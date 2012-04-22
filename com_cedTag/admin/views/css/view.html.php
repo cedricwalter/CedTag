@@ -7,7 +7,7 @@
  **/
 defined('_JEXEC') or die();
 jimport('joomla.application.component.view');
-jimport( 'joomla.filesystem.file' );
+jimport('joomla.filesystem.file');
 
 
 class CedTagViewCss extends JView
@@ -20,14 +20,9 @@ class CedTagViewCss extends JView
 
     function defaultTpl($tpl = null)
     {
-        JToolBarHelper::title(JText::_('TEMPLATE MANAGER'), 'tag.png');
-        JToolBarHelper::save();
-        JToolBarHelper::spacer();
-        JToolBarHelper::custom('restore', 'default', '', JText::_('RESTORE DEFAULT'), false);
-        JToolBarHelper::spacer();
-        JToolBarHelper::back(JText::_('CONTROL PANEL'), 'index.php?option=com_cedtag');
+        $this->addToolbar();
 
-        $tagCssFile = JPATH_SITE.'/media/com_cedtag/css/tagcloud.css';
+        $tagCssFile = JPATH_SITE . '/media/com_cedtag/css/tagcloud.css';
         $isCssWritable = is_writable($tagCssFile);
 
         $cssFileContent = JFile::read($tagCssFile);
@@ -36,6 +31,16 @@ class CedTagViewCss extends JView
         $this->assignRef('cssFileContent', $cssFileContent);
 
         parent::display($tpl);
+    }
+
+    function addToolbar()
+    {
+        JToolBarHelper::title(JText::_('TEMPLATE MANAGER'), 'tag.png');
+        JToolBarHelper::save();
+        JToolBarHelper::spacer();
+        JToolBarHelper::custom('restore', 'default', '', JText::_('RESTORE DEFAULT'), false);
+        JToolBarHelper::spacer();
+        JToolBarHelper::back(JText::_('CONTROL PANEL'), 'index.php?option=com_cedtag');
     }
 
 

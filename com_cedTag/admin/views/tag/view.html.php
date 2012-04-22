@@ -124,8 +124,8 @@ class cedtagViewtag extends JView
         //not pretty to refetch model in view instead of in model!
         $dbo = JFactory::getDbo();
         foreach ($items as $item) {
-            $query = "select tagterm.id,tagterm.name from jos_cedtag_term as tagterm
-                                left join jos_cedtag_term_content as tagtermcontent
+            $query = "select tagterm.id,tagterm.name from #__cedtag_term as tagterm
+                                left join #__cedtag_term_content as tagtermcontent
                                 on tagtermcontent.tid=tagterm.id
                                 where tagtermcontent.cid=".$dbo->quote($item->id)."
                                 and tagterm.published='1'

@@ -8,7 +8,7 @@
 defined('_JEXEC') or die('Restricted access');
 ?>
 
-<form action="<?php echo JRoute::_('index.php?controller=stopwords&option=com_cedtag'); ?>" method="post" name="adminForm" id="adminForm" autocomplete="off">
+<form action="<?php echo JRoute::_('index.php'); ?>" method="post" name="adminForm" id="adminForm" autocomplete="off">
 
     <div class="width-100 fltlft">
         <fieldset class="adminform">
@@ -18,8 +18,10 @@ defined('_JEXEC') or die('Restricted access');
                     <ul class="adminformlist">
                         <li><?php echo JText::_('FILE');?>
                             <?php if ($this->isWritable) { ?>
-                                <strong style="color: green;"><?php echo JText::_('WRITEABLE');?></strong> <?php } else { ?> <strong
-                                style="color: red"><?php echo JText::_('UNWRITEABLE');?></strong> <?php };?>
+                                <strong style="color: green;"><?php echo JText::_('WRITEABLE');?></strong>
+                                <?php } else { ?>
+                                <strong style="color: red"><?php echo JText::_('UNWRITEABLE');?></strong>
+                                <?php };?>
                         </li>
                         <li>
                             <?php echo($this->FileName);?>
