@@ -25,7 +25,7 @@
                default="-|_|,|~|!|?|@|%|^|(|)|&lt;|&gt;|:|;|{|}|[|]|&amp;|`|&quot;|#|*"
                label="Strip Characters" description="Characters to strip from the tag name, seperate with |">
         </field>
-        <field name="mappingFrequencyToSizeAlgorithm" type="radio" default="pareto" label="Mapping frequency"
+        <field name="mappingFrequencyToSizeAlgorithm" type="list" default="dynamicbuckets" label="Mapping frequency"
                description="Mapping frequency of terms to font size">
             <option value="pareto">Pareto distribution</option>
             <option value="dynamicbuckets">Dynamic Bucketizing by Frequency</option>

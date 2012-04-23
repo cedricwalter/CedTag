@@ -31,8 +31,8 @@ cedTagsHelper::addTagcanvasJavascript($uuid1, $uuid2);
                    font-size="<?php echo $item->size; ?>%"
                    target="_blank"
                    class="<?php echo $item->class; ?>"
-                   title="<?php echo $item->ct; ?> items tagged with <?php echo $item->name; ?> | <?php echo $item->hits; ?> hits"
-                   alt="<?php echo $item->ct; ?> items tagged with <?php echo $item->name; ?> | <?php echo $item->hits; ?> hits">
+                   title="<?php echo $item->frequency; ?> items tagged with <?php echo $item->name; ?> | <?php echo $item->hits; ?> hits"
+                   alt="<?php echo $item->frequency; ?> items tagged with <?php echo $item->name; ?> | <?php echo $item->hits; ?> hits">
                     <?php echo $item->name; ?></a></li>
             <?php }?>
         </ul>

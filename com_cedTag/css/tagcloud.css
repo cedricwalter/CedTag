@@ -66,32 +66,32 @@
 *	Frontend inline edit Tag
 ************************************************/
 
-.tag {
+.cedtag {
     margin: 0;
     padding: 0;
     color: #999;
     display: inline;
 }
 
-.tag ul {
+.cedtag ul {
     margin: 0;
     padding: 0;
     display: inline;
 }
 
-.tag li {
+.cedtag li {
     list-style-type: none;
     display: inline;
     background: -moz-linear-gradient(center top, #FFFFFF, #CCCCCC) repeat scroll 0 0 transparent;
 }
 
-.tag li a {
+.cedtag li a {
     padding: 0px 6px 0px 6px !important;
     border: 1px solid #AAAAAA;
     border-radius: 9px;
 }
 
-.tag li a:hover {
+.cedtag li a:hover {
     padding: 0px 6px 0px 6px !important;
 
     -webkit-transition-delay: 0s;
@@ -106,16 +106,16 @@
     color: #2484B0;
 }
 
-.tag li:after {
+.cedtag li:after {
     content: " "; /* you can place here a , or any character to clearly separate tags */
     padding-right: 2px;
 }
 
-.tag li:last-child:before {
+.cedtag li:last-child:before {
     /*content: "and ";*/
 }
 
-.tag li:last-child:after {
+.cedtag li:last-child:after {
     content: " "; /* you can use a dot here */
     padding-right: 2px;
 }
@@ -218,7 +218,7 @@ div.joomlatags {
 When using Mapping frequency = Pareto Ditribution
 only this css class is used
 */
-.cloud .tag {
+.cloud .cedtag {
     -webkit-transition-delay: 0s;
     -webkit-transition-duration: 0.5s;
     -webkit-transition-property: color;
@@ -239,7 +239,7 @@ only this css class is used
 When using Mapping frequency = Dynamic Buckets
 all these 7 css class are used
 */
-.cloud .tag1 {
+.cloud .cedtag1 {
     -webkit-transition-delay: 0s;
     -webkit-transition-duration: 0.5s;
     -webkit-transition-property: color;
@@ -256,7 +256,7 @@ all these 7 css class are used
     cursor: auto;
 }
 
-.cloud .tag2 {
+.cloud .cedtag2 {
     -webkit-transition-delay: 0s;
     -webkit-transition-duration: 0.5s;
     -webkit-transition-property: color;
@@ -273,7 +273,7 @@ all these 7 css class are used
     cursor: auto;
 }
 
-.cloud .tag3 {
+.cloud .cedtag3 {
     -webkit-transition-delay: 0s;
     -webkit-transition-duration: 0.5s;
     -webkit-transition-property: color;
@@ -290,7 +290,7 @@ all these 7 css class are used
     cursor: auto;
 }
 
-.cloud .tag4 {
+.cloud .cedtag4 {
     -webkit-transition-delay: 0s;
     -webkit-transition-duration: 0.5s;
     -webkit-transition-property: color;
@@ -307,7 +307,7 @@ all these 7 css class are used
     cursor: auto;
 }
 
-.cloud .tag5 {
+.cloud .cedtag5 {
     -webkit-transition-delay: 0s;
     -webkit-transition-duration: 0.5s;
     -webkit-transition-property: color;
@@ -324,7 +324,7 @@ all these 7 css class are used
     cursor: auto;
 }
 
-.cloud .tag6 {
+.cloud .cedtag6 {
     -webkit-transition-delay: 0s;
     -webkit-transition-duration: 0.5s;
     -webkit-transition-property: color;
@@ -341,7 +341,7 @@ all these 7 css class are used
     cursor: auto;
 }
 
-.cloud .tag7 {
+.cloud .cedtag7 {
     -webkit-transition-delay: 0s;
     -webkit-transition-duration: 0.5s;
     -webkit-transition-property: color;

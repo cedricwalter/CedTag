@@ -50,7 +50,7 @@ class plgContentCedTags extends JPlugin
             return true;
         }
 
-        //select t.id as tid,t.name, count(tc.cid) as ct from #__cedtag_term_content as c left join jos_tag_term as t on c.tid=t.id left join jos_tag_term_content tc on c.tid=tc.cid where c.cid=1 group by t.id,tc.cid ;
+        //select t.id as tid,t.name, count(tc.cid) as frequency from #__cedtag_term_content as c left join jos_tag_term as t on c.tid=t.id left join jos_tag_term_content tc on c.tid=tc.cid where c.cid=1 group by t.id,tc.cid ;
         $dbo =& JFactory::getDBO();
         $query = 'select tagterm.id,tagterm.name,tagterm.hits from #__cedtag_term as tagterm
                         left join #__cedtag_term_content as tagtermcontent
@@ -80,7 +80,7 @@ class plgContentCedTags extends JPlugin
             $haveValidTags = false;
 
             foreach ($terms as $term) {
-                $countQuery = 'select count(cid) as ct from #__cedtag_term_content where tid=' . $dbo->quote($term->id);
+                $countQuery = 'select count(cid) as frequency from #__cedtag_term_content where tid=' . $dbo->quote($term->id);
                 $dbo->setQuery($countQuery);
                 $ct = $dbo->loadResult();
 
@@ -115,8 +115,8 @@ class plgContentCedTags extends JPlugin
             if ($havingTags) {
                 $tagResult = '<div class="clearfix">
                 </div>
-                    <div class="tag">' . JText::_('TAGS:') . '
-                    <ul class="tag">' . $htmlList . '</ul>
+                    <div class="cedtag">' . JText::_('TAGS:') . '
+                    <ul class="cedtag">' . $htmlList . '</ul>
                 </div>';
 
                 $position = CedTagsHelper::param('TagPosition', 2);

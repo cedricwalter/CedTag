@@ -7,108 +7,60 @@
  **/
 
 defined('_JEXEC') or die('Restricted access');
+
+require dirname(__FILE__) . '/FrequencyMapping.php';
+
+
 class CedTagsHelper
 {
+
+    /**
+     *
+     * @param int $count
+     * @param string $sorting
+     * @param int $reverse
+     * @return array|mixed|void
+     */
     function getAllTagModel($count = 25, $sorting = 'sizeasort', $reverse = 1)
     {
-        $dbo = JFactory::getDBO();
+        $this->cache = JFactory::getCache('com_cedtag', '');
+        $rows = $this->cache->get("getAllTagModel");
 
-        $query = "select count(*) as ct,name as name,t.hits as hits from #__cedtag_term_content as tc inner join
-                    #__cedtag_term as t on t.id=tc.tid  where t.published='1' group by(tid) order by ct DESC;";
-        $dbo->setQuery($query);
-        $rows = $dbo->loadObjectList();
+        //if not found in cache
+        if ($rows === false) {
+            $dbo = JFactory::getDBO();
 
-        CedTagsHelper::addCss();
+            $query = "select count(*) as frequency,name as name,t.hits as hits, t.created as created from #__cedtag_term_content as tc inner join
+                    #__cedtag_term as t on t.id=tc.tid  where t.published='1' group by(tid) order by frequency DESC;";
+            $dbo->setQuery($query);
+            $rows = $dbo->loadObjectList();
 
-        // linearizes the Pareto distribution
-        return $this->mappingFrequencyToSize($rows);
+            CedTagsHelper::addCss();
+            $rows =  $this->mappingFrequencyToSize($rows);
+
+            $this->cache->store($rows, "getAllTagModel");
+        }
+
+        return $rows;
     }
 
-    private function mappingFrequencyToSize($rows)
+    public function mappingFrequencyToSize($rows)
     {
         if (isset($rows) && !empty($rows)) {
-            $mappingFrequencyToSizeAlgorithm = CedTagsHelper::param('mappingFrequencyToSizeAlgorithm', 'dynamicbuckets');
+            $mappingFrequencyToSizeAlgorithm = CedTagsHelper::param('mappingFrequencyToSizeAlgorithm', 'pareto');
+
+            $CedTagFrequencyMapping = new CedTagFrequencyMapping();
 
             if ($mappingFrequencyToSizeAlgorithm == 'pareto') {
-                return $this->mappingFrequencyToSizeWithPareto($rows);
+                return $CedTagFrequencyMapping->mappingFrequencyToSizeWithPareto($rows);
             } else if ($mappingFrequencyToSizeAlgorithm == 'dynamicbuckets') {
-                return $this->mappingFrequencyToSizeWithDynamicBuckets($rows);
+                return $CedTagFrequencyMapping->mappingFrequencyToSizeWithDynamicBuckets($rows);
             } else {
-                return $this->mappingFrequencyToSizeWithFixedBuckets($rows);
+                return $CedTagFrequencyMapping->mappingFrequencyToSizeWithFixedBuckets($rows);
             }
 
         }
         return $rows;
-    }
-
-    private function mappingFrequencyToSizeWithDynamicBuckets($rows)
-    {
-        $tags = array();
-        foreach ($rows as $row) {
-            $tags[$row->name] = $row->ct;
-            $taghit[$row->name] = $row->hits;
-            $tagcount[$row->name] = $row->ct;
-            $buckets[$row->ct] = "";
-        }
-
-        // order buckets by frequency
-        ksort($buckets);
-        $count = count($buckets) - 1;
-
-        // min-max font sizes
-        $max_size = 250; // max font size in %
-        $min_size = 100; // min font size in %
-        $range = $max_size - $min_size;
-        // step is the difference in font size from one bucket to the next
-        $step = $range / $count;
-
-        // populate buckets with font sizes
-        $i = $min_size;
-        foreach ($buckets AS $key => $value) {
-            $buckets[$key] = $i;
-            $i += $step;
-        }
-        $result = array();
-        while (list($tagname, $tagsize) = each($tags)) {
-            $term = new stdClass();
-            $term->link = JRoute::_('index.php?option=com_cedtag&task=tag&tag=' . CedTagsHelper::urlTagname($tagname));
-            $term->name = CedTagsHelper::ucwords($tagname);
-            $term->size = $buckets[$tagsize];
-            $term->ct = $tagcount[$tagname];
-            $term->hits = $taghit[$tagname];
-            $term->class = 'tag';
-            $result[] = $term;
-        }
-        return $result;
-    }
-
-
-    private function mappingFrequencyToSizeWithPareto($rows)
-    {
-        $tags = array();
-        foreach ($rows as $row) {
-            $tags[$row->name] = $row->ct;
-            $taghit[$row->name] = $row->hits;
-            $tagcount[$row->name] = $row->ct;
-        }
-        $maxSize = $rows[0]->ct;
-        $minSize = 1;
-
-        $tags = $this->fromParetoCurve($tags, $minSize, $maxSize);
-
-        $result = array();
-        while (list($tagname, $tagsize) = each($tags)) {
-            $term = new stdClass();
-            $term->link = JRoute::_('index.php?option=com_cedtag&task=tag&tag=' . CedTagsHelper::urlTagname($tagname));
-            $term->name = CedTagsHelper::ucwords($tagname);
-            $term->size = $tagsize;
-            $term->ct = $tagcount[$tagname];
-            $term->hits = $taghit[$tagname];
-            $term->class = 'tag';
-            $result[] = $term;
-        }
-
-        return $result;
     }
 
 
@@ -156,44 +108,15 @@ class CedTagsHelper
     {
         $dbo = JFactory::getDBO();
 
-        $query = "select count(*) as ct,name,hits from #__cedtag_term_content as tc inner join #__cedtag_term as t on t.id=tc.tid where t.published='1' group by(tid) order by ct desc";
+        $query = "select count(*) as frequency,name,hits, t.created as created from #__cedtag_term_content as tc inner join #__cedtag_term as t on t.id=tc.tid where t.published='1' group by(tid) order by frequency desc";
         $dbo->setQuery($query, 0, $count);
         $rows = $dbo->loadObjectList();
 
         if (isset($rows) && !empty($rows)) {
+            CedTagsHelper::addCss();
+            $rows = $this->mappingFrequencyToSize($rows);
 
             usort($rows, array('CedTagsHelper', 'tag_popularasort'));
-
-            CedTagsHelper::addCss();
-
-            $tag_sizes = 7;
-            $total_tags = count($rows);
-            $min_tags = $total_tags / $tag_sizes;
-            $bucket_count = 1;
-            $bucket_items = 0;
-            $tags_set = 0;
-            for ($index = 0; $index < $total_tags; $index++) {
-                $row =& $rows[$index];
-                //$row->link=JRoute::_('index.php?option=com_cedtag&task=tag&tag='.urlencode($row->name));
-                $row->link = JRoute::_('index.php?option=com_cedtag&task=tag&tag=' . CedTagsHelper::urlTagname($row->name));
-                $last_count = 0;
-                $tag_count = $row->ct;
-                if (($bucket_items >= $min_tags) and $last_count != $tag_count and $bucket_count < $tag_sizes) {
-                    $bucket_count++;
-                    $bucket_items = 0;
-                    // Calculate a new minimum number of tags for the remaining classes.
-                    $remaining_tags = $total_tags - $tags_set;
-                    $min_tags = $remaining_tags / $bucket_count;
-                }
-                $row->class = 'tag' . $bucket_count;
-                $row->size = 65 + ($bucket_count * 10); //65 + ($tag_count * 10); //65 + ($tag_count * 10);
-                $bucket_items++;
-                $tags_set++;
-                $last_count = $tag_count;
-                $row->name = CedTagsHelper::ucwords($row->name);
-
-            }
-            usort($rows, array('CedTagsHelper', $sorting));
 
             if ($reverse) {
                 $rows = array_reverse($rows);
@@ -293,69 +216,6 @@ class CedTagsHelper
     }
 
 
-    /*
-     * Pareto distribution
-     * The Pareto distribution, named after the Italian economist Vilfredo Pareto, is a power law probability distribution that coincides
-     * with social, scientific, geophysical, actuarial, and many other types of observable phenomena. Outside the field of economics it
-     * is sometimes referred to as the Bradford distribution.
-     *
-     */
-    function fromParetoCurve($weights, $minSize, $maxSize)
-    {
-
-
-        $logweights = array(); // array of log value of counts
-        $output = array(); // output array of linearized count values
-
-        // Convert each weight to its log value.
-        foreach ($weights AS $tagname => $w)
-        {
-            // take each weight from input, convert to log, put into new array called logweights
-            $logweights[$tagname] = log($w);
-        }
-
-        // MAX AND MIN OF logweights ARRAY
-        $max = max(array_values($logweights));
-        $min = min(array_values($logweights));
-
-        foreach ($logweights AS $lw)
-        {
-            if ($lw < $min) {
-                $min = $lw;
-            }
-            if ($lw > $max) {
-                $max = $lw;
-            }
-        }
-
-        // Now calculate the slope of a straight line, from min to max.
-        if ($max > $min) {
-            $slope = ($maxSize - $minSize) / ($max - $min);
-        }
-
-        $middle = ($minSize + $maxSize) / 2;
-
-        foreach ($logweights AS $tagname => $w)
-        {
-            if ($max <= $min) { //With max=min all tags have the same weight.
-                $output[$tagname] = $middle;
-            } else { // Calculate the distance from the minimum for this weight.
-                $distance = $w - $min; //Calculate the position on the slope for this distance.
-                $result = $slope * $distance + $minSize; // If the tag turned out too small, set minSize.
-                if ($result < $minSize) {
-                    $result = $minSize;
-                }
-                //If the tag turned out too big, set maxSize.
-                if ($result > $maxSize) {
-                    $result = $maxSize;
-                }
-                $output[$tagname] = $result;
-            }
-        }
-        return $output;
-    }
-
-
     static function param($name, $default = '')
     {
         static $params;
@@ -383,10 +243,10 @@ class CedTagsHelper
 
     static function tag_popularasort($tag1, $tag2)
     {
-        if ($tag1->ct == $tag2->ct) {
+        if ($tag1->frequency == $tag2->frequency) {
             return 0;
         }
-        return ($tag1->ct < $tag2->ct) ? -1 : 1;
+        return ($tag1->frequency < $tag2->frequency) ? -1 : 1;
     }
 
     static function tag_latestasort($tag1, $tag2)
@@ -395,6 +255,11 @@ class CedTagsHelper
             return 0;
         }
         return ($tag1->created < $tag2->created) ? -1 : 1;
+    }
+
+    static function tag_random($tag1, $tag2)
+    {
+        return rand(-1, 1);
     }
 
     static function hitsasort($tag1, $tag2)

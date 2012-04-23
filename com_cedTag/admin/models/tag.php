@@ -333,7 +333,7 @@ class CedTagModelTag extends JModelList
                 $where .= " and ( `title` like'%" . $search . "%'  or `fulltext` like'%" . $search . "%'  or  `introtext` like'%" . $search . "%')";
             }
 
-            $totalQuery = "select count(*) as ct from #__content where 1=1" . $where;
+            $totalQuery = "select count(*) as frequency from #__content where 1=1" . $where;
 
             $dbo->setQuery($totalQuery);
             $dbo->query();
@@ -500,7 +500,7 @@ class CedTagModelTag extends JModelList
         function isContentHasTags($cid)
         {
             $dbo = JFactory::getDbo();
-            $query = 'select count(*) as ct from #__cedtag_term_content where cid=' . $dbo->quote($cid).';';
+            $query = 'select count(*) as frequency from #__cedtag_term_content where cid=' . $dbo->quote($cid).';';
             $dbo->setQuery($query);
             return $dbo->loadResult();
         }

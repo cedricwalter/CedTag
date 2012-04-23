@@ -10,8 +10,10 @@
     <authorUrl>www.waltercedric.com</authorUrl>
     <version>2.5.0</version>
     <description>Allows Searching of tags information</description>
+
     <files>
         <filename plugin="cedSearchTags">cedSearchTags.php</filename>
+        <filename>index.html</filename>
     </files>
 
 

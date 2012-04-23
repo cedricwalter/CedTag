@@ -39,9 +39,10 @@
                 <field
                         name="sorting"
                         type="list"
-                        default="1"
+                        default="hitsasort"
                         label="Tag Sorting"
                         description="COM_MODULES_FIELD_CACHING_DESC">
+                    <option value="hitsasort">By Hits</option>
                     <option value="tag_alphasort">Aphabetical</option>
                     <option value="sizeasort">By size</option>
                 </field>

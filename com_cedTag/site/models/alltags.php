@@ -33,7 +33,9 @@ class CedTagModelAllTags extends JModel
         $app = JFactory::getApplication();
         $params = $app->getParams();
 
-        $rows = $this->getModel("wordle");
+        $CedTagsHelper = new CedTagsHelper();
+        $rows = $CedTagsHelper->getPopularTagModel();
+        //$rows = $this->getModel("wordle");
 
         $full_text = array();
         foreach ($rows as $row) {

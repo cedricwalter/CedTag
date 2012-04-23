@@ -11,5 +11,6 @@
     <description>This button plugin will make add tags easy.</description>
     <files>
         <filename plugin="cedAddTags">cedAddTags.php</filename>
+        <filename>index.html</filename>
     </files>
 </extension>

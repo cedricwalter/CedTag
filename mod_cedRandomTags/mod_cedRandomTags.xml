@@ -39,9 +39,10 @@
                 <field
                         name="sorting"
                         type="list"
-                        default="1"
+                        default="tag_random"
                         label="Tag Sorting"
                         description="COM_MODULES_FIELD_CACHING_DESC">
+                    <option value="tag_random">Random</option>
                     <option value="tag_alphasort">Aphabetical</option>
                     <option value="sizeasort">By size</option>
                 </field>

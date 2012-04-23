@@ -156,7 +156,7 @@ class CedTagModelTerm extends JModel
         if (!is_null($search)) {
             $where = " where name like'%" . $search . "%' ";
         }
-        $query = "select count(*) as ct from #__cedtag_term as t " . $where;
+        $query = "select count(*) as frequency from #__cedtag_term as t " . $where;
         $dbo->setQuery($query);
         $dbo->query();
         $total = $dbo->loadResult();

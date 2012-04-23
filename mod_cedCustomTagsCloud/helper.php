@@ -21,7 +21,7 @@ class modCedCustomTagsCloudHelper
         if (empty($idsArray)) {
             return array();
         }
-        $query = "select id,name, 1 as sequence from #__cedtag_term as t where t.id in(" . @implode(',', $idsArray) . ");";
+        $query = "select id,count(*) as frequency,name,hits as hits, t.created as created, 1 as sequence from #__cedtag_term as t where t.id in(" . @implode(',', $idsArray) . ")";
         $dbo->setQuery($query);
         $rows = $dbo->loadObjectList();
 
@@ -42,37 +42,16 @@ class modCedCustomTagsCloudHelper
             $rows = array_reverse($sortedRows);
             unset($sortedRows);
             unset($rowsMap);
-            $document =& JFactory::getDocument();
-            $document->addStyleSheet(JURI::base() . 'media/com_cedtag/css/tagcloud.css');
-            $tag_sizes = 7;
 
-            $min_tags = $total_tags / $tag_sizes;
-            $bucket_count = 1;
-            $bucket_items = 0;
-            $tags_set = 0;
-            for ($index = 0; $index < $total_tags; $index++) {
-                $row =& $rows[$index];
-                //$row->link=JRoute::_('index.php?option=com_cedtag&task=tag&tag='.urlencode($row->name));
-                $row->link = JRoute::_('index.php?option=com_cedtag&task=tag&tag=' . CedTagsHelper::urlTagname($row->name));
-                $tag_count = $row->sequence;
-                $last_count = 0;
-                if (($bucket_items >= $min_tags) and $last_count != $tag_count and $bucket_count < $tag_sizes) {
-                    $bucket_count++;
-                    $bucket_items = 0;
-                    // Calculate a new minimum number of tags for the remaining classes.
-                    $remaining_tags = $total_tags - $tags_set;
-                    $min_tags = $remaining_tags / $bucket_count;
-                }
-                $row->class = 'tag' . $bucket_count;
-                $row->size = 9 * $bucket_count;
+            $sorting = $params->get('sorting', 'tag_random');
 
-                $bucket_items++;
-                $tags_set++;
-                $last_count = $tag_count;
-                $row->name = CedTagsHelper::ucwords($row->name);
+            $CedTagsHelper = new CedTagsHelper();
+            $rows = $CedTagsHelper->mappingFrequencyToSize($rows);
 
-            }
-            usort($rows, array('CedTagsHelper', $params->get('sorting', 'sizeasort')));
+            $sorting = $params->get('sorting', 'tag_latestasort');
+            usort($rows, array('CedTagsHelper', $sorting));
+
+            CedTagsHelper::addCss();
 
             if (intval($params->get('reverse', 1))) {
                 $rows = array_reverse($rows);

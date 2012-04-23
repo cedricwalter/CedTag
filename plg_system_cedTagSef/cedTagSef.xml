@@ -10,8 +10,10 @@
     <authorUrl>www.waltercedric.com</authorUrl>
     <version>2.5.0</version>
     <description>TagSef will build a search engine friendly url, which is also human friendly.</description>
+
     <files>
         <filename plugin="cedTagSef">cedTagSef.php</filename>
+        <filename>index.html</filename>
     </files>
 
 

@@ -16,7 +16,7 @@ defined('_JEXEC') or die('Restricted access'); ?>
         rel="tag"
         style="font-size: <?php echo $item->size; ?>%"
         class="<?php echo $item->class; ?>"
-        title="<?php echo $item->ct; ?> items tagged with <?php echo $item->name; ?> | <?php echo $item->created; ?> | <?php echo $item->hits; ?> hits">
+        title="<?php echo $item->frequency; ?> items tagged with <?php echo $item->name; ?> | <?php echo $item->created; ?> | <?php echo $item->hits; ?> hits">
         <?php echo $item->name; ?>
     </a>
     <?php }?>

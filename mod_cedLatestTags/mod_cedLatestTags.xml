@@ -38,9 +38,10 @@
                 <field
                         name="sorting"
                         type="list"
-                        default="1"
+                        default="tag_latestasort"
                         label="Tag Sorting"
                         description="COM_MODULES_FIELD_CACHING_DESC">
+                    <option value="tag_latestasort">By Latest created</option>
                     <option value="tag_alphasort">Aphabetical</option>
                     <option value="sizeasort">By size</option>
                 </field>
