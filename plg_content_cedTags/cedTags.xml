@@ -16,7 +16,7 @@
         3.Auto extract meta keywords as tags when saving articles.
     </description>
     <files>
-        <filename plugin="cedtags">cedTags.php</filename>
+        <filename plugin="cedTags">cedTags.php</filename>
         <filename>index.html</filename>
     </files>
 
