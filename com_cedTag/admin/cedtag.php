@@ -16,6 +16,7 @@ require_once (JPATH_COMPONENT . '/controllers/css.php');
 require_once (JPATH_COMPONENT . '/controllers/stopwords.php');
 require_once (JPATH_COMPONENT . '/controllers/import.php');
 require_once (JPATH_COMPONENT . '/controllers/export.php');
+require_once (JPATH_COMPONENT . '/controllers/statistics.php');
 
 $document = & JFactory::getDocument();
 $document->addStyleSheet(JURI::root() . '/media/com_cedtag/css/tag.css');
