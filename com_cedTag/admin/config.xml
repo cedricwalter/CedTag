@@ -34,6 +34,22 @@
 
 
     </fieldset>
+
+    <fieldset name="Fonts" label="Fonts">
+        <field name="useGoogleFonts" type="list" default="1" label="Use Google Fonts"
+               description="Use Google Fonts, visit http://www.google.com/webfonts">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+
+        <field name="googleFonts" type="list" default="font-family: 'Open Sans', sans-serif;|Open+Sans" label="Google Fonts *"
+               description="Google Fonts, hit save css if changing this settings!">
+            <option value="font-family: 'Just Me Again Down Here', cursive;|Just+Me+Again+Down+Here">Just Me Again Down Here</option>
+            <option value="font-family: 'Great Vibes', cursive;|Great+Vibes">Great Vibes cursive</option>
+            <option value="font-family: 'Open Sans', sans-serif;|Open+Sans">Open Sans</option>
+        </field>
+    </fieldset>
+
     <fieldset name="Backend" label="Backend">
         <field name="tag_page_limit" type="text" default="30" label="Tag/Term Page Limit" size="4"
                description="How many tags/terms to show on each page.">

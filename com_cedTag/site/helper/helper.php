@@ -36,7 +36,7 @@ class CedTagsHelper
             $rows = $dbo->loadObjectList();
 
             CedTagsHelper::addCss();
-            $rows =  $this->mappingFrequencyToSize($rows);
+            $rows = $this->mappingFrequencyToSize($rows);
 
             $this->cache->store($rows, "getAllTagModel");
         }
@@ -230,6 +230,14 @@ class CedTagsHelper
     {
         $document =& JFactory::getDocument();
         $document->addStyleSheet(JURI::base() . 'media/com_cedtag/css/tagcloud.css');
+
+        $useGoogleFonts = CedTagsHelper::param('useGoogleFonts', '1');
+        if ($useGoogleFonts) {
+            $googleFonts = explode("|", CedTagsHelper::param('googleFonts', "font-family: 'Open Sans', sans-serif;|Open+Sans"));
+            $document->addStyleSheet('http://fonts.googleapis.com/css?family='.$googleFonts[1]);
+        }
+
+
     }
 
 

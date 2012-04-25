@@ -32,9 +32,16 @@ class CedTagControllerFile extends JController
     public function save()
     {
         $updatedFileContent = JFactory::getApplication()->input->get('content', '', 'STRING');
+        $updatedFileContent = $this->transform($updatedFileContent);
+
         JFile::write($this->getFile(), trim($updatedFileContent));
         JFactory::getApplication()->input->set('view', $this->getDefaultView());
         parent::display();
+    }
+
+    public function transform($fileContent)
+    {
+        return $fileContent;
     }
 
     public function getDefaultFile()

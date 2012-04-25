@@ -54,6 +54,7 @@
 }
 
 .alltags .cloud {
+    font-family: 'Open Sans', sans-serif;
     /*   border: 1px solid #2484B0;*/
     /*   border-radius: 9px;*/
 }
@@ -101,6 +102,7 @@
 
     border: 1px solid #2484B0;
     border-radius: 9px;
+
     cursor: auto;
 
     color: #2484B0;
@@ -228,8 +230,10 @@ only this css class is used
 
     /* box around term */
     padding: 0px 6px 0px 6px !important;
+    /*
     border: 1px solid #2484B0;
     border-radius: 9px;
+    */
     /* end box around term */
 
     cursor: auto;
@@ -357,6 +361,3 @@ all these 7 css class are used
 
     cursor: auto;
 }
-
-
-
