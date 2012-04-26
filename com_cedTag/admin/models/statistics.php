@@ -30,6 +30,17 @@ class CedTagModelStatistics extends JModel
         $statistics->termUnpublished = $dbo->loadResult();
 
 
+        $query = "select count(*) as ct from #__cedtag_term where published = '1' and description is null;";
+        $dbo = JFactory::getDbo();
+        $dbo->setQuery($query);
+        $statistics->termPublishedWithoutDescription = $dbo->loadResult();
+
+        $query = "select count(*) as ct from #__cedtag_term where published = '1' and description is not null;";
+        $dbo = JFactory::getDbo();
+        $dbo->setQuery($query);
+        $statistics->termPublishedWithDescription = $dbo->loadResult();
+
+
         $query = "select count(*) as ct  from #__content where id not in (select cid from #__cedtag_term_content)";
         $dbo = JFactory::getDbo();
         $dbo->setQuery($query);

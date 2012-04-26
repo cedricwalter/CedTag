@@ -44,9 +44,20 @@
 
         <field name="googleFonts" type="list" default="font-family: 'Open Sans', sans-serif;|Open+Sans" label="Google Fonts *"
                description="Google Fonts, hit save css if changing this settings!">
+            <option value="font-family: 'Droid Sans', sans-serif;|Droid+Sans">Droid Sans</option>
+            <option value="font-family: 'Lato', sans-serif;|Lato">Lato</option>
+            <option value="font-family: 'Arvo', serif;|Arvo">Arvo</option>
+            <option value="font-family: 'Lora', serif;|Lora">Lora</option>
+            <option value="font-family: 'PT Sans', sans-serif;|PT+Sans">PT Sans</option>
+            <option value="font-family: 'PT Sans Narrow', sans-serif;|PT+Sans+Narrow">PT Sans Narrow</option>
+            <option value="font-family: 'Ubuntu', sans-serif;|Ubuntu">Ubuntu</option>
+            <option value="font-family: 'Lobster', cursive;|Lobster">Lobster</option>
+            <option value="font-family: 'Droid Serif', serif;|Droid+Serif">Droid Serif</option>
+            <option value="font-family: 'Open Sans', sans-serif;|Open+Sans">Open Sans</option>
+            <option value="font-family: 'Oswald', sans-serif;|Oswald">Oswald</option>
+            <option value="font-family: 'Yanone Kaffeesatz', sans-serif;|Yanone+Kaffeesatz">Yanone Kaffeesatz</option>
             <option value="font-family: 'Just Me Again Down Here', cursive;|Just+Me+Again+Down+Here">Just Me Again Down Here</option>
             <option value="font-family: 'Great Vibes', cursive;|Great+Vibes">Great Vibes cursive</option>
-            <option value="font-family: 'Open Sans', sans-serif;|Open+Sans">Open Sans</option>
         </field>
     </fieldset>
 

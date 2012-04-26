@@ -105,35 +105,33 @@ class CedTagModelTag extends JModel
 
         JFactory::getApplication()->input->set('tag', $tag);
         $tag = trim($tag);
-        $dbo =& JFactory::getDBO();
+        $dbo = JFactory::getDBO();
         $tagObj = null;
         $ids = $this->_ids;
         if (!isset($this->_tagDescription)) {
-            $tagDescriptionQuery = "select id,description from #__cedtag_term as t where binary t.name=" .$dbo->quote($tag) . " and t.published='1';";
+            $tagDescriptionQuery = "select id, description from #__cedtag_term as t where binary t.name=" .$dbo->quote($tag) . " and t.published='1';";
 
             $dbo->setQuery($tagDescriptionQuery);
             $dbo->query();
             $this->_tagDescription = $dbo->loadResult();
             $tagObj = $dbo->loadObject();
+            $this->_tagDescription = $tagObj->description;
+
             if (isset($tagObj) && $tagObj->id) {
                 $this->_termExist = true;
             } else {
                 $this->_termExist = false;
                 return '';
             }
-            $updateHitsQuery = "update #__cedtag_term set hits=hits+1 where id=" . $dbo->quote($tagObj->id);
-            $dbo->setQuery($updateHitsQuery);
-            $dbo->query();
-            $this->_tagDescription = $tagObj->description;
 
-            $totalQuery = "select count(c.cid) from #__cedtag_term_content as c where c.tid=" . $dbo->quote($tagObj->id);
-            $dbo->setQuery($totalQuery);
-            $dbo->query();
-            $this->_total = $dbo->loadResult();
+            $this->incrementHitsForTagId($tagObj->id);
 
+            $this->_total = $this->countNumberOfArticleForTagId($tagObj->id);
+
+            $dbo = JFactory::getDBO();
             $tagQuery = "select c.cid from #__cedtag_term_content as c where c.tid=" . $dbo->quote($tagObj->id);
             $dbo->setQuery($tagQuery);
-            $contentIds = $dbo->loadResultArray();
+            $contentIds = $dbo->loadColumn();
 
             $ids = implode(',', $contentIds);
             $this->_ids = $ids;
@@ -147,7 +145,7 @@ class CedTagModelTag extends JModel
         $nullDate = $dbo->getNullDate();
         jimport('joomla.utilities.date');
         $date = new JDate();
-        $now = $date->toMySQL();
+        $now =  JDate::getInstance()->toSql($date);
         $order = CedTagsHelper::param('Order');
         $ShowArchiveArticles = CedTagsHelper::param('ShowArchiveArticles');
         $state = ' a.state = 1 ';
@@ -176,6 +174,25 @@ class CedTagModelTag extends JModel
 
         return $query;
 
+    }
+
+    private function countNumberOfArticleForTagId($tagid)
+    {
+        $dbo = JFactory::getDBO();
+        $totalQuery = "select count(c.cid) from #__cedtag_term_content as c where c.tid=" . $dbo->quote($tagid);
+        $dbo->setQuery($totalQuery);
+        $dbo->query();
+        $total = $dbo->loadResult();
+        return $total;
+    }
+
+    private function incrementHitsForTagId($tagid)
+    {
+        $dbo = JFactory::getDBO();
+        $updateHitsQuery = "update #__cedtag_term set hits=hits+1 where id=" . $dbo->quote($tagid);
+        $dbo->setQuery($updateHitsQuery);
+        $dbo->query();
+        return $dbo;
     }
 
     function _buildOrderBy($order)

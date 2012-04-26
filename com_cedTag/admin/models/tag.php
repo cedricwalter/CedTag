@@ -258,30 +258,30 @@ class CedTagModelTag extends JModelList
 		return $query;
 	}
 
-	/**
-	 * Build a list of authors
-	 *
-	 * @return	JDatabaseQuery
-	 * @since	1.6
-	 */
-	public function getAuthors() {
-		// Create a new query object.
-		$db = $this->getDbo();
-		$query = $db->getQuery(true);
+    /**
+   	 * Build a list of authors
+   	 *
+   	 * @return	JDatabaseQuery
+   	 * @since	1.6
+   	 */
+   	public function getAuthors() {
+   		// Create a new query object.
+   		$db = $this->getDbo();
+   		$query = $db->getQuery(true);
 
-		// Construct the query
-		$query->select('u.id AS value, u.name AS text');
-		$query->from('#__users AS u');
-		$query->join('INNER', '#__content AS c ON c.created_by = u.id');
-		$query->group('u.id, u.name');
-		$query->order('u.name');
+   		// Construct the query
+   		$query->select('u.id AS value, u.name AS text');
+   		$query->from('#__users AS u');
+   		$query->join('INNER', '#__content AS c ON c.created_by = u.id');
+   		$query->group('u.id, u.name');
+   		$query->order('u.name');
 
-		// Setup the query
-		$db->setQuery($query->__toString());
+   		// Setup the query
+   		$db->setQuery($query->__toString());
 
-		// Return the result
-		return $db->loadObjectList();
-	}
+   		// Return the result
+   		return $db->loadObjectList();
+   	}
 
 	/**
 	 * Method to get a list of articles.

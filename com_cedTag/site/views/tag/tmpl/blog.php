@@ -13,11 +13,11 @@ $tagKeyword = JText::_('Posts Tagged ').JText::_('‘') . $tag.JText::_('’');
 $config =& JFactory::getConfig();
 
 $params = JComponentHelper::getParams('com_cedtag');
+$comContentParams = JComponentHelper::getParams('com_content');
+
 $topAds = $params->get('topAds');
 $bottomAds = $params->get('bottomAds');
 $showTagDescription = $params->get('description');
-$showMeta = $params->get('contentMeta', '1');
-$user =& JFactory::getUser();
 
 function readmore($item, $user)
 {
@@ -58,66 +58,9 @@ function readmore($item, $user)
         <td valign="top"><?php
             $count = $this->pagination->limitstart;
             if (isset($this->results) && !empty($this->results)) {
-                foreach ($this->results as $result) {
-                    $readmore = $params->get('onlyIntro');
-                    $readmore = $readmore && $result->readmore;
-                    //echo($readmore);
-                    if ($readmore) {
-                        $result = readmore($result, $user);
-                        $result->text =& $result->introtext;
-                    } else {
-                        $result->text = $result->introtext . $result->fulltext;
-                        $result->readmore_link = JRoute::_(ContentHelperRoute::getArticleRoute($result->slug, $result->catslug));
-                    }
-                    ?>
-
-                    <div>
-                        <div class="contentpaneopen">
-                            <h2 class="contentheading">
-                                <a href="<?php echo $result->readmore_link; ?>"
-                                   class="contentpagetitle"> <?php echo $this->escape($result->title);?>
-                                </a>
-                            </h2>
-                        </div>
-
-                        <?php if ($showMeta) { ?>
-                        <div class="article-tools">
-                            <div class="article-meta">
-                                    <span class="createdate">
-                                        <?php echo JHTML::_('date', $result->created, JText::_('DATE_FORMAT_LC1')); ?></span>
-                                    <span class="createby">
-                                        <?php JText::_('Written by');
-                                        $author = $result->created_by_alias ? $result->created_by_alias : $result->author;
-                                        echo(' ' . $author);
-                                        ?>
-                                    </span>
-                            </div>
-                        </div>
-                        <?php };?>
-
-                        <div class="article-content">
-                            <?php echo $result->text; ?>
-
-                            <?php
-                              //echo $this->loadTemplate('item');
-                            ?>
-
-                        </div>
-
-                        <?php if ($readmore) {
-                        //read more
-                        ?>
-                        <a href="<?php echo $result->readmore_link; ?>"
-                           class="readon"> <?php if ($result->readmore_register) {
-                            echo JText::_('Register to read more...');
-                        } else {
-                            echo JText::sprintf('Read more...');
-                        } ?>
-                        </a>
-                        <?php }?>
-                        <span class="article_separator">&nbsp;</span>
-                    </div>
-                    <?php
+                foreach ($this->results as $item) {
+                    $this->item = &$item;
+                    echo $this->loadTemplate('item');
                 }
             } ?></td>
     </tr>
@@ -136,6 +79,20 @@ function readmore($item, $user)
     </tbody>
 
 </table>
+aaaa
+<?php if (($comContentParams->def('show_pagination', 1) == 1  || ($comContentParams->get('show_pagination') == 2)) && ($comContentParams->get('pages.total') > 1)) : ?>
+		<div class="pagination">
+						<?php  if ($comContentParams->def('show_pagination_results', 1)) : ?>
+						<p class="counter">
+								<?php echo $this->pagination->getPagesCounter(); ?>
+						</p>
+
+				<?php endif; ?>
+				<?php echo $this->pagination->getPagesLinks(); ?>
+		</div>
+<?php  endif; ?>
+bbb
+
 
 <?php
 $document =& JFactory::getDocument();

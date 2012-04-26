@@ -27,6 +27,14 @@ $document->addScriptDeclaration("
         var chartTerms = new google.visualization.PieChart(document.getElementById('chart_terms'));
         chartTerms.draw(terms, optionsTerms);
 
+        var description = google.visualization.arrayToDataTable([
+          ['Task', 'Hours per Day'],
+          ['With Description',     " . $this->statistics->termPublishedWithDescription . "  ],
+          ['Without Description',   " . $this->statistics->termPublishedWithoutDescription . "]
+        ]);
+
+        var chartDescription = new google.visualization.PieChart(document.getElementById('chart_description'));
+        chartDescription.draw(description, optionsTerms);
 
         var articles = google.visualization.arrayToDataTable([
           ['Task', 'Hours per Day'],
@@ -38,23 +46,18 @@ $document->addScriptDeclaration("
           title: 'Articles'
         };
 
-
         var chartArticles = new google.visualization.PieChart(document.getElementById('chart_articles'));
         chartArticles.draw(articles, optionsArticles);
-
-
-
       }
-
-
-
 ");
 ?>
 
 <form action="<?php echo JRoute::_('index.php?controller=statistics&option=com_cedtag'); ?>" method="post" name="adminForm" id="adminForm" autocomplete="off">
     <div>
-    <div id="chart_terms" style="float:left; width: 450px; height: 450px;"></div>
-    <div id="chart_articles" style="float:left; width: 450px; height: 450px;"></div>
+        <div id="chart_terms" style="float:left; width: 450px; height: 450px;"></div>
+        <div id="chart_description" style="float:left; width: 450px; height: 450px;"></div>
+        <div id="chart_articles" style="float:left; width: 450px; height: 450px;"></div>
+
     </div>
     <input type="hidden" name="controller" value="statistics">
     <?php echo JHTML::_('form.token'); ?>
