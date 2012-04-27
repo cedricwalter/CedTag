@@ -7,6 +7,8 @@
  **/
 defined('_JEXEC') or die('Restricted access');
 require_once (JPATH_SITE . '/components/com_content/helpers/route.php');
+require_once JPATH_COMPONENT_SITE . '/helper/themes.php';
+
 $tag = JRequest::getVar('tag', null);
 
 $tagKeyword = JText::_('Posts Tagged ').JText::_('‘') . $tag.JText::_('’');
@@ -15,8 +17,8 @@ $config =& JFactory::getConfig();
 $params = JComponentHelper::getParams('com_cedtag');
 $comContentParams = JComponentHelper::getParams('com_content');
 
-$topAds = $params->get('topAds');
-$bottomAds = $params->get('bottomAds');
+$ads_top_use = $params->get('ads_top_use');
+$ads_bottom_use = $params->get('ads_bottom_use');
 $showTagDescription = $params->get('description');
 
 function readmore($item, $user)
@@ -49,8 +51,9 @@ function readmore($item, $user)
     if (isset($showTagDescription) && $showTagDescription) {
         echo('<tr><td>' . $this->tagDescription . '</td></tr>');
     }
-    if (isset($topAds) && $topAds) {
-        echo('<tr><td>' . $topAds . '</td></tr>');
+    if (isset($ads_top_use) && $ads_top_use) {
+        $ads_top_content = $params->get('ads_top_content');
+        echo('<tr><td>' . $ads_top_content . '</td></tr>');
     }
     ?>
     <tr>
@@ -66,8 +69,9 @@ function readmore($item, $user)
     </tr>
     <tr>
         <?php
-        if (isset($bottomAds) && $bottomAds) {
-            echo('<tr><td>' . $bottomAds . '</td></tr>');
+        if (isset($ads_bottom_use) && $ads_bottom_use) {
+            $ads_bottom_content = $params->get('ads_bottom_content');
+            echo('<tr><td>' . ads_bottom_content . '</td></tr>');
         }
         ?>
         <td>
@@ -103,5 +107,8 @@ if ($this->tagDescription) {
 }
 $document->setTitle( JText::_('Items tagged with ') . $tag . ' | ' . $config->getValue('sitename'));
 $document->setMetadata('keywords', $tag);
-$document->addStyleSheet(JURI::base() . 'media/com_cedtag/css/tagcloud.css');
+$CedTagThemes = new CedTagThemes();
+$CedTagThemes->addCss();
+
+
 ?>

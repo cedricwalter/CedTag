@@ -9,6 +9,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.event.plugin');
+require_once JPATH_COMPONENT_SITE . '/helper/themes.php';
 
 class plgButtonCedAddTags extends JPlugin
 {
@@ -54,7 +55,7 @@ class plgButtonCedAddTags extends JPlugin
         $document = & JFactory::getDocument();
         $app = JFactory::getApplication();
         if ($app->isAdmin()) {
-            $document->addStyleSheet(JURI::base() . 'components/com_cedtag/css/tag.css');
+            $document->addStyleSheet(JURI::base() . 'components/com_cedtag/css/admintag.css');
 
             if ($id == 0) {
                 $button->set('options', "{handler: 'iframe', size: {x: 400, y: 300}}");
@@ -66,7 +67,8 @@ class plgButtonCedAddTags extends JPlugin
             }
         }
         else {
-            $document->addStyleSheet(JURI::base() . 'components/com_cedtag/css/tagcloud.css');
+            $CedTagThemes = new CedTagThemes();
+            $CedTagThemes->addCss();
 
             //return $button;
             if ($id == 0) {

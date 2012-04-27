@@ -34,6 +34,8 @@ class CedTagModelAllTags extends JModel
         $params = $app->getParams();
 
         $CedTagsHelper = new CedTagsHelper();
+
+
         $rows = $CedTagsHelper->getPopularTagModel();
         //$rows = $this->getModel("wordle");
 
@@ -44,10 +46,10 @@ class CedTagModelAllTags extends JModel
         }
 
         $font = JPATH_SITE . './components/com_cedtag/wordcloud/Arial.ttf';
-        $width = intval($params->get('wordleWidth', 600));
-        $height = intval($params->get('wordleHeight', 600));
+        $width = intval($params->get('wordleWidth', 300));
+        $height = intval($params->get('wordleHeight', 300));
 
-        $cloud = new WordCloud($width, $height, $font, $full_text);
+        $cloud = new WordCloud(915, 692, $font, $full_text);
 
         $palette = $params->get('wordlePalette', 'CC6600,FFFBD0,FF9900,C13100');
 

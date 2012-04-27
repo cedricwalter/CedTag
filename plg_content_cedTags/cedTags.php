@@ -11,6 +11,7 @@ jimport('joomla.event.plugin');
 jimport('joomla.plugin.plugin');
 jimport('joomla.language.helper');
 
+require_once JPATH_SITE . '/components/com_cedtag//helper/themes.php';
 require_once JPATH_SITE . '/components/com_cedtag/helper/helper.php';
 require_once JPATH_SITE . '/components/com_content/helpers/route.php';
 
@@ -23,39 +24,75 @@ class plgContentCedTags extends JPlugin
         $this->loadLanguage();
     }
 
-    public function onContentPrepare($context, &$article, &$params, $limitstart)
+
+    /**
+     * @param $context
+     * @param $article
+     * @param $params
+     * @param $page
+     * @return mixed
+     */
+    public function onContentBeforeDisplay($context, &$article, &$params, $page)
     {
-        //$regex = "#{tag\s*(.*?)}(.*?){/tag}#s";
-        //$article->text=preg_replace($regex,' ',$article->text);
+        $frontPageTagView = CedTagsHelper::param('FrontPageTagView', '1');
+        $view = JRequest :: getVar('view');
+
+        if (($view == 'frontpage') && !$frontPageTagView) {
+            return;
+        }
+        $frontPageTagViewTagPosition = CedTagsHelper::param('FrontPageTagViewTagPosition', '1');
+        $this->execute($context, $article->id, $article->introtext, $params, $page, $frontPageTagViewTagPosition);
+    }
+
+    /**
+     * @param $context
+     * @param $row
+     * @param $params
+     * @param int $page
+     * @return bool
+     */
+    public function onContentPrepare($context, &$row, &$params, $page = 0)
+    {
         $app =& JFactory::getApplication();
         if ($app->getName() != 'site') {
             return true;
         }
-        If (isset($article) && (!isset($article->id) || is_null($article->id))) {
+
+        $frontPageTagArticleView = CedTagsHelper::param('FrontPageTagArticleView', '1');
+        if (!$frontPageTagArticleView) {
             return true;
         }
 
-        $frontPageTag = CedTagsHelper::param('FrontPageTag');
+        if (isset($row) && (!isset($row->id) || is_null($row->id))) {
+            return true;
+        }
+
         $blogTag = CedTagsHelper::param('BlogTag');
-
-        $view = JRequest :: getVar('view');
         $layout = JRequest :: getVar('layout');
-        if (($view == 'frontpage') && !$frontPageTag) {
-            return true;
-        }
         if ($layout == 'blog' && !$blogTag) {
             return true;
         }
+
+        $view = JRequest :: getVar('view');
         if (($layout != 'blog') && ($view == 'category' || $view == 'section')) {
             return true;
         }
 
-        //select t.id as tid,t.name, count(tc.cid) as frequency from #__cedtag_term_content as c left join jos_tag_term as t on c.tid=t.id left join jos_tag_term_content tc on c.tid=tc.cid where c.cid=1 group by t.id,tc.cid ;
+        $frontPageTagArticleViewTagPosition = CedTagsHelper::param('FrontPageTagArticleViewTagPosition', '0');
+        return $this->execute($context, $row->id, $row->text, $params, $page,$frontPageTagArticleViewTagPosition);
+    }
+
+
+    private function execute($context, $id, &$text, &$params, $page = 0,$position)
+    {
+        //$regex = "#{tag\s*(.*?)}(.*?){/tag}#s";
+        //$article->text=preg_replace($regex,' ',$article->text);
+
         $dbo =& JFactory::getDBO();
         $query = 'select tagterm.id,tagterm.name,tagterm.hits from #__cedtag_term as tagterm
                         left join #__cedtag_term_content as tagtermcontent
                         on tagtermcontent.tid=tagterm.id
-                        where tagtermcontent.cid=' . $dbo->quote($article->id) . '
+                        where tagtermcontent.cid=' . $dbo->quote($id) . '
                         and tagterm.published=\'1\'
                         group by(tid)
                         order by tagterm.weight
@@ -71,12 +108,14 @@ class plgContentCedTags extends JPlugin
 
         $currentNumber = 0;
 
-        CedTagsHelper::addCss();
 
         $havingTags = false;
         $htmlList = '';
         $termIds = array();
         if (isset($terms) && !empty($terms)) {
+            $CedTagThemes = new CedTagThemes();
+            $CedTagThemes->addCss();
+
             $haveValidTags = false;
 
             foreach ($terms as $term) {
@@ -108,7 +147,7 @@ class plgContentCedTags extends JPlugin
                 }
 
                 $link = JRoute::_('index.php?option=com_cedtag&task=tag&tag=' . CedTagsHelper::urlTagname($term->name));
-                $htmlList .= '<li><a href="' . $link . '" rel="tag" title="' .$hrefTitle  . '" >' . $term->name . '</a></li> ';
+                $htmlList .= '<li><a href="' . $link . '" rel="tag" title="' . $hrefTitle . '" >' . $term->name . '</a></li> ';
                 $havingTags = true;
             }
 
@@ -119,16 +158,15 @@ class plgContentCedTags extends JPlugin
                     <ul class="cedtag">' . $htmlList . '</ul>
                 </div>';
 
-                $position = CedTagsHelper::param('TagPosition', 2);
                 // before Text
                 if ($position == 1) {
-                    $article->text = $tagResult . $article->text;
+                    $text = $tagResult . $text;
                 } else if ($position == 2) {
                     // Both before and after Text
-                    $article->text = $tagResult . $article->text . $tagResult;
+                    $text = $tagResult . $text . $tagResult;
                 } else {
                     // After Text
-                    $article->text .= $tagResult;
+                    $text .= $tagResult;
                 }
             }
 
@@ -137,7 +175,7 @@ class plgContentCedTags extends JPlugin
         $showAddTagButton = CedTagsHelper::param('ShowAddTagButton');
         if ($showAddTagButton) {
             $user =& JFactory::getUser();
-            $canEdit = $this->canUserAddTags($user, $article->id);
+            $canEdit = $this->canUserAddTags($user, $id);
             if ($canEdit) {
                 $Itemid = JRequest::getVar('Itemid', false);
                 if (is_numeric($Itemid)) {
@@ -146,13 +184,15 @@ class plgContentCedTags extends JPlugin
                 else {
                     $Itemid = 1;
                 }
-                $article->text .= $this->addTagsButtonsHTML($article->id, $Itemid, $havingTags);
+                $text .= $this->addTagsButtonsHTML($id, $Itemid, $havingTags);
             }
         }
 
+        $view = JRequest :: getVar('view');
         if ($showRelatedArticles && !empty($termIds) && ($view == 'article')) {
-            $article->text .= $this->showReleatedArticlesByTags($article->id, $termIds);
+            $text .= $this->showReleatedArticlesByTags($id, $termIds);
         }
+
         return true;
     }
 

@@ -19,14 +19,14 @@ require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
     <div style="float: left;">
         <div class="icon"><a href="index.php?option=com_cedtag&controller=tag"
                              title="<?php echo JText::_('TAG　MANAGER');?>"> <img
-            src="<? echo JURI::root() ?>/media/com_cedtag/images/tag.png"
+            src="<? echo JURI::root() ?>/media/com_cedtag/images/article.png"
             alt="<?php echo JText::_('TAG　MANAGER');?>"/> <span><?php echo JText::_('TAG　MANAGER');?></span></a>
         </div>
     </div>
     <div style="float: left;">
         <div class="icon"><a href="index.php?option=com_cedtag&controller=term"
                              title="<?php echo JText::_('TERM MANAGER');?>"> <img
-            src="<? echo JURI::root() ?>/media/com_cedtag/images/term.png"
+            src="<? echo JURI::root() ?>/media/com_cedtag/images/tag.png"
             alt="<?php echo JText::_('TERM MANAGER');?>"/>
             <span><?php echo JText::_('TERM MANAGER');?></span></a></div>
     </div>
@@ -44,7 +44,7 @@ require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
     <div style="float: left;">
         <div class="icon"><a href="index.php?option=com_cedtag&controller=css"
                              title="<?php echo JText::_('TEMPLATE MANAGER');?>"> <img
-            src="<? echo JURI::root() ?>/media/com_cedtag/images/template.png"
+            src="<? echo JURI::root() ?>/media/com_cedtag/images/css.png"
             alt="<?php echo JText::_('TEMPLATE MANAGER');?>"/>
             <span><?php echo JText::_('TEMPLATE MANAGER');?></span></a></div>
     </div>
@@ -64,7 +64,7 @@ require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
     <div style="float: left;">
         <div class="icon"><a href="index.php?option=com_cedtag&controller=export"
                              title="<?php echo JText::_('EXPORT TAGS TO OTHER COMPONENTS');?>">
-            <img src="<? echo JURI::root() ?>/media/com_cedtag/images/import.png"/>
+            <img src="<? echo JURI::root() ?>/media/com_cedtag/images/export.png"/>
             <span><?php echo JText::_('EXPORT TAGS');?></span></a></div>
     </div>
     <div style="float: left;">
@@ -115,11 +115,22 @@ require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
                 <span><?php echo JText::_('SKYPE ME');?></span></a>
         </div>
     </div>
+    <div style="float: left;">
+        <div class="icon">
+            <a href="http://extensions.joomla.org/extensions/search-a-indexing/tags-a-clouds/20423"
+               target="_blank"
+               title="<?php echo JText::_('JED VOTE');?>"> <img
+                src="<? echo JURI::root() ?>/media/com_cedtag/images/jed.png"/>
+                <span><?php echo JText::_('JED VOTE');?></span></a>
+        </div>
+    </div>
+
+
 </div>
 
 <div class="tagversion">
 
-    <p><a href="TODO" target="_blank">Joomla
+    <p><a href="http://extensions.joomla.org/extensions/search-a-indexing/tags-a-clouds/20423" target="_blank">Joomla
         cedTag</a> v<?php echo(CedTagsHelper::getComponentVersion());?>
     </p>
 
@@ -137,9 +148,9 @@ require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
     </p>
 
     <p>
-        <?php echo JText::_('VOTE');?>
+        <?php echo JText::_('VOTE at');?>
         <a target="_blank"
-           href="TODO">Joomla
+           href="http://extensions.joomla.org/extensions/search-a-indexing/tags-a-clouds/20423">Joomla
             Extensions Directory</a>
     </p>
 

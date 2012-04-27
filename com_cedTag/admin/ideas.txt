@@ -1,0 +1,37 @@
+
+
+create a wordle tag for all tags
+
+customize all tags view
+
+http://www.joomlatags.org/forum/view-topiclist/forum-4-feature-request.html
+http://localhost/dev25/index.php?option=com_cedtag&view=alltags
+
+http://stackoverflow.com/questions/2351623/combining-css-pseudo-elements-after-the-last-child
+
+
+Show most popular tags in an list format
+
+include cedthumbnails for related articles
+
+rss for cedTag
+
+Add category name to the blog layout
+
+Option to exclude the numeric tags..  filter when adding! delete or clean button in backend
+I have many unwanted tags like: 2009, 1932, 123, 32454, etc and i dont think that`s good for tags.
+
+<p>How do I show recent searched keywords in joomla tags I am sure it must be possible</p>
+<p>by some means its a good way to get into google index.</p>
+<p>Please guide me I am using joomla tags on my site <a href="http://www.neeshu.com">neeshu.com</a></p>
+
+t could be nice if we could search multiple tags at a time... for example if I have tags in an alumni association such as: "class of 71", "class of 72", "females", "males", "lawyers", "doctors" etc.</p>
+<p>Suppose I want to filter out all female lawyers in class of 72, it could be interesting if I could press "Ctrl" while choosing the tags I need, and the system would output all the items that comply with my request...</p>
+<p>A different way would be a drop down menu for each type of tag, i.e. "class of", "gender", "profession", and I could choose the tag I need from each drop down menu... only that I would have to have categories for the tags to do this...</p>
+
+
+suggestion for a new view..
+In the moment there is list & blog view, but it would be good to build a view of the tag like the joomla standard search results which show in the list the tag in the sentence. In that case on this view there will be the tag doften on the view page and search engine should like this.</p>
+
+
+Is there a possibility to put tags into Web Link Component's Links and integrate joomla tags with hwdvideoshare tags? Joomla Tags is greate component for joomla articles, but I need to tag also my videos and links

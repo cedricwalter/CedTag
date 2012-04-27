@@ -8,7 +8,10 @@
 defined('_JEXEC') or die('Restricted access');
 
 require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
-CedTagsHelper::addCss();
+require_once JPATH_COMPONENT_SITE . '/helper/themes.php';
+
+$CedTagThemes = new CedTagThemes();
+$CedTagThemes->addCss();
 ?>
 <?php if (isset($this->list) && !empty($this->list)) {   ?>
 <div class="alltags">

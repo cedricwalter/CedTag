@@ -10,6 +10,7 @@ defined('_JEXEC') or die('Restricted access');
 
 require_once JPATH_SITE . '/components/com_content/helpers/route.php';
 require_once JPATH_SITE . '/components/com_cedtag/helper/helper.php';
+require_once JPATH_COMPONENT_SITE . '/helper/themes.php';
 
 class modCedMostReadTagsHelper
 {
@@ -30,7 +31,8 @@ class modCedMostReadTagsHelper
             $sorting = $params->get('sorting', 'hitsasort');
             usort($rows, array('CedTagsHelper', $sorting));
 
-            CedTagsHelper::addCss();
+            $CedTagThemes = new CedTagThemes();
+            $CedTagThemes->addCss();
 
             if (intval($params->get('reverse', 1))) {
                 $rows = array_reverse($rows);

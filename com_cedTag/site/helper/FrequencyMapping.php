@@ -7,7 +7,8 @@
  **/
 
 defined('_JEXEC') or die('Restricted access');
-class CedTagFrequencyMapping
+
+class CedTagFrequencyMapping extends JObject
 {
 
 /*

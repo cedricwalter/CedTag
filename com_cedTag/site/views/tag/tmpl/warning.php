@@ -8,11 +8,13 @@
  **/
 defined('_JEXEC') or die('Restricted access');
 
+require_once JPATH_COMPONENT_SITE . '/helper/themes.php';
+
 $firstWarning = JRequest::getVar('FirstWarning', true);
 $warning = JRequest::getVar('tagsWarning', 'FIRST_SAVE_WARNING');
 if ($firstWarning) {
-    $document =& JFactory::getDocument();
-    $document->addStyleSheet(JURI::base() . 'media/com_cedtag/css/tagcloud.css');
+    $CedTagThemes = new CedTagThemes();
+    $CedTagThemes->addCss();
     ?>
 
 <div class="warning">

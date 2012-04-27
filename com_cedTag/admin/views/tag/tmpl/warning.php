@@ -13,7 +13,7 @@ $warning = JFactory::getApplication()->input->get('tagsWarning', 'FIRST_SAVE_WAR
 
 if ($firstWarning) {
     $document =& JFactory::getDocument();
-    $document->addStyleSheet(JURI::root() . '/media/com_cedtag/css/tag.css');
+    $document->addStyleSheet(JURI::root() . '/media/com_cedtag/css/admintag.css');
     ?>
 
 <div class="warning">

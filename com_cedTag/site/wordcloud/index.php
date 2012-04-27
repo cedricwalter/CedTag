@@ -19,7 +19,12 @@ $full_text =
     array(
         array('word' => "cedric", 'count' => "25", 'title' => "cedric", 'link' => "cedric"),
         array('word' => "walter", 'count' => "5", 'title' => "cedric", 'link' => "cedric"),
-        array('word' => "toto", 'count' => "25", 'title' => "1", 'link' => "cedric")
+        array('word' => "toto", 'count' => "12", 'title' => "1", 'link' => "cedric"),
+        array('word' => "cedric", 'count' => "2", 'title' => "cedric", 'link' => "cedric"),
+        array('word' => "aaaa", 'count' => "4", 'title' => "cedric", 'link' => "cedric"),
+        array('word' => "bbbbb", 'count' => "25", 'title' => "cedric", 'link' => "cedric"),
+        array('word' => "rrrrrr", 'count' => "8", 'title' => "cedric", 'link' => "cedric"),
+
 );
 
 
@@ -43,6 +48,9 @@ imagedestroy($cloud->get_image());
 <img usemap="#mymap" src="data:image/png;base64,<?php echo $img64 ?>" border="0"/>
 <map name="mymap">
 <?php foreach($cloud->get_image_map() as $map): ?>
-<area shape="rect" coords="<?php echo $map[1]->get_map_coords() ?>" onclick="alert('You clicked: <?php echo $map[0] ?>');" />
+<area
+    style="height: 600px; width: 600px"
+
+    shape="rect" coords="<?php echo $map[1]->get_map_coords() ?>" onclick="alert('You clicked: <?php echo $map[0] ?>');" />
 <?php endforeach ?>
 </map>

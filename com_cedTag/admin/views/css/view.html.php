@@ -8,7 +8,7 @@
 defined('_JEXEC') or die();
 jimport('joomla.application.component.view');
 jimport('joomla.filesystem.file');
-
+require_once JPATH_COMPONENT_SITE . '/helper/themes.php';
 
 class CedTagViewCss extends JView
 {
@@ -22,7 +22,8 @@ class CedTagViewCss extends JView
     {
         $this->addToolbar();
 
-        $tagCssFile = JPATH_SITE . '/media/com_cedtag/css/tagcloud.css';
+        $CedTagThemes  = new CedTagThemes();
+        $tagCssFile = $CedTagThemes->getFile();
         $isCssWritable = is_writable($tagCssFile);
 
         $cssFileContent = JFile::read($tagCssFile);

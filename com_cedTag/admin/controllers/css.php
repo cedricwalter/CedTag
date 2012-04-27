@@ -13,6 +13,8 @@ jimport('joomla.filesystem.file');
 
 require_once (JPATH_COMPONENT . '/controllers/file.php');
 require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
+require_once JPATH_COMPONENT_SITE . '/helper/themes.php';
+
 
 class CedTagControllerCss extends CedTagControllerFile
 {
@@ -22,7 +24,7 @@ class CedTagControllerCss extends CedTagControllerFile
      */
     public function getDefaultFile()
     {
-        return JPATH_SITE . '/media/com_cedtag/css/tagcloud.default.css';
+        return JPATH_SITE . '/media/com_cedtag/css/simple.default.css';
     }
 
     /**
@@ -31,7 +33,8 @@ class CedTagControllerCss extends CedTagControllerFile
      */
     public function getFile()
     {
-        return JPATH_SITE . '/media/com_cedtag/css/tagcloud.css';
+        $CedTagThemes  = new CedTagThemes();
+        return $CedTagThemes->getFile();
     }
 
     /**

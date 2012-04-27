@@ -8,8 +8,8 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-require dirname(__FILE__) . '/FrequencyMapping.php';
-
+require_once dirname(__FILE__) . '/FrequencyMapping.php';
+require_once dirname(__FILE__) . '/themes.php';
 
 class CedTagsHelper
 {
@@ -32,10 +32,17 @@ class CedTagsHelper
 
             $query = "select count(*) as frequency,name as name,t.hits as hits, t.created as created from #__cedtag_term_content as tc inner join
                     #__cedtag_term as t on t.id=tc.tid  where t.published='1' group by(tid) order by frequency DESC;";
-            $dbo->setQuery($query);
+            $tagloud_limit = CedTagsHelper::param("tagloud_limit", "0");
+            if ($tagloud_limit) {
+                $tagloud_limit_size = intval(CedTagsHelper::param("tagloud_limit_size", "100"));
+                $dbo->setQuery($query, 0, $tagloud_limit_size);
+            } else {
+                $dbo->setQuery($query);
+            }
             $rows = $dbo->loadObjectList();
 
-            CedTagsHelper::addCss();
+            $CedTagThemes = new CedTagThemes();
+            $CedTagThemes->addCss();
             $rows = $this->mappingFrequencyToSize($rows);
 
             $this->cache->store($rows, "getAllTagModel");
@@ -108,12 +115,14 @@ class CedTagsHelper
     {
         $dbo = JFactory::getDBO();
 
-        $query = "select count(*) as frequency,name,hits, t.created as created from #__cedtag_term_content as tc inner join #__cedtag_term as t on t.id=tc.tid where t.published='1' group by(tid) order by frequency desc";
+        $query = "select count(*) as frequency,name,hits, t.created as created from #__cedtag_term_content as tc
+                  inner join #__cedtag_term as t on t.id=tc.tid where t.published='1' group by(tid) order by frequency desc";
         $dbo->setQuery($query, 0, $count);
         $rows = $dbo->loadObjectList();
 
         if (isset($rows) && !empty($rows)) {
-            CedTagsHelper::addCss();
+            $CedTagThemes = new CedTagThemes();
+            $CedTagThemes->addCss();
             $rows = $this->mappingFrequencyToSize($rows);
 
             usort($rows, array('CedTagsHelper', 'tag_popularasort'));
@@ -225,21 +234,6 @@ class CedTagsHelper
 
         return $params->get($name, $default);
     }
-
-    static function addCss()
-    {
-        $document =& JFactory::getDocument();
-        $document->addStyleSheet(JURI::base() . 'media/com_cedtag/css/tagcloud.css');
-
-        $useGoogleFonts = CedTagsHelper::param('useGoogleFonts', '1');
-        if ($useGoogleFonts) {
-            $googleFonts = explode("|", CedTagsHelper::param('googleFonts', "font-family: 'Open Sans', sans-serif;|Open+Sans"));
-            $document->addStyleSheet('http://fonts.googleapis.com/css?family='.$googleFonts[1]);
-        }
-
-
-    }
-
 
     static function tag_alphasort($tag1, $tag2)
     {
@@ -405,11 +399,12 @@ class CedTagsHelper
     static function isValidName($name)
     {
         $name = CedTagsHelper::preHandle($name);
-
         if (empty($name)) {
             return false;
         }
-        if (in_array($name, CedTagsHelper::getExcludedWordList())) {
+
+        $useStopWords = CedTagsHelper::param("useStopWords", '1');
+        if ($useStopWords && in_array($name, CedTagsHelper::getExcludedWordList())) {
             return false;
         }
 

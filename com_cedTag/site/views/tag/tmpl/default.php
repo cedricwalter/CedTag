@@ -7,6 +7,8 @@
  **/
 defined('_JEXEC') or die('Restricted access');
 
+require_once JPATH_COMPONENT_SITE . '/helper/themes.php';
+
 $tag = JFactory::getApplication()->input->get('tag', null, 'string');
 
 $tagKeyword = JText::_('TAG:') . $tag;
@@ -77,6 +79,7 @@ if ($this->tagDescription) {
 }
 $document->setTitle($tag . ' | ' . $config->get('sitename'));
 $document->setMetadata('keywords', $tag);
-$document->addStyleSheet(JURI::base() . 'media/com_cedtag/css/tagcloud.css');
+$CedTagThemes = new CedTagThemes();
+$CedTagThemes->addCss();
 ?>
 

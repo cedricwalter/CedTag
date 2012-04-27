@@ -42,30 +42,25 @@ class CedTagControllerImport extends JController
     function import()
     {
         $model = $this->getModel('import');
-        $ok = false;
 
         $jinput = JFactory::getApplication()->input;
         $source = $jinput->get('source', 'meta-keys');
         if ($source == 'meta-keys') {
-            $ok = $model->importTagsFromMetaKeys();
+            $importMessage = $model->importTagsFromMetaKeys();
         } else if ($source == 'jtags') {
-            $ok = $model->importTagsFromJTags();
+            $importMessage = $model->importTagsFromJTags();
         } else if ($source == 'joomlatags') {
-            $ok = $model->importTagsFromJoomlaTags();
+            $importMessage = $model->importTagsFromJoomlaTags();
         } else if ($source == 'joomlatags') {
-            $ok = $model->joomlatagsPhil();
+            $importMessage = $model->joomlatagsPhil();
         }
 
-
-        //need specail handle on the msg and method calls when add more sources.
-        $msg = "";
-        if (!$ok) {
-            $msg = JText::_('We met some problems while importing tags, please check!');
+        if (strlen($importMessage) != 0) {
+            $message = JText::_('We met some problems while importing tags, please check!') . $importMessage;
         } else {
-            $msg = JText::_('Tags are successfully imported!');
+            $message = JText::_('Tags are successfully imported!');
         }
-        //parent::display();
-        $this->setRedirect("index.php?option=com_cedtag&controller=import", $msg);
+        $this->setRedirect("index.php?option=com_cedtag&controller=import", $message);
     }
 
 }

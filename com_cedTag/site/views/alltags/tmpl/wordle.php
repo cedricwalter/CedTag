@@ -19,9 +19,14 @@ defined('_JEXEC') or die('Restricted access');
         <img usemap="#mymap" src="data:image/png;base64,<?php echo $this->img64 ?>" border="0"/>
         <map name="mymap">
             <?php foreach ($this->cloud->get_image_map() as $map): ?>
-            <area shape="rect" coords="<?php echo $map[1]->get_map_coords() ?>"
-                  href="<?php echo $map[3] ?>"/>
+            <area shape="rect"
+                  coords="<?php echo $map[1]->get_map_coords() ?>"
+                  onclick="alert('You clicked: <?php echo $map[0] ?>');"
+                />
             <?php endforeach ?>
+
+
+            <!--  href="<?php echo $map[3] ?>" -->
         </map>
     </div>
     <div class="copyright">

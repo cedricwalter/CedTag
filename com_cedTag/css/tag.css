@@ -8,98 +8,87 @@
 
 @CHARSET "UTF-8";
 
-.tagpanel {
-    float:left;
-    width: 50%;
+ul.cedtag li {
+	background-color: #FFC200;
+	font-size: 1em;
+	line-height: 1.5em;
+	display: inline-block;
+	position: relative;
+	margin-left: .5em;
+	padding: 0 .5em;
+	border-radius:  0 5px 5px 0;
+	-moz-border-radius: 0 5px 5px 0;
+	-webkit-border-radius: 0 5px 5px 0;
 }
 
-
-/** tagpanel settings **/
-.tagpanel div.icon {
-    text-align: center;
-    margin-right: 20px;
-    float: left;
-    margin-bottom: 15px;
+ul.cedtag li:before {
+	content: " ";
+	display: block;
+	position: absolute;
+	left: -.5em;
+	border-color: transparent #FFC200 transparent transparent;
+	border-style: solid;
+	border-width: .75em .5em .75em 0;
+	float: left;
+	height: 0;
+	width: 0;
 }
 
-.tagpanel div.icon a {
-    display: block;
-    float: left;
-    border: 1px solid #f0f0f0;
-    height: 107px;
-    width: 138px;
-    color: #666;
-    vertical-align: middle;
-    text-decoration: none;
+ul.cedtag li.edit-mode {
+	margin-left: 0;
+	border-radius:  5px 5px 5px 5px;
+	-moz-border-radius: 5px 5px 5px 5px;
+	-webkit-border-radius: 5px 5px 5px 5px;
 }
 
-.tagpanel div.icon a:hover {
-    border-left: 1px solid #eee;
-    border-top: 1px solid #eee;
-    border-right: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    background: #f9f9f9;
-    color: #0B55C4;
+ul.cedtag li.edit-mode:before {
+	content: "";
+	border: none;
 }
 
-.tagpanel img {
-    padding: 10px 0;
-    margin: 0 auto;
+ul.cedtag li a {
+	text-decoration: none;
 }
 
-.tagpanel span {
-    display: block;
-    text-align: center;
+ul.cedtag li,
+ul.cedtag li .tag-value {
+	font-size: 1em;
+	line-height: 1.5em;
+	display: inline-block;
 }
 
-.tagversion {
-    display: block;
-    text-align: center;
-    border: 0px solid #eee;
-    color: #666;
-    margin-top: 10px;
-    float:right;
-    width: 50%;
+.remove-tag,
+.add-tag {
+	color: #999;
+	font-size: 0.8em;
+	text-decoration: none;
+	cursor: pointer;
+	margin-left: .5em;
+	display: inline-block;
+	text-indent: 16px;
+	overflow: hidden;
+	height: 16px;
+	width: 16px;
+	vertical-align: -10%;
 }
 
-/* For icons */
-.icon-48-tag {
-    background-image: url(../images/tag_logo48.png);
+.remove-tag img,
+.add-tag img {
+	vertical-align: text-bottom;
 }
 
-.icon-16-tag {
-    background-image: url(../images/icon-16-tag.png);
+.tag-input {
+	font-size: 1em;
+	height: 1.5em;
+	padding: 0;
+	margin-left: -1px;
+	font-family: inherit;
+	background-color: #FFC200;
+	border: none;
 }
 
-.icon-32-admin {
-    background-image: url(../images/tag_admin32.png);
-}
-
-/************************************** 
-*Warnings 
-***************************************/
-div.warning {
-    margin-left: 20px;
-    margin-top: 10px;
-}
-
-div.warning h1 {
-    line-height: normal;
-    font-size: 200%;
-    font-weight: bold;
-    text-align: center;
-    color: red;
-}
-
-div.warning h2 {
-    line-height: normal;
-    font-size: 150%;
-    font-weight: bold;
-}
-
-/***************************************************************
-*Add Tags
-*******************************************************************/
-.button2-left .add_Tags {
-    background: url(../images/addTags.png) 100% 0 no-repeat;
-}
+.sprite { background: url("http://simplicityengineer.com/tag/tag.png") no-repeat top left; }
+.remove-tag { background-position: 0 0; width: 16px; height: 16px; }
+.edit-cedtag { background-position: 0 -66px; width: 16px; height: 16px; padding-left: 1.5em; }
+.add-tag { background-position: 0 -132px; width: 16px; height: 16px; }
+.done-editing{ background-position: 0 -198px; width: 16px; height: 16px; padding-left: 1.5em; }
