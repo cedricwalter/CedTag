@@ -25,7 +25,7 @@ class CedTagThemes extends JObject
         $document =& JFactory::getDocument();
         $themes = CedTagsHelper::param('themes', 'simple');
 
-        if (JFile::exists(JPATH_SITE . 'media/com_cedtag/css/' . $themes . '.css')) {
+        if (JFile::exists(JPATH_SITE . '/media/com_cedtag/css/' . $themes . '.css')) {
             $document->addStyleSheet(JURI::base() . 'media/com_cedtag/css/' . $themes . '.css');
         }
         $useGoogleFonts = CedTagsHelper::param('useGoogleFonts', '1');
