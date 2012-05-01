@@ -16,6 +16,10 @@ include cedthumbnails for related articles
 
 rss for cedTag
 
+Auto remove some characters..provide better default
+
+unwanted words..provide a list of english article like: or, bye, and, do, I, hi, on, in and badwords
+
 Add category name to the blog layout
 
 Option to exclude the numeric tags..  filter when adding! delete or clean button in backend

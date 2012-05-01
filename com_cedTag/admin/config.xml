@@ -3,12 +3,12 @@
 
     <fieldset name="Themes" label="Themes">
 
-        <field name="themes" type="list" default="1" label="Themes"
-               description="Select theme">
-            <option value="tag">Simple style</option>
+        <field name="themes" type="list" default="simple" label="Themes" disabled="true"
+               description="Select theme, switch off for now, a work in progress">
+            <option value="simple">Simple style</option>
             <option value="tag">Tag style</option>
-            <option value="0">Flickr style</option>
-            <option value="0">Quora style</option>
+            <option value="flickr">Flickr style</option>
+            <option value="quora">Quora style</option>
         </field>
 
     </fieldset>

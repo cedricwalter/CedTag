@@ -14,6 +14,9 @@ require_once JPATH_COMPONENT_SITE . DS . 'helper/helper.php';
 
 class CedTagModelTerm extends JModel
 {
+
+
+
     function remove($ids)
     {
         $where = "";
