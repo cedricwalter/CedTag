@@ -33,7 +33,7 @@ class plgSystemCedTagSef extends JPlugin
 
     public function onAfterInitialise()
     {
-        $app =& JFactory::getApplication();
+        $app = JFactory::getApplication();
         if ($app->getName() != 'site') {
             return true;
         }
@@ -70,7 +70,7 @@ class plgSystemCedTagSef extends JPlugin
      */
     public function onAfterRender()
     {
-        $app =& JFactory::getApplication();
+        $app = JFactory::getApplication();
 
         if ($app->getName() != 'site') {
             return true;

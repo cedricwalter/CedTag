@@ -161,7 +161,7 @@ class PlgSystemInstallerInstallerScript
         //Load Event Handler
         $event_handler_file = $this->installerdir . '/RokInstallerEvents.php';
         require_once($event_handler_file);
-        $dispatcher =& JDispatcher::getInstance();
+        $dispatcher = JDispatcher::getInstance();
         new RokInstallerEvents($dispatcher);
     }
 
@@ -231,7 +231,7 @@ class PlgSystemInstallerInstallerScript
             JError::addToStack($error);
         }
 
-        $app =& JFactory::getApplication();
+        $app = JFactory::getApplication();
         $enqueued_messages = $app->get('_messageQueue');
         $other_messages = array();
         if (!empty($enqueued_messages) && is_array($enqueued_messages)) {
