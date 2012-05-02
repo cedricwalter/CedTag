@@ -40,14 +40,14 @@ class plgSystemCedTagSef extends JPlugin
         $uir = $_SERVER['REQUEST_URI'];
         //$uir	= JURI::getInstance()->;
 
-        if (strpos($uir, '/tag/index.php') !== false) {
+        if (strpos($uir, '/cedtag/index.php') !== false) {
             return true;
         }
-        if (strpos($uir, '/tag/') !== false && strpos($uir, '/component/tag/') === false) {
+        if (strpos($uir, '/cedtag/') !== false && strpos($uir, '/component/tag/') === false) {
             $_SERVER['REQUEST_URI'] = str_replace('/tag/', '/component/tag/', $uir);
             $this->prehandle($uir);
 
-        } else if (strpos($uir, 'tag/') === 0) {
+        } else if (strpos($uir, 'cedtag/') === 0) {
             $_SERVER['REQUEST_URI'] = str_replace('tag/', 'component/tag/', $uir);
             $this->prehandle($uir);
         }
@@ -76,8 +76,8 @@ class plgSystemCedTagSef extends JPlugin
             return true;
         }
         $buffer = JResponse::getBody();
-        $regex = '#component/tag/#m';
-        $buffer = preg_replace($regex, 'tag/', $buffer);
+        $regex = '#component/cedtag/#m';
+        $buffer = preg_replace($regex, 'cedtag/', $buffer);
         JResponse::setBody($buffer);
         return true;
     }

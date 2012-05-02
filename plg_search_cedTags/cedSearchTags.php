@@ -43,8 +43,8 @@ class plgCedSearchTags extends JPlugin
      */
     function onContentSearch($text, $phrase = '', $ordering = '', $areas = null)
     {
-        $db =& JFactory::getDBO();
-        $user =& JFactory::getUser();
+        $db = JFactory::getDBO();
+        $user = JFactory::getUser();
         $searchText = $text;
         if (is_array($areas)) {
             if (!array_intersect($areas, array_keys(plgSearchTagsAreas()))) {
@@ -53,7 +53,7 @@ class plgCedSearchTags extends JPlugin
         }
 
         // load plugin params info
-        $plugin =& JPluginHelper::getPlugin('search', 'cedtags');
+        $plugin = JPluginHelper::getPlugin('search', 'cedtags');
         $pluginParams = new JParameter($plugin->params);
 
         $limit = $pluginParams->def('search_limit', 50);

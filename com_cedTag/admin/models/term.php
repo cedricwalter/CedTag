@@ -88,7 +88,7 @@ class CedTagModelTerm extends JModel
                 $insertQuery .= ",weight";
                 $valuePart .= "," . $weight;
             }
-            $date =& JFactory::getDate();
+            $date = JFactory::getDate();
             $now = JDate::getInstance()->toSql($date);
             $insertQuery .= ',created) ';
             $valuePart .= ',' . $dbo->Quote($now) . ')';
@@ -152,7 +152,7 @@ class CedTagModelTerm extends JModel
     function getTermList()
     {
         $dbo = JFactory::getDbo();
-        $mainframe =& JFactory::getApplication();
+        $mainframe = JFactory::getApplication();
         $search = $mainframe->getUserStateFromRequest('articleelement.search', 'search', '', 'string');
         $search = JString::strtolower($search);
         $where = null;

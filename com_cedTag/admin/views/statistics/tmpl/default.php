@@ -7,7 +7,7 @@
  **/
 defined('_JEXEC') or die('Restricted access');
 
-$document =& JFactory::getDocument();
+$document = JFactory::getDocument();
 $document->addScript("https://www.google.com/jsapi");
 
 $document->addScriptDeclaration("

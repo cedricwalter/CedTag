@@ -22,7 +22,7 @@ class CedTagThemes extends JObject
 
     static function addCss()
     {
-        $document =& JFactory::getDocument();
+        $document = JFactory::getDocument();
         $themes = CedTagsHelper::param('themes', 'simple');
 
         if (JFile::exists(JPATH_SITE . '/media/com_cedtag/css/' . $themes . '.css')) {

@@ -44,7 +44,7 @@ class CedTagViewTerm extends JView
 
     function edit($tpl = null)
     {
-        $term =& $this->get('term');
+        $term = $this->get('term');
         if (isset($term->id)) {
             JToolBarHelper::title(JText::_('TERM EDIT'), 'tag.png');
         } else {
@@ -83,7 +83,7 @@ class CedTagViewTerm extends JView
         $params = JComponentHelper::getParams('com_cedtag');
         $this->assignRef('params', $params);
         //get data
-        $termList =& $this->get('termList');
+        $termList = $this->get('termList');
 
         $this->assignRef('termList', $termList);
 

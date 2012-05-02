@@ -27,7 +27,7 @@ class cedtagViewtag extends JView
 
     function display($tpl = null)
     {
-        $layout = JInput::get('layout', "default", 'STRING');
+        $layout = JFactory::getApplication()->input->get('layout', "default", 'STRING');
         switch ($layout) {
             case 'add':
                 $this->add($tpl);
@@ -109,7 +109,7 @@ class cedtagViewtag extends JView
 
     function add($tpl = null)
     {
-        $tags =& $this->get('tagsForArticle');
+        $tags = $this->get('tagsForArticle');
         $this->assignRef('tags', $tags);
         parent::display($tpl);
     }

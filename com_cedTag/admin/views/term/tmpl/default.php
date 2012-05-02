@@ -7,7 +7,7 @@
  **/
 defined('_JEXEC') or die('Restricted access');
 $limitstart = JRequest::getVar('limitstart', 0, '', 'int');
-$mainframe =& JFactory::getApplication();
+$mainframe = JFactory::getApplication();
 $search = $mainframe->getUserStateFromRequest('articleelement.search', 'search', '', 'string');
 $search = JString::strtolower($search);
 $rows = $this->termList->list;

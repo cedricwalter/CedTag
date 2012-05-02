@@ -18,7 +18,7 @@ require_once (JPATH_COMPONENT . '/controllers/import.php');
 require_once (JPATH_COMPONENT . '/controllers/export.php');
 require_once (JPATH_COMPONENT . '/controllers/statistics.php');
 
-$document = & JFactory::getDocument();
+$document = JFactory::getDocument();
 $document->addStyleSheet(JURI::root() . '/media/com_cedtag/css/admintag.css');
 
 $jinput = JFactory::getApplication()->input;

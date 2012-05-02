@@ -14,7 +14,7 @@ jimport('joomla.application.input');
 
 class CedTagController extends JController
 {
-    function execute($task)
+    public function execute($task)
     {
         switch ($task) {
             case 'tag':
@@ -26,7 +26,6 @@ class CedTagController extends JController
             case 'add':
                 $this->add();
                 break;
-
             case 'warning':
                 $this->warning();
                 break;
@@ -38,7 +37,7 @@ class CedTagController extends JController
         }
     }
 
-    function display()
+    public function display($cachable = false, $urlparams = false)
     {
         $view = JFactory::getApplication()->input->get('view', 'tag', 'string');
         //Set default view
@@ -48,27 +47,27 @@ class CedTagController extends JController
         parent::display();
     }
 
-    function allTags()
+    private function allTags()
     {
         JFactory::getApplication()->input->set('view', 'alltags');
         parent::display();
     }
 
-    function warning()
+    private function warning()
     {
         JFactory::getApplication()->input->set('view', 'tag');
         JFactory::getApplication()->input->set('layout', 'warning');
         parent::display();
     }
 
-    function add()
+    private function add()
     {
         JFactory::getApplication()->input->set('view', 'tag');
         JFactory::getApplication()->input->set('layout', 'add');
         parent::display();
     }
 
-    function save()
+    private function save()
     {
         $id = JFactory::getApplication()->input->get('cid', 0, 'int');
         $tags = JFactory::getApplication()->input->get('tags', '', 'string');

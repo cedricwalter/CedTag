@@ -49,10 +49,11 @@ class CedTagControllerCss extends CedTagControllerFile
     public function save()
     {
         $updatedFileContent = JFactory::getApplication()->input->get('content', '', 'STRING');
-
         $updatedFileContent = $this->transform($updatedFileContent);
 
-        JFile::write($this->getFile(), trim($updatedFileContent));
+        $file = $this->getFile();
+        $content = trim($updatedFileContent);
+        JFile::write($file, $content);
         JFactory::getApplication()->input->set('view', $this->getDefaultView());
         parent::display();
     }

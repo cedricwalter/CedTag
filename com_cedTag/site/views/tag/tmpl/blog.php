@@ -12,7 +12,7 @@ require_once JPATH_COMPONENT_SITE . '/helper/themes.php';
 $tag = JRequest::getVar('tag', null);
 
 $tagKeyword = JText::_('Posts Tagged ').JText::_('‘') . $tag.JText::_('’');
-$config =& JFactory::getConfig();
+$config = JFactory::getConfig();
 
 $params = JComponentHelper::getParams('com_cedtag');
 $comContentParams = JComponentHelper::getParams('com_content');
@@ -99,7 +99,7 @@ bbb
 
 
 <?php
-$document =& JFactory::getDocument();
+$document = JFactory::getDocument();
 if ($this->tagDescription) {
     $document->setDescription(CedTagsHelper::truncate($this->tagDescription));
 } else {

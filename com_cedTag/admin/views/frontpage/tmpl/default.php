@@ -124,7 +124,15 @@ require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
                 <span><?php echo JText::_('JED VOTE');?></span></a>
         </div>
     </div>
-
+    <div style="float: left;">
+        <div class="icon">
+            <a href="http://www.waltercedric.com/downloads/cedtags.html"
+               target="_blank"
+               title="<?php echo JText::_('Download');?>"> <img
+                src="<? echo JURI::root() ?>/media/com_cedthumbnails/images/download.png"/>
+                <span><?php echo JText::_('Download');?></span></a>
+        </div>
+    </div>
 
 </div>
 

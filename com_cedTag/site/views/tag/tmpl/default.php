@@ -17,7 +17,7 @@ $params = JComponentHelper::getParams('com_cedtag');
 $topAds = $params->get('topAds');
 $bottomAds = $params->get('bottomAds');
 $showTagDescription = $params->get('description');
-$config =& JFactory::getConfig();
+$config = JFactory::getConfig();
 ?>
 <h1><?php echo($tag);?></h1>
 
@@ -71,7 +71,7 @@ $config =& JFactory::getConfig();
 
 
 <?php
-$document =& JFactory::getDocument();
+$document = JFactory::getDocument();
 if ($this->tagDescription) {
     $document->setDescription(CedTagsHelper::truncate($this->tagDescription));
 } else {

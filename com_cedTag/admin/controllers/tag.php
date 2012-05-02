@@ -13,7 +13,7 @@ jimport('joomla.application.input');
 class CedTagControllerTag extends JController
 {
 
-    function execute($task)
+    public function execute($task)
     {
         switch ($task) {
             case 'batchsave':
@@ -42,7 +42,7 @@ class CedTagControllerTag extends JController
      * display the form
      * @return void
      */
-    function display()
+    public function display($cachable = false, $urlparams = false)
     {
         JFactory::getApplication()->input->set('view', 'tag');
         parent::display();

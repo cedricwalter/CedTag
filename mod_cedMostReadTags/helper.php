@@ -16,7 +16,7 @@ class modCedMostReadTagsHelper
 {
     function getList(&$params)
     {
-        $dbo =& JFactory::getDBO();
+        $dbo = JFactory::getDBO();
         $query = "select count(*) as frequency,name as name,t.hits as hits, t.created as created from #__cedtag_term_content as tc
                    inner join #__cedtag_term as t on t.id=tc.tid where t.published='1' group by(tid) ORDER BY hits DESC";
 

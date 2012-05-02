@@ -41,7 +41,7 @@ class CedTagControllerTerm extends JController
      * display the form
      * @return void
      */
-    function display()
+    public function display($cachable = false, $urlparams = false)
     {
         JFactory::getApplication()->input->set('view', 'term');
         parent::display();

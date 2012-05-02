@@ -320,7 +320,7 @@ class CedTagModelTag extends JModelList
         function getTagList()
         {
             $dbo = JFactory::getDbo();
-            $mainframe =& JFactory::getApplication();
+            $mainframe = JFactory::getApplication();
             $catid = $mainframe->getUserStateFromRequest('articleelement.catid', 'catid', 0, 'int');
             $search = $mainframe->getUserStateFromRequest('articleelement.search', 'search', '', 'string');
             $search = JString::strtolower($search);
@@ -466,7 +466,7 @@ class CedTagModelTag extends JModelList
                     $insertQuery .= ",weight";
                     $valuePart .= "," . $weight;
                 }
-                $date =& JFactory::getDate();
+                $date = JFactory::getDate();
                 $now = JDate::getInstance()->toSql($date);
                 $insertQuery .= ',created) ';
                 $valuePart .= ',' . $dbo->Quote($now) . ')';

@@ -140,7 +140,7 @@ class CedTagsHelper
     {
         static $added;
 
-        $document =& JFactory::getDocument();
+        $document = JFactory::getDocument();
         $document->addScript(JURI::base() . 'media/com_cedtag/js/tagcanvas.js?1.15');
 
         if (!isset($added)) {
@@ -203,7 +203,7 @@ class CedTagsHelper
         }
 
 
-        $document =& JFactory::getDocument();
+        $document = JFactory::getDocument();
         $document->addScriptDeclaration("
                 window.onload = function() {
                 try {
@@ -290,8 +290,8 @@ class CedTagsHelper
             $xmlFile = JPATH_ADMINISTRATOR . '/components/com_cedtag/tag.xml';
             if (file_exists($xmlFile)) {
                 if ($xml->loadFile($xmlFile)) {
-                    $root =& $xml->document;
-                    $element =& $root->getElementByPath('version');
+                    $root = $xml->document;
+                    $element = $root->getElementByPath('version');
                     $version = $element ? $element->data() : '';
                 }
             }

@@ -23,7 +23,7 @@ class CedTagControllerFile extends JController
         }
     }
 
-    public function display()
+    public function display($cachable = false, $urlparams = false)
     {
         JFactory::getApplication()->input->set('view', $this->getDefaultView());
         parent::display();
@@ -34,7 +34,9 @@ class CedTagControllerFile extends JController
         $updatedFileContent = JFactory::getApplication()->input->get('content', '', 'STRING');
         $updatedFileContent = $this->transform($updatedFileContent);
 
-        JFile::write($this->getFile(), trim($updatedFileContent));
+        $file = $this->getFile();
+        $content = trim($updatedFileContent);
+        JFile::write($file, $content);
         JFactory::getApplication()->input->set('view', $this->getDefaultView());
         parent::display();
     }

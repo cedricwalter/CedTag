@@ -16,7 +16,7 @@ class modCedCustomTagsCloudHelper
 {
     public function getList(&$params)
     {
-        $dbo =& JFactory::getDBO();
+        $dbo = JFactory::getDBO();
         $termIds = $params->get("tagIds");
 
         $idsArray = @explode(',', $termIds);

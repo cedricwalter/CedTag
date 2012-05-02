@@ -15,9 +15,9 @@ $showMeta = $params->get('contentMeta', '1');
 $readmore = $params->get('onlyIntro');
 $readmore = $readmore && $this->item->readmore;
 if ($readmore) {
-    $user =& JFactory::getUser();
+    $user = JFactory::getUser();
     $result = readmore($this->item, $user);
-    $result->text =& $this->item->introtext;
+    $result->text = $this->item->introtext;
 } else {
     $result->text = $this->item->introtext . $this->item->fulltext;
     $result->readmore_link = JRoute::_(ContentHelperRoute::getArticleRoute($this->item->slug, $this->item->catslug));

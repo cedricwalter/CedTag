@@ -16,7 +16,7 @@ class CedTagController extends JController
 {
     protected $default_view = 'frontpage';
 
-    function display()
+    public function display($cachable = false, $urlparams = false)
     {
         $view = JFactory::getApplication()->input->get('view');
         if (!isset($view)) {
@@ -24,17 +24,6 @@ class CedTagController extends JController
         }
         parent::display();
     }
-
-    public function display2($cachable = false, $urlparams = false)
-    {
-        //	require_once JPATH_COMPONENT.'/helpers/search.php';
-
-        // Load the submenu.
-        //	SearchHelper::addSubmenu(JRequest::getCmd('view', 'searches'));
-
-        parent::display();
-    }
-
 
 }
 

@@ -40,10 +40,10 @@ class CedTagViewTag extends JView
 
         JFactory::getApplication()->input->set('tag', $tag);
 
-        $results = & $this->get('Data');
-        $total = & $this->get('Total');
-        $pagination = & $this->get('Pagination');
-        $tagDescription =& $this->get('TagDescription');
+        $results =  $this->get('Data');
+        $total =  $this->get('Total');
+        $pagination =  $this->get('Pagination');
+        $tagDescription = $this->get('TagDescription');
         $isTermExist = $this->get('TermExist');
 
         if (!$isTermExist) {
@@ -66,7 +66,7 @@ class CedTagViewTag extends JView
 
             $showMeta = $params->get('contentMeta', '1');
             $description = $params->get('description', '1');
-            $ads =& $params->get('ads', '');
+            $ads = $params->get('ads', '');
 
             $this->assign('showMeta', $showMeta);
             $this->assign('showDescription', $description);
@@ -79,7 +79,7 @@ class CedTagViewTag extends JView
 
     function add($tpl = null)
     {
-        $tags =& $this->getTagsForArticle();
+        $tags = $this->getTagsForArticle();
         $this->assignRef('tags', $tags);
         parent::display($tpl);
     }
@@ -93,7 +93,7 @@ class CedTagViewTag extends JView
     {
         $cid = JFactory::getApplication()->input->get('article_id', null, 'int');
         if (isset($cid)) {
-            $dbo =& JFactory::getDBO();
+            $dbo = JFactory::getDBO();
             $query = 'select t.name from #__cedtag_term_content as tc left join #__cedtag_term as t on t.id=tc.tid where tc.cid=' . $dbo->quote($cid). ' and t.published=\'1\';';
             $dbo->setQuery($query);
             $tagsInArray = $dbo->loadColumn();

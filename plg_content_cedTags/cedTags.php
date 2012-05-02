@@ -34,6 +34,11 @@ class plgContentCedTags extends JPlugin
      */
     public function onContentBeforeDisplay($context, &$article, &$params, $page)
     {
+        $app = JFactory::getApplication();
+        if ($app->isAdmin()) {
+            return true;
+        }
+
         $frontPageTagView = CedTagsHelper::param('FrontPageTagView', '1');
         $view = JRequest :: getVar('view');
 
@@ -53,8 +58,8 @@ class plgContentCedTags extends JPlugin
      */
     public function onContentPrepare($context, &$row, &$params, $page = 0)
     {
-        $app =& JFactory::getApplication();
-        if ($app->getName() != 'site') {
+        $app = JFactory::getApplication();
+        if ($app->isAdmin()) {
             return true;
         }
 
@@ -88,7 +93,7 @@ class plgContentCedTags extends JPlugin
         //$regex = "#{tag\s*(.*?)}(.*?){/tag}#s";
         //$article->text=preg_replace($regex,' ',$article->text);
 
-        $dbo =& JFactory::getDBO();
+        $dbo = JFactory::getDBO();
         $query = 'select tagterm.id,tagterm.name,tagterm.hits from #__cedtag_term as tagterm
                         left join #__cedtag_term_content as tagtermcontent
                         on tagtermcontent.tid=tagterm.id
@@ -174,7 +179,7 @@ class plgContentCedTags extends JPlugin
 
         $showAddTagButton = CedTagsHelper::param('ShowAddTagButton');
         if ($showAddTagButton) {
-            $user =& JFactory::getUser();
+            $user = JFactory::getUser();
             $canEdit = $this->canUserAddTags($user, $id);
             if ($canEdit) {
                 $Itemid = JRequest::getVar('Itemid', false);
@@ -210,12 +215,12 @@ class plgContentCedTags extends JPlugin
         //find the unique article ids
         $query = ' select distinct cid from #__cedtag_term_content where tid in (' . $termIdsCondition . ') and cid<>' . $articleId;
 
-        $dbo =& JFactory::getDBO();
+        $dbo = JFactory::getDBO();
         $dbo->setQuery($query);
         $cids = $dbo->loadColumn(0);
 
         $nullDate = $dbo->getNullDate();
-        $date =& JFactory::getDate();
+        $date = JFactory::getDate();
         $now = JDate::getInstance()->toSql($date);
 
         $where = ' a.id in(' . @implode(',', $cids) . ') AND a.state = 1'
@@ -236,7 +241,7 @@ class plgContentCedTags extends JPlugin
         if (empty($rows)) {
             return '';
         }
-        $user =& JFactory::getUser();
+        $user = JFactory::getUser();
         $aid = $user->get('aid', 0);
 
         $html = '<div class="relateditemsbytags">' . $relatedArticlesTitle . '</div><ul class="relateditems">';
@@ -278,7 +283,7 @@ class plgContentCedTags extends JPlugin
         if ($article_id == null || $article_id == '' || !is_numeric($article_id)) {
             return false;
         }
-        $dbo =& JFactory::getDBO();
+        $dbo = JFactory::getDBO();
         $query = "SELECT created_by from #__content WHERE id='" . $article_id . "'";
         $dbo->setQuery($query);
         $rows = $dbo->loadObjectList();
