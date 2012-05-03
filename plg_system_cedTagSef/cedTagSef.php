@@ -43,12 +43,12 @@ class plgSystemCedTagSef extends JPlugin
         if (strpos($uir, '/cedtag/index.php') !== false) {
             return true;
         }
-        if (strpos($uir, '/cedtag/') !== false && strpos($uir, '/component/tag/') === false) {
-            $_SERVER['REQUEST_URI'] = str_replace('/tag/', '/component/tag/', $uir);
+        if (strpos($uir, '/cedtag/') !== false && strpos($uir, '/component/cedtag/') === false) {
+            $_SERVER['REQUEST_URI'] = str_replace('/tag/', '/component/cedtag/', $uir);
             $this->prehandle($uir);
 
         } else if (strpos($uir, 'cedtag/') === 0) {
-            $_SERVER['REQUEST_URI'] = str_replace('tag/', 'component/tag/', $uir);
+            $_SERVER['REQUEST_URI'] = str_replace('cedtag/', 'component/cedtag/', $uir);
             $this->prehandle($uir);
         }
         return true;

@@ -9,15 +9,24 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.event.plugin');
-require_once JPATH_COMPONENT_SITE . '/helper/themes.php';
+require_once JPATH_SITE . 'components/com_cedtag/helper/themes.php';
 
 class plgButtonCedAddTags extends JPlugin
 {
 
-    function plgCedAddTags(& $subject, $config)
-    {
-        parent::__construct($subject, $config);
-    }
+    /**
+   	 * Constructor
+   	 *
+   	 * @access      protected
+   	 * @param       object  $subject The object to observe
+   	 * @param       array   $config  An array that holds the plugin configuration
+   	 * @since       1.5
+   	 */
+   	public function __construct(& $subject, $config)
+   	{
+   		parent::__construct($subject, $config);
+   		$this->loadLanguage();
+   	}
 
     /**
      * Add Attachment button
