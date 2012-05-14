@@ -23,8 +23,8 @@ class CedTagControllerStopWords extends CedTagControllerFile
     public function getDefaultFile()
     {
         $lang = JFactory::getLanguage()->getDefault();
-        $defaultfile = JPATH_ADMINISTRATOR . '/components/com_cedtag/stopwords/stopwords_' . $lang . '-default.php';
-        return $defaultfile;
+        $file = JPATH_ADMINISTRATOR . '/components/com_cedtag/stopwords/stopwords_' . $lang . '-default.php';
+        return $file;
     }
 
     /**

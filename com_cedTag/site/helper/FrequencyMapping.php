@@ -165,7 +165,8 @@ printTagCloud($tags);
 
     function mappingFrequencyToSizeWithFixedBuckets($tags)
     {
-
+        //TODO create fix size bucket
+        return $this->mappingFrequencyToSizeWithDynamicBuckets($tags);
     }
 
 

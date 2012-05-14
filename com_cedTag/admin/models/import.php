@@ -54,6 +54,9 @@ class CedTagModelImport extends CedTagModelTag
                             }
                         }
                         unset($keys);
+
+
+
                         $deleteTags = 'delete from #__cedtag_term_content where cid=' . $dbo->quote($cid);
                         $dbo->setQuery($deleteTags);
                         $dbo->query();
@@ -116,9 +119,12 @@ class CedTagModelImport extends CedTagModelTag
     function importTagsFromJTags()
     {
         $dbo = JFactory::getDbo();
-
-        $jtagsQuery = "select tag_id,item_id from #__jtags_items where component='com_content'";
-        $dbo->setQuery($jtagsQuery);
+        $query	= $dbo->getQuery(true);
+        $query->select("tag_id");
+        $query->select("item_id");
+        $query->from("#__jtags_items");
+        $query->where("component='com_content'");
+        $dbo->setQuery($query);
         $jtagTags = $dbo->loadObjectList();
 
         $jtags = array();

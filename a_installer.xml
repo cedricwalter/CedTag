@@ -20,52 +20,52 @@
 
     <cogs>
         <cog type="component" client="administrator" access="0" enabled="true" protected="false">
-            com_cedtag
+            com_cedTag
             <name>Component Tag</name>
 			<description>A real free tag system for joomla 2.5</description>
         </cog>
         <cog type="module" client="site">
-            mod_cedlatesttags
+            com_cedTag
             <name>Module Latest Tags</name>
             <description></description>
         </cog>
         <cog type="module" client="site">
-            mod_cedmostpopulartags
+            mod_cedMostPopularTags
             <name>Module Popular Tags</name>
             <description></description>
         </cog>
         <cog type="module" client="site">
-            mod_cedmostreadtags
+            mod_cedMostReadTags
             <name>Module Most Read Tags</name>
             <description></description>
         </cog>
         <cog type="module" client="site">
-            mod_cedrandomtags
+            mod_cedRandomTags
             <name>Module Random Tags</name>
             <description></description>
         </cog>
         <cog type="module" client="site">
-            mod_cedCustomtagscloud
+            mod_cedCustomTagsCloud
             <name>Module Custom Tags Cloud</name>
             <description></description>
         </cog>
         <cog type="plugin" group="system" client="site" ordering="1" access="1" enabled="true" protected="false">
-            plg_system_cedtagSef
+            plg_system_cedTagSef
             <name>Plugin SEF Tags</name>
             <description></description>
         </cog>
         <cog type="plugin" client="site" group="search" ordering="0" access="1" enabled="true" protected="false">
-            plg_search_cedtags
+            plg_search_cedTags
             <name>Plugin Search Tags</name>
             <description></description>
         </cog>
         <cog type="plugin" client="site" group="content" ordering="0" access="1" enabled="true" protected="false">
-            plg_content_cedtags
+            plg_content_cedTags
             <name>Plugin Content Tags</name>
             <description></description>
         </cog>
         <cog type="plugin" client="site" group="editors-xtd" ordering="0" access="1" enabled="true" protected="false">
-            plg_cedaddtags_button
+            plg_cedAddTags_button
             <name>Plugin Button Add Tags</name>
             <description></description>
         </cog>

@@ -54,7 +54,7 @@ class CedTagsHelper
     public function mappingFrequencyToSize($rows)
     {
         if (isset($rows) && !empty($rows)) {
-            $mappingFrequencyToSizeAlgorithm = CedTagsHelper::param('mappingFrequencyToSizeAlgorithm', 'pareto');
+            $mappingFrequencyToSizeAlgorithm = CedTagsHelper::param('mappingFrequencyToSizeAlgorithm', 'dynamicbuckets');
 
             $CedTagFrequencyMapping = new CedTagFrequencyMapping();
 

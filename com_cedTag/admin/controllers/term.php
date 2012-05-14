@@ -53,11 +53,11 @@ class CedTagControllerTerm extends JController
      */
     function save()
     {
-        $jinput = JFactory::getApplication()->input;
-        $id = $jinput->get('cid', 0, 'POST');
-        $name = $jinput->get('name', '', 'POST');
-        $description = $jinput->get('description', '', 'POST', 'string', JREQUEST_ALLOWHTML);
-        $weight = $jinput->get('weight', '', 'POST');
+        $input = JFactory::getApplication()->input;
+        $id = $input->get('cid', 0, 'POST');
+        $name = $input->get('name', '', 'POST');
+        $description = $input->get('description', '', 'POST', 'string', JREQUEST_ALLOWHTML);
+        $weight = $input->get('weight', '', 'POST');
         $model = $this->getModel('term');
         $isok = true;
         if (isset($id[0]) && $id[0]) {

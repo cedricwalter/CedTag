@@ -13,7 +13,9 @@ jimport('joomla.language.helper');
 
 require_once JPATH_SITE . '/components/com_cedtag//helper/themes.php';
 require_once JPATH_SITE . '/components/com_cedtag/helper/helper.php';
+require_once JPATH_SITE . '/components/com_cedtag/helper/suggest.php';
 require_once JPATH_SITE . '/components/com_content/helpers/route.php';
+require_once JPATH_SITE . '/components/com_cedtag/models/tags.php';
 
 class plgContentCedTags extends JPlugin
 {
@@ -23,7 +25,6 @@ class plgContentCedTags extends JPlugin
         parent::__construct($subject, $config);
         $this->loadLanguage();
     }
-
 
     /**
      * @param $context
@@ -45,6 +46,10 @@ class plgContentCedTags extends JPlugin
         if (($view == 'frontpage') && !$frontPageTagView) {
             return;
         }
+
+        //0 Display after the article fulltext
+        //1 Display below the article title
+        //2 Display at both position
         $frontPageTagViewTagPosition = CedTagsHelper::param('FrontPageTagViewTagPosition', '1');
         $this->execute($context, $article->id, $article->introtext, $params, $page, $frontPageTagViewTagPosition);
     }
@@ -83,51 +88,37 @@ class plgContentCedTags extends JPlugin
             return true;
         }
 
+        //0 Display after the article fulltext
+        //1 Display below the article title
+        //2 Display at both position
         $frontPageTagArticleViewTagPosition = CedTagsHelper::param('FrontPageTagArticleViewTagPosition', '0');
-        return $this->execute($context, $row->id, $row->text, $params, $page,$frontPageTagArticleViewTagPosition);
+        return $this->execute($context, $row->id, $row->text, $params, $page, $frontPageTagArticleViewTagPosition);
     }
 
 
-    private function execute($context, $id, &$text, &$params, $page = 0,$position)
+    private function execute($context, $id, &$text, &$params, $page = 0, $position)
     {
-        //$regex = "#{tag\s*(.*?)}(.*?){/tag}#s";
-        //$article->text=preg_replace($regex,' ',$article->text);
+        $cedTagModelTags = new CedTagModelTags();
+        $terms = $cedTagModelTags->getTagsForArticle($id);
 
-        $dbo = JFactory::getDBO();
-        $query = 'select tagterm.id,tagterm.name,tagterm.hits from #__cedtag_term as tagterm
-                        left join #__cedtag_term_content as tagtermcontent
-                        on tagtermcontent.tid=tagterm.id
-                        where tagtermcontent.cid=' . $dbo->quote($id) . '
-                        and tagterm.published=\'1\'
-                        group by(tid)
-                        order by tagterm.weight
-                        desc,tagterm.name';
-
-        $dbo->setQuery($query);
-        $terms = $dbo->loadObjectList();
-
-        $suppresseSingleTerms = CedTagsHelper::param('SuppresseSingleTerms');
-        $hitsNumber = CedTagsHelper::param('HitsNumber');
-        $maxTagsNumber = CedTagsHelper::param('MaxTagsNumber', 10);
-        $showRelatedArticles = CedTagsHelper::param('RelatedArticlesByTags', 0);
-
-        $currentNumber = 0;
-
-
-        $havingTags = false;
-        $htmlList = '';
-        $termIds = array();
         if (isset($terms) && !empty($terms)) {
+            $suppresseSingleTerms = CedTagsHelper::param('SuppresseSingleTerms');
+            $hitsNumber = CedTagsHelper::param('HitsNumber');
+            $maxTagsNumber = CedTagsHelper::param('MaxTagsNumber', 10);
+            $showRelatedArticles = CedTagsHelper::param('RelatedArticlesByTags', 0);
+
+            $currentNumber = 0;
+
+            $havingTags = false;
+            $htmlList = '';
+            $termIds = array();
+
             $CedTagThemes = new CedTagThemes();
             $CedTagThemes->addCss();
-
             $haveValidTags = false;
 
             foreach ($terms as $term) {
-                $countQuery = 'select count(cid) as frequency from #__cedtag_term_content where tid=' . $dbo->quote($term->id);
-                $dbo->setQuery($countQuery);
-                $ct = $dbo->loadResult();
-
+                $ct = $cedTagModelTags->getTagFrequency($term);
                 if ($showRelatedArticles || $suppresseSingleTerms) {
                     if (@intval($ct) <= 1) {
                         if ($suppresseSingleTerms) {
@@ -163,19 +154,31 @@ class plgContentCedTags extends JPlugin
                     <ul class="cedtag">' . $htmlList . '</ul>
                 </div>';
 
-                // before Text
+                //0 Display after the article fulltext
+                //1 Display below the article title
+                //2 Display at both position
                 if ($position == 1) {
                     $text = $tagResult . $text;
-                } else if ($position == 2) {
-                    // Both before and after Text
-                    $text = $tagResult . $text . $tagResult;
-                } else {
-                    // After Text
-                    $text .= $tagResult;
                 }
+
+                else
+                    if ($position == 2) {
+                        // Both before and after Text
+                        $text = $tagResult . $text . $tagResult;
+                    } else {
+                        // After Text
+                        $text .= $tagResult;
+                    }
             }
 
         }
+        /* auto suggestion using ajax
+        $CedTagSuggest = new CedTagSuggest();
+        $CedTagSuggest->addJs();
+        JHtml::_('behavior.mootools');
+        $text .= '<span id="cedTagSuggestStatus">Start typing</span>
+        <input type="text" name="cedTagSuggest" id="cedTagSuggest" value="caliber30,kyosho" title="Search in plug-in title.">';
+        */
 
         $showAddTagButton = CedTagsHelper::param('ShowAddTagButton');
         if ($showAddTagButton) {
@@ -201,40 +204,40 @@ class plgContentCedTags extends JPlugin
         return true;
     }
 
+
+
     function showReleatedArticlesByTags($articleId, $termIds)
     {
         $count = CedTagsHelper::param('RelatedArticlesCountByTags', 10);
         $relatedArticlesTitle = CedTagsHelper::param('RelatedArticlesTitleByTags', "Related Articles");
         //$max=max(intval($relatedArticlesCount),array_count_values($termIds));
-        $relatedArticlesCount = 0;
-        $max = max(intval($relatedArticlesCount), count($termIds));
-
-        $termIds = array_slice($termIds, 0, $max);
-        $termIdsCondition = @implode(',', $termIds);
 
         //find the unique article ids
-        $query = ' select distinct cid from #__cedtag_term_content where tid in (' . $termIdsCondition . ') and cid<>' . $articleId;
+        $cids = $this->getUniqueArticleId($termIds, $articleId);
 
         $dbo = JFactory::getDBO();
-        $dbo->setQuery($query);
-        $cids = $dbo->loadColumn(0);
-
         $nullDate = $dbo->getNullDate();
+
         $date = JFactory::getDate();
         $now = JDate::getInstance()->toSql($date);
 
-        $where = ' a.id in(' . @implode(',', $cids) . ') AND a.state = 1'
-            . ' AND ( a.publish_up = ' . $dbo->Quote($nullDate) . ' OR a.publish_up <= ' . $dbo->Quote($now) . ' )'
-            . ' AND ( a.publish_down = ' . $dbo->Quote($nullDate) . ' OR a.publish_down >= ' . $dbo->Quote($now) . ' )';
+        $query = $dbo->getQuery(true);
+        $query->select('a.id');
+        $query->select('a.title');
+        $query->select('a.alias');
+        $query->select('a.access');
+        $query->select('CASE WHEN CHAR_LENGTH(a.alias) THEN CONCAT_WS(":", a.id, a.alias) ELSE a.id END as slug');
+        $query->select('CASE WHEN CHAR_LENGTH(cc.alias) THEN CONCAT_WS(":", cc.id, cc.alias) ELSE cc.id END as catslug');
 
-        // Content Items only
-        $query = 'SELECT a.id,a.title, a.alias,a.access, ' .
-            ' CASE WHEN CHAR_LENGTH(a.alias) THEN CONCAT_WS(":", a.id, a.alias) ELSE a.id END as slug,' .
-            ' CASE WHEN CHAR_LENGTH(cc.alias) THEN CONCAT_WS(":", cc.id, cc.alias) ELSE cc.id END as catslug' .
-            ' FROM #__content AS a' .
-            ' INNER JOIN #__categories AS cc ON cc.id = a.catid' .
-            ' WHERE ' . $where .
-            ' AND cc.published = 1';
+        $query->from('#__content AS a');
+
+        $query->innerJoin('#__categories AS cc ON cc.id = a.catid');
+        $query->where('a.id in(' . @implode(',', $cids) . ')');
+        $query->where('a.state = 1');
+        $query->where('( a.publish_up = ' . $dbo->Quote($nullDate) . ' OR a.publish_up <= ' . $dbo->Quote($now) . ' )');
+        $query->where('( a.publish_down = ' . $dbo->Quote($nullDate) . ' OR a.publish_down >= ' . $dbo->Quote($now) . ' )');
+        $query->where('cc.published = 1');
+
         $dbo->setQuery($query, 0, $count);
         $rows = $dbo->loadObjectList();
 
@@ -244,10 +247,10 @@ class plgContentCedTags extends JPlugin
         $user = JFactory::getUser();
         $aid = $user->get('aid', 0);
 
-        $html = '<div class="relateditemsbytags">' . $relatedArticlesTitle . '</div><ul class="relateditems">';
+        $html = '
+        <div class="relateditemsbytags">' . $relatedArticlesTitle . '</div><ul class="relateditems">';
         $link = "";
-        foreach ($rows as $row)
-        {
+        foreach ($rows as $row) {
 
             if ($row->access <= $aid) {
                 $link = JRoute::_(ContentHelperRoute::getArticleRoute($row->slug, $row->catslug, $row->sectionid));
@@ -259,6 +262,26 @@ class plgContentCedTags extends JPlugin
         $html .= '</ul></div>';
         return $html;
 
+    }
+
+    public
+    function getUniqueArticleId($termIds, $articleId)
+    {
+        $dbo = JFactory::getDBO();
+        $query = $dbo->getQuery(true);
+
+        $relatedArticlesCount = 0;
+        $max = max(intval($relatedArticlesCount), count($termIds));
+        $termIds = array_slice($termIds, 0, $max);
+        $termIdsCondition = @implode(',', $termIds);
+
+        $query->select('distinct cid');
+        $query->from('#__cedtag_term_content');
+        $query->where("tid in (' . $termIdsCondition . ')");
+        $query->where('cid<>' . $articleId);
+        $dbo->setQuery($query);
+        $cids = $dbo->loadColumn(0);
+        return $cids;
     }
 
 
@@ -308,7 +331,7 @@ class plgContentCedTags extends JPlugin
         JHTML::_('behavior.modal', 'a.modal');
 
         // Generate the HTML for a  button for the user to click to get to a form to add an attachment
-        $url = "index.php?option=com_cedtag&task=add&refresh=1&article_id=" . $article_id;
+        $url = "index.php?option=com_cedtag&amp;task=add&amp;tmpl=component&amp;refresh=1&amp;article_id=" . $article_id;
 
         $url = JRoute::_($url);
         $icon_url = JURI::Base() . 'components/com_cedtag/images/logo.png';
@@ -334,7 +357,8 @@ class plgContentCedTags extends JPlugin
      * @param    object        A JTableContent object
      * @param    bool        If the content has just been created
      */
-    public function onContentAfterSave($context, &$article, $isNew)
+    public
+    function onContentAfterSave($context, &$article, $isNew)
     {
         // Check we are handling the frontend edit form.
         if ($context != 'com_content.form') {

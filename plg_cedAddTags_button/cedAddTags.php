@@ -9,7 +9,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.event.plugin');
-require_once JPATH_SITE . 'components/com_cedtag/helper/themes.php';
+require_once JPATH_SITE . '/components/com_cedtag/helper/themes.php';
 
 class plgButtonCedAddTags extends JPlugin
 {
@@ -68,11 +68,11 @@ class plgButtonCedAddTags extends JPlugin
 
             if ($id == 0) {
                 $button->set('options', "{handler: 'iframe', size: {x: 400, y: 300}}");
-                $link = "index.php?option=com_cedtag&controller=tag&task=warning&tmpl=component&tagsWarning=FIRST_SAVE_WARNING";
+                $link = "index.php?option=com_cedtag&controller=tag&amp;task=warning&amp;tmpl=component&amp;tagsWarning=FIRST_SAVE_WARNING";
             }
             else {
                 $button->set('options', "{handler: 'iframe', size: {x: 500, y: 300}}");
-                $link = "index.php?option=com_cedtag&controller=tag&task=add&article_id=" . $id . "&tmpl=component";
+                $link = "index.php?option=com_cedtag&amp;controller=tag&amp;task=add&amp;article_id=" . $id . "&amp;tmpl=component";
             }
         }
         else {
@@ -83,11 +83,11 @@ class plgButtonCedAddTags extends JPlugin
             if ($id == 0) {
                 $button->set('options', "{handler: 'iframe', size: {x: 400, y: 300}}");
                 $msg = JText::_('SAVE ARTICLE BEFORE ADD TAGS');
-                $link = "index.php?option=com_cedtag&task=warning&tmpl=component&tagsWarning=FIRST_SAVE_WARNING";
+                $link = "index.php?option=com_cedtag&amp;task=warning&amp;tmpl=component&amp;tagsWarning=FIRST_SAVE_WARNING";
             }
             else {
                 $button->set('options', "{handler: 'iframe', size: {x: 500, y: 300}}");
-                $link = "index.php?option=com_cedtag&task=add&article_id=" . $id;
+                $link = "index.php?option=com_cedtag&amp;tmpl=component&amp;task=add&amp;article_id=" . $id;
             }
         }
 

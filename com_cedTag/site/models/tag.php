@@ -9,12 +9,13 @@ defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.model');
 
-require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
+require_once JPATH_SITE . '/components/com_cedtag/helper/helper.php';
+require_once JPATH_SITE . '/components/com_cedtag/models/tags.php';
 
 //TODO see \components\com_content\models\category.php
 
 
-class CedTagModelTag extends JModel
+class CedTagModelTag extends CedTagModelTags
 {
     /**
      * tag data array
@@ -32,12 +33,6 @@ class CedTagModelTag extends JModel
 
     var $_termExist = false;
 
-
-    /**
-     * Pagination object
-     *
-     * @var object
-     */
     var $_pagination = null;
 
     var $_defaultLimit = 10;
@@ -72,7 +67,7 @@ class CedTagModelTag extends JModel
     {
         $query = $this->_buildQuery();
         if ($this->_termExist) {
-            $limitstart = JFactory::getApplication()->input->get('limitstart', 0 , 'int');
+            $limitstart = JFactory::getApplication()->input->get('limitstart', 0, 'int');
             $this->_data = $this->_getList($query, $limitstart, $this->_defaultLimit);
         }
     }
@@ -86,7 +81,7 @@ class CedTagModelTag extends JModel
     {
         // Lets load the content if it doesn't already exist
         if (empty($this->_pagination)) {
-            $limitstart = JFactory::getApplication()->input->get('limitstart', 0 , 'int');
+            $limitstart = JFactory::getApplication()->input->get('limitstart', 0, 'int');
             jimport('joomla.html.pagination');
             $this->_pagination = new JPagination($this->getTotal(), $limitstart, $this->_defaultLimit);
         }
@@ -109,11 +104,16 @@ class CedTagModelTag extends JModel
         $tagObj = null;
         $ids = $this->_ids;
         if (!isset($this->_tagDescription)) {
-            $tagDescriptionQuery = "select id, description from #__cedtag_term as t where binary t.name=" .$dbo->quote($tag) . " and t.published='1';";
 
-            $dbo->setQuery($tagDescriptionQuery);
-            $dbo->query();
+            $query = $dbo->getQuery(true);
+            $query->from('#__cedtag_term as t');
+            $query->select('id AS id');
+            $query->select('description AS description');
+            $query->where('binary t.name=' . $dbo->quote($tag));
+            $query->where("t.published='1'");
+            $dbo->setQuery($query);
             $this->_tagDescription = $dbo->loadResult();
+
             $tagObj = $dbo->loadObject();
             $this->_tagDescription = $tagObj->description;
 
@@ -145,7 +145,7 @@ class CedTagModelTag extends JModel
         $nullDate = $dbo->getNullDate();
         jimport('joomla.utilities.date');
         $date = new JDate();
-        $now =  JDate::getInstance()->toSql($date);
+        $now = JDate::getInstance()->toSql($date);
         $order = CedTagsHelper::param('Order');
         $ShowArchiveArticles = CedTagsHelper::param('ShowArchiveArticles');
         $state = ' a.state = 1 ';
@@ -176,29 +176,9 @@ class CedTagModelTag extends JModel
 
     }
 
-    private function countNumberOfArticleForTagId($tagid)
-    {
-        $dbo = JFactory::getDBO();
-        $totalQuery = "select count(c.cid) from #__cedtag_term_content as c where c.tid=" . $dbo->quote($tagid);
-        $dbo->setQuery($totalQuery);
-        $dbo->query();
-        $total = $dbo->loadResult();
-        return $total;
-    }
-
-    private function incrementHitsForTagId($tagid)
-    {
-        $dbo = JFactory::getDBO();
-        $updateHitsQuery = "update #__cedtag_term set hits=hits+1 where id=" . $dbo->quote($tagid);
-        $dbo->setQuery($updateHitsQuery);
-        $dbo->query();
-        return $dbo;
-    }
-
     function _buildOrderBy($order)
     {
-        switch ($order)
-        {
+        switch ($order) {
             case 'date' :
                 $orderby = 'a.created';
                 break;

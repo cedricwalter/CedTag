@@ -16,17 +16,30 @@ class modCedCustomTagsCloudHelper
 {
     public function getList(&$params)
     {
-        $dbo = JFactory::getDBO();
         $termIds = $params->get("tagIds");
 
         $idsArray = @explode(',', $termIds);
         if (empty($idsArray)) {
             return array();
         }
-        $query = "select id,count(*) as frequency,name,hits as hits, t.created as created, 1 as sequence from #__cedtag_term as t where t.id in(" . @implode(',', $idsArray) . ")";
+
+        $dbo = JFactory::getDBO();
+        $query	= $dbo->getQuery(true);
+
+        $query->select('count(*) as frequency');
+        $query->select('id as id');
+        $query->select('name as name');
+        $query->select('t.hits as hits');
+        $query->select('t.created as created');
+        $query->select('1 as sequence');
+
+        $query->from('#__cedtag_term as t');
+
+        $query->where("t.id in(" . @implode(',', $idsArray));
         $dbo->setQuery($query);
         $rows = $dbo->loadObjectList();
 
+        //if there is results
         if (isset($rows) && !empty($rows)) {
             $rowsMap = array();
             $total_tags = count($rows);
@@ -44,8 +57,6 @@ class modCedCustomTagsCloudHelper
             $rows = array_reverse($sortedRows);
             unset($sortedRows);
             unset($rowsMap);
-
-            $sorting = $params->get('sorting', 'tag_random');
 
             $CedTagsHelper = new CedTagsHelper();
             $rows = $CedTagsHelper->mappingFrequencyToSize($rows);

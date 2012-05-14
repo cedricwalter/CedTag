@@ -9,6 +9,7 @@ defined('_JEXEC') or die('Restricted access');
 
 // Include dependencies
 jimport('joomla.application.component.controller');
+
 require_once (JPATH_COMPONENT . '/controller.php');
 require_once (JPATH_COMPONENT . '/controllers/tag.php');
 require_once (JPATH_COMPONENT . '/controllers/term.php');
@@ -21,15 +22,13 @@ require_once (JPATH_COMPONENT . '/controllers/statistics.php');
 $document = JFactory::getDocument();
 $document->addStyleSheet(JURI::root() . '/media/com_cedtag/css/admintag.css');
 
-$jinput = JFactory::getApplication()->input;
-
 $controller = JFactory::getApplication()->input->get('controller');
 $task = JFactory::getApplication()->input->get('task');
 
 // Create the controller
-$classname = 'CedTagController' . $controller;
+$class = 'CedTagController' . $controller;
 
-$controller = new $classname();
+$controller = new $class();
 
 // Perform the Request task
 $controller->execute($task);

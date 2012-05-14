@@ -15,8 +15,6 @@ require_once JPATH_COMPONENT_SITE . DS . 'helper/helper.php';
 class CedTagModelTerm extends JModel
 {
 
-
-
     function remove($ids)
     {
         $where = "";
@@ -27,9 +25,13 @@ class CedTagModelTerm extends JModel
         } else {
             return false;
         }
-        $query = 'delete from #__cedtag_term where ' . $where;
         $dbo = JFactory::getDbo();
+
+        $query = $dbo->getQuery(true);
+        $query->delete('#__cedtag_term');
+        $query->where($where);
         $dbo->setQuery($query);
+
         return $dbo->query();
     }
 
@@ -40,8 +42,15 @@ class CedTagModelTerm extends JModel
         if (!$name) {
             return false;
         }
-        $updateQuery = 'update #__cedtag_term set name=' . $dbo->quote($name) . ', weight=' . $dbo->quote($weight) . ', description=' . $dbo->quote($description) . ' where id=' . $dbo->quote($id);
-        $dbo->setQuery($updateQuery);
+        $query = $dbo->getQuery(true);
+
+        $query->update('#__cedtag_term');
+        $query->set('name=' . $dbo->quote($name));
+        $query->set('weight=' . $dbo->quote($weight));
+        $query->set('description=' . $dbo->quote(description));
+        $query->where('id=' . $dbo->quote($id));
+
+        $dbo->setQuery($query);
         return $dbo->query();
     }
 
@@ -52,8 +61,14 @@ class CedTagModelTerm extends JModel
         if (!$name) {
             return false;
         }
-        $query = "SELECT id as id FROM #__cedtag_term where binary name=" .$dbo->quote($name).";";
+
+        $query = $dbo->getQuery(true);
+
+        $query->select('id as id');
+        $query->from('#__cedtag_term');
+        $query->where(' name=" . $dbo->quote($name)');
         $dbo->setQuery($query);
+
         $tagAlreadyExisting = $dbo->loadObject();
 
         if (isset($tagAlreadyExisting) & isset($tagAlreadyExisting->id)) {
@@ -119,8 +134,12 @@ class CedTagModelTerm extends JModel
     function deleteContentTerms($cid)
     {
         $dbo = JFactory::getDbo();
-        $deleteQuery = 'delete from #__cedtag_term_content where cid=' . $dbo->quote($cid);
-        $dbo->setQuery($deleteQuery);
+
+        $query = $dbo->getQuery(true);
+        $query->delete('#__cedtag_term_content');
+        $query->where('cid=' . $dbo->quote($cid));
+        $dbo->setQuery($query);
+
         $dbo->query();
     }
 
@@ -133,19 +152,33 @@ class CedTagModelTerm extends JModel
 
     function insertContentterm($tid, $cid)
     {
-        $db = JFactory::getDbo();
-        $insertQuery = 'insert into #__cedtag_term_content (tid,cid) values(' . $tid . ',' . $cid . ')';
-        $db->setQuery($insertQuery);
-        $db->query();
+        $dbo = JFactory::getDbo();
+        $query = $dbo->getQuery(true);
+
+        $query->insert('#__cedtag_term_content');
+        $query->columns(array($dbo->quoteName('tid'), $dbo->quoteName('cid')));
+        $query->values($tid . ',' . $cid);
+
+        $dbo->setQuery($query);
+        $dbo->query();
     }
 
     function termsForContent($cid)
     {
         $dbo = JFactory::getDbo();
-        $query = 'select t.id as tid,t.name from #__cedtag_term as t';
-        $query .= ' left join #__cedtag_term_content as c  on c.tid=t.id';
-        $query .= ' where c.cid=' . $dbo->quote($cid) . ' and t.published=\'1\' order by t.weight desc,t.name';
+
+        $query = $dbo->getQuery(true);
+
+        $query->select('t.id as tid');
+        $query->select('t.name as name');
+        $query->from('#__cedtag_term as t');
+        $query->leftJoin('#__cedtag_term_content as c  on c.tid=t.id');
+        $query->where('c.cid=' . $dbo->quote($cid));
+        $query->where('t.published=\'1\'');
+        $query->order('t.weight desc,t.name');
+
         $dbo->setQuery($query);
+
         return $dbo->loadColumn();
     }
 
@@ -184,7 +217,10 @@ class CedTagModelTerm extends JModel
         $dbo = JFactory::getDbo();
         $jinput = JFactory::getApplication()->input;
         $id = $jinput->get('cid', array(0), '', 'array');
+
         $query = 'select * from #__cedtag_term  where id=' . $id[0];
+
+
         $dbo->setQuery($query);
         return $dbo->loadObject();
     }

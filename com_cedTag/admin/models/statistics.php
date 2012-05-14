@@ -17,37 +17,51 @@ class CedTagModelStatistics extends JModel
 
     function getStatistics()
     {
+        $dbo = JFactory::getDBO();
 
         $statistics = new stdClass();
-        $query = "select count(*) as ct from #__cedtag_term where published = '1';";
-        $dbo = JFactory::getDbo();
+
+        $query	= $dbo->getQuery(true);
+        $query->select('count(*) as ct');
+        $query->from('#__cedtag_term');
+        $query->where("published='1'");
         $dbo->setQuery($query);
         $statistics->termPublished = $dbo->loadResult();
 
-        $query = "select count(*) as ct from #__cedtag_term where published = '0';";
-        $dbo = JFactory::getDbo();
+        $query	= $dbo->getQuery(true);
+        $query->select('count(*) as ct');
+        $query->from('#__cedtag_term');
+        $query->where("published='0'");
         $dbo->setQuery($query);
         $statistics->termUnpublished = $dbo->loadResult();
 
-
-        $query = "select count(*) as ct from #__cedtag_term where published = '1' and description is null;";
-        $dbo = JFactory::getDbo();
+        $query	= $dbo->getQuery(true);
+        $query->select('count(*) as ct');
+        $query->from('#__cedtag_term');
+        $query->where("published='1'");
+        $query->where("description is null");
         $dbo->setQuery($query);
         $statistics->termPublishedWithoutDescription = $dbo->loadResult();
 
-        $query = "select count(*) as ct from #__cedtag_term where published = '1' and description is not null;";
-        $dbo = JFactory::getDbo();
+        $query	= $dbo->getQuery(true);
+        $query->select('count(*) as ct');
+        $query->from('#__cedtag_term');
+        $query->where("published='1'");
+        $query->where("description is not null");
         $dbo->setQuery($query);
         $statistics->termPublishedWithDescription = $dbo->loadResult();
 
-
-        $query = "select count(*) as ct  from #__content where id not in (select cid from #__cedtag_term_content)";
-        $dbo = JFactory::getDbo();
+        $query	= $dbo->getQuery(true);
+        $query->select('count(*) as ct');
+        $query->from('#__cedtag_term');
+        $query->where("id not in (select cid from #__cedtag_term_content)");
         $dbo->setQuery($query);
         $statistics->articlesWithoutTags = $dbo->loadResult();
 
-        $query = "select count(*) as ct  from #__content where id in (select cid from #__cedtag_term_content)";
-        $dbo = JFactory::getDbo();
+        $query	= $dbo->getQuery(true);
+        $query->select('count(*) as ct');
+        $query->from('#__cedtag_term');
+        $query->where("id in (select cid from #__cedtag_term_content)");
         $dbo->setQuery($query);
         $statistics->articlesWithTags = $dbo->loadResult();
 

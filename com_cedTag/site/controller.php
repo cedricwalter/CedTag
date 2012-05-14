@@ -17,6 +17,9 @@ class CedTagController extends JController
     public function execute($task)
     {
         switch ($task) {
+            case 'suggest':
+                $this->suggest();
+                break;
             case 'tag':
                 $this->display();
                 break;
@@ -47,27 +50,67 @@ class CedTagController extends JController
         parent::display();
     }
 
-    private function allTags()
+    private function suggest()
+    {
+        if ($tags = JRequest::getVar('tags', '', 'get', 'cmd')) {
+
+            $array = explode(",", $tags);
+            $lastElement = array_pop($array);
+            if (isset($lastElement)) {
+            }
+            //http://forum.joomla.org/viewtopic.php?f=642&t=701004
+            $db = JFactory::getDBO();
+            $query = 'SELECT name FROM #__cedtag_term WHERE name like ' . $db->Quote($lastElement . "%");
+            $db->setQuery($query);
+            $result = $db->loadObject();
+            if ($result) {
+
+                /*  $data = new stdClass;
+                                $data->cedTagSuggest = '{"0":"7","1":"8","2":"9","3":"5"}'; // Just to implement your example
+                                $data->cedTagSuggest = json_decode(trim($data->cedTagSuggest), true); // Returns Associative Array
+                            }
+                */
+
+                $response['html'] = JText::_('COM_AA4J_UNAME_NOT_AVAILABLE');
+                $response['msg'] = 'false';
+            } else {
+                $response['html'] = JText::_('COM_AA4J_UNAME_AVAILABLE');
+                $response['msg'] = 'true';
+            }
+
+
+        }
+        echo (json_encode($response));
+
+        return true;
+    }
+
+
+    private
+    function allTags()
     {
         JFactory::getApplication()->input->set('view', 'alltags');
         parent::display();
     }
 
-    private function warning()
+    private
+    function warning()
     {
         JFactory::getApplication()->input->set('view', 'tag');
         JFactory::getApplication()->input->set('layout', 'warning');
         parent::display();
     }
 
-    private function add()
+    private
+    function add()
     {
         JFactory::getApplication()->input->set('view', 'tag');
         JFactory::getApplication()->input->set('layout', 'add');
         parent::display();
     }
 
-    private function save()
+    private
+    function save()
     {
         $id = JFactory::getApplication()->input->get('cid', 0, 'int');
         $tags = JFactory::getApplication()->input->get('tags', '', 'string');

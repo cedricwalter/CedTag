@@ -42,9 +42,7 @@ class CedTagControllerImport extends JController
     function import()
     {
         $model = $this->getModel('import');
-
-        $jinput = JFactory::getApplication()->input;
-        $source = $jinput->get('source', 'meta-keys');
+        $source = JFactory::getApplication()->input->get('source', 'meta-keys');
         if ($source == 'meta-keys') {
             $importMessage = $model->importTagsFromMetaKeys();
         } else if ($source == 'jtags') {

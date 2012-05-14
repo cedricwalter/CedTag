@@ -16,10 +16,24 @@ class modCedLatestTagsHelper
 {
     function getList(&$params)
     {
-        //Get the latest tag by creation date
-        $query = "select count(*) as frequency,name,hits as hits, t.created as created from #__cedtag_term_content as tc
-                    inner join #__cedtag_term as t on t.id=tc.tid where t.published='1' group by(tid) order by created desc";
         $dbo = JFactory::getDBO();
+        $query	= $dbo->getQuery(true);
+
+        $query->select('count(*) as frequency');
+        $query->select('name as name');
+        $query->select('t.hits as hits');
+        $query->select('t.created as created');
+
+        $query->from('#__cedtag_term_content as tc');
+
+        $query->innerJoin('#__cedtag_term as t on t.id=tc.tid');
+
+        $query->where("t.published='1'");
+
+        $query->group('tid');
+        $query->order('created desc');
+
+        $dbo->setQuery($query);
 
         $count = intval($params->get('count', 25));
         $dbo->setQuery($query, 0, $count);

@@ -3,9 +3,11 @@
 
     <fieldset name="Themes" label="Themes">
 
-        <field name="themes" type="list" default="simple" label="Themes" disabled="true"
+        <field name="themes" type="list" default="simple" label="Themes" disabled="false"
                description="Select theme, switch off for now, a work in progress">
-            <option value="simple">Simple style</option>
+            <option value="simple">Simple style - rounded boxes - hover glowing effect</option>
+            <option value="text">Simple style - text only - hover glowing effect</option>
+
             <option value="tag">Tag style</option>
             <option value="flickr">Flickr style</option>
             <option value="quora">Quora style</option>
