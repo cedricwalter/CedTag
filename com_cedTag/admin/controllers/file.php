@@ -9,6 +9,11 @@
 class CedTagControllerFile extends JController
 {
 
+    function __construct()
+    {
+        parent::__construct();
+    }
+
     public function execute($task)
     {
         switch ($task) {

@@ -14,6 +14,48 @@ require_once dirname(__FILE__) . '/themes.php';
 class CedTagsHelper
 {
 
+    public function canUserDoTagOperations($articleId)
+    {
+        $user = JFactory::getUser();
+
+        // A user must be logged in to add attachments
+        if ($user->get('username') == '') {
+            return false;
+        }
+
+        // If the user generally has permissions to add content, they qualify.
+        // (editor, publisher, admin, etc)
+        // NOTE: Exclude authors since they need to be handled separately.
+        $user_type = $user->get('usertype', false);
+        if (($user_type != 'Author') &&
+            $user->authorize('com_content', 'add', 'content', 'all')
+        ) {
+            return true;
+        }
+
+        // Make sure the article is valid and load its info
+        if ($articleId == null || $articleId == '' || !is_numeric($articleId)) {
+            return false;
+        }
+        $dbo = JFactory::getDBO();
+        $query = "SELECT created_by from #__content WHERE id='" . $articleId . "'";
+        $dbo->setQuery($query);
+        $rows = $dbo->loadObjectList();
+        if (count($rows) == 0) {
+            return false;
+        }
+        $created_by = $rows[0]->created_by;
+
+        //the created author can add tags.
+        if ($user->get('id') == $created_by) {
+            return true;
+        }
+
+        // No one else is allowed to add articles
+        return false;
+    }
+
+
     /**
      *
      * @param int $count
@@ -73,8 +115,7 @@ class CedTagsHelper
 
     function _buildOrderBy($order)
     {
-        switch ($order)
-        {
+        switch ($order) {
             case 'random':
                 $orderBy = 'RAND()';
                 break;
@@ -301,10 +342,10 @@ class CedTagsHelper
 
     static function preHandle($tag)
     {
-        $tag = CedTagsHelper::tripChars($tag);
+        $cedTagsHelper = new CedTagsHelper();
+        $tag = $cedTagsHelper->tripChars($tag);
         $tag = JString::trim($tag);
-        $tag = CedTagsHelper::unUrlTagname($tag);
-
+        $tag = $cedTagsHelper->unUrlTagname($tag);
 
         $toLowerCase = CedTagsHelper::param('lowcase', 1);
         if ($toLowerCase) {
@@ -333,7 +374,7 @@ class CedTagsHelper
         //return urlencode($tagname);
     }
 
-    static function unUrlTagname($tagname)
+    public function unUrlTagname($tagname)
     {
         return preg_replace(
             '/[:-]/',
@@ -343,7 +384,7 @@ class CedTagsHelper
         //return urldecode($tagname);
     }
 
-    static function truncate($blurb)
+    public function truncate($blurb)
     {
         $blurb = strip_tags($blurb);
         $blurb = str_replace('"', '\"', $blurb);
@@ -356,11 +397,10 @@ class CedTagsHelper
         return $blurb;
     }
 
-    static function tripChars($name)
+    public function tripChars($name)
     {
         $stripChars = CedTagsHelper::param('StripCharacters');
 
-        $stripCharList = array();
         $stripCharList = explode('|', $stripChars);
         $mustTripChars = array('|', "'", "\"");
 
@@ -379,7 +419,7 @@ class CedTagsHelper
         return $name;
     }
 
-    static function getExcludedWordList()
+    public static function getExcludedWordList()
     {
         static $excludedArray;
         if (!isset($excludedArray)) {
@@ -396,7 +436,7 @@ class CedTagsHelper
     }
 
 
-    static function isValidName($name)
+    public function isValidName($name)
     {
         $name = CedTagsHelper::preHandle($name);
         if (empty($name)) {
@@ -409,8 +449,15 @@ class CedTagsHelper
         }
 
         return $name;
-
     }
+
+    public function getTagModel()
+    {
+        JModel::addIncludePath(JPATH_SITE . '/administrator/components/com_cedtag/models', 'CedTagModel');
+        $model = JModel::getInstance('tag', 'CedTagModel', array('ignore_request' => true));
+        return $model;
+    }
+
 }
 
 ?>

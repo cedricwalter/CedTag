@@ -19,6 +19,52 @@ class CedTagModelTags extends JModel
         parent::__construct();
     }
 
+    public function getModelTags($id)
+    {
+        $cedTagModelTags = new CedTagModelTags();
+        $terms = $cedTagModelTags->getTagsForArticle($id);
+        $showRelatedArticles = CedTagsHelper::param('RelatedArticlesByTags', 0);
+
+        $tags = array();
+        if (isset($terms) && !empty($terms)) {
+            $singleTermsSuppress = CedTagsHelper::param('SuppresseSingleTerms');
+            $displayHitsNumber = CedTagsHelper::param('HitsNumber');
+
+            $termIds = array();
+
+            $CedTagThemes = new CedTagThemes();
+            $CedTagThemes->addCss();
+
+            foreach ($terms as $term) {
+                $ct = $cedTagModelTags->getTagFrequency($term);
+                if ($showRelatedArticles || $singleTermsSuppress) {
+                    if (@intval($ct) <= 1) {
+                        if ($singleTermsSuppress) {
+                            continue;
+                        }
+                    } else {
+                        $termIds[] = $term->id;
+                    }
+                }
+                $hrefTitle = $ct . ' items tagged with ' . $term->name;
+                if ($displayHitsNumber) {
+                    $hrefTitle .= ' | Hits:' . $term->hits;
+                }
+
+                $tag = new stdClass();
+                $tag->link = JRoute::_('index.php?option=com_cedtag&task=tag&tag=' . CedTagsHelper::urlTagname($term->name));
+                $tag->title = $hrefTitle;
+                $tag->tag = CedTagsHelper::ucwords($term->name);
+                $tags[] = $tag;
+            }
+        }
+
+        //Limit size of tags displayed
+        array_splice($tags, intval(CedTagsHelper::param('MaxTagsNumber', 10)));
+
+        return $tags;
+    }
+
     public function getTagFrequency($term)
     {
         $dbo = JFactory::getDBO();
@@ -34,7 +80,7 @@ class CedTagModelTags extends JModel
         return $ct;
     }
 
-    public function getTagsForArticle($articleId)
+    public function getTagsForArticle($id)
     {
         $dbo = JFactory::getDBO();
         $query = $dbo->getQuery(true);
@@ -45,7 +91,7 @@ class CedTagModelTags extends JModel
 
         $query->from('#__cedtag_term as tagterm');
 
-        $query->where('tagtermcontent . cid = ' . $dbo->quote($articleId));
+        $query->where('tagtermcontent . cid = ' . $dbo->quote($id));
         $query->where('tagterm.published=1');
 
         $query->group('tid');
@@ -72,14 +118,14 @@ class CedTagModelTags extends JModel
         return $total;
     }
 
-    public function incrementHitsForTagId($tagid)
+    public function incrementHitsForTagId($tagId)
     {
         $dbo = JFactory::getDBO();
         $query = $dbo->getQuery(true);
 
         $query->update('#__cedtag_term');
         $query->set('hits=hits+1');
-        $query->where('id=' . $dbo->quote($tagid));
+        $query->where('id=' . $dbo->quote($tagId));
 
         $dbo->setQuery($query);
         $dbo->query();

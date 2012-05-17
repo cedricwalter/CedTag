@@ -10,7 +10,7 @@ defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.view');
 jimport('joomla.application.pathway');
-jimport( 'joomla.application.input' );
+jimport('joomla.application.input');
 require_once JPATH_SITE . '/components/com_cedtag/helper/helper.php';
 
 class CedTagViewTag extends JView
@@ -19,9 +19,6 @@ class CedTagViewTag extends JView
     {
         $layout = JFactory::getApplication()->input->get('layout', null, 'string');
         switch ($layout) {
-            case 'add':
-                $this->add($tpl);
-                break;
             case 'warning':
                 $this->warning($tpl);
                 break;
@@ -31,18 +28,18 @@ class CedTagViewTag extends JView
 
     }
 
-    function defaultTpl($tpl = null)
+    private function defaultTpl($tpl = null)
     {
         $tag = JFactory::getApplication()->input->get('tag', null, 'string');
-        //$tag = JRequest::getString('tag', null);
-        //$tag=URLDecode($tag);
-        $tag = CedTagsHelper::unUrlTagname($tag);
+
+        $cedTagsHelper = new CedTagsHelper();
+        $tag = $cedTagsHelper->unUrlTagname($tag);
 
         JFactory::getApplication()->input->set('tag', $tag);
 
-        $results =  $this->get('Data');
-        $total =  $this->get('Total');
-        $pagination =  $this->get('Pagination');
+        $results = $this->get('Data');
+        $total = $this->get('Total');
+        $pagination = $this->get('Pagination');
         $tagDescription = $this->get('TagDescription');
         $isTermExist = $this->get('TermExist');
 
@@ -77,31 +74,9 @@ class CedTagViewTag extends JView
 
     }
 
-    function add($tpl = null)
-    {
-        $tags = $this->getTagsForArticle();
-        $this->assignRef('tags', $tags);
-        parent::display($tpl);
-    }
-
-    function warning($tpl = null)
+    private function warning($tpl = null)
     {
         parent::display($tpl);
-    }
-
-    function getTagsForArticle()
-    {
-        $cid = JFactory::getApplication()->input->get('article_id', null, 'int');
-        if (isset($cid)) {
-            $dbo = JFactory::getDBO();
-            $query = 'select t.name from #__cedtag_term_content as tc left join #__cedtag_term as t on t.id=tc.tid where tc.cid=' . $dbo->quote($cid). ' and t.published=\'1\';';
-            $dbo->setQuery($query);
-            $tagsInArray = $dbo->loadColumn();
-            if (isset($tagsInArray) && !empty($tagsInArray)) {
-                return implode(',', $tagsInArray);
-            }
-        }
-        return '';
     }
 
 

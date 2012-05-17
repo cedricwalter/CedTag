@@ -16,10 +16,10 @@ require_once JPATH_SITE . '/components/com_cedtag/helper/helper.php';
 require_once JPATH_SITE . '/components/com_cedtag/helper/suggest.php';
 require_once JPATH_SITE . '/components/com_content/helpers/route.php';
 require_once JPATH_SITE . '/components/com_cedtag/models/tags.php';
+require_once JPATH_SITE . '/components/com_cedtag/helper/suggest.php';
 
 class plgContentCedTags extends JPlugin
 {
-
     public function __construct(& $subject, $config)
     {
         parent::__construct($subject, $config);
@@ -63,11 +63,18 @@ class plgContentCedTags extends JPlugin
      */
     public function onContentPrepare($context, &$row, &$params, $page = 0)
     {
+        $canProceed = $context == 'com_content.article';
+        if (!$canProceed) {
+            return true;
+        }
+
+        //do not work in admin
         $app = JFactory::getApplication();
         if ($app->isAdmin()) {
             return true;
         }
 
+        //dont display if user want so
         $frontPageTagArticleView = CedTagsHelper::param('FrontPageTagArticleView', '1');
         if (!$frontPageTagArticleView) {
             return true;
@@ -98,115 +105,62 @@ class plgContentCedTags extends JPlugin
 
     private function execute($context, $id, &$text, &$params, $page = 0, $position)
     {
+        $CedTagsHelper = new CedTagsHelper();
+
         $cedTagModelTags = new CedTagModelTags();
-        $terms = $cedTagModelTags->getTagsForArticle($id);
 
-        if (isset($terms) && !empty($terms)) {
-            $suppresseSingleTerms = CedTagsHelper::param('SuppresseSingleTerms');
-            $hitsNumber = CedTagsHelper::param('HitsNumber');
-            $maxTagsNumber = CedTagsHelper::param('MaxTagsNumber', 10);
-            $showRelatedArticles = CedTagsHelper::param('RelatedArticlesByTags', 0);
-
-            $currentNumber = 0;
-
-            $havingTags = false;
-            $htmlList = '';
-            $termIds = array();
-
-            $CedTagThemes = new CedTagThemes();
-            $CedTagThemes->addCss();
-            $haveValidTags = false;
-
-            foreach ($terms as $term) {
-                $ct = $cedTagModelTags->getTagFrequency($term);
-                if ($showRelatedArticles || $suppresseSingleTerms) {
-                    if (@intval($ct) <= 1) {
-                        if ($suppresseSingleTerms) {
-                            continue;
-                        }
-                    } else {
-                        $termIds[] = $term->id;
-                    }
-                }
-                //do some specail filters.
-                if ($currentNumber >= $maxTagsNumber) {
-                    break;
-                }
-                $currentNumber++;
-
-                //capitalize of not the terms
-                $term->name = CedTagsHelper::ucwords($term->name);
-
-                $hrefTitle = $ct . ' items tagged with ' . $term->name;
-                if ($hitsNumber) {
-                    $hrefTitle .= ' | Hits:' . $term->hits;
-                }
-
-                $link = JRoute::_('index.php?option=com_cedtag&task=tag&tag=' . CedTagsHelper::urlTagname($term->name));
-                $htmlList .= '<li><a href="' . $link . '" rel="tag" title="' . $hrefTitle . '" >' . $term->name . '</a></li> ';
-                $havingTags = true;
+        $tags = $cedTagModelTags->getModelTags($id);
+        $canEdit = $CedTagsHelper->canUserDoTagOperations($id);
+        if ($canEdit) {
+            $CedTagSuggest = new CedTagSuggest();
+            $tagit = array();
+            foreach ($tags as $tag) {
+                $tagit[] = $tag->tag;
             }
-
-            if ($havingTags) {
-                $tagResult = '<div class="clearfix">
-                </div>
-                    <div class="cedtag">' . JText::_('TAGS:') . '
-                    <ul class="cedtag">' . $htmlList . '</ul>
-                </div>';
-
-                //0 Display after the article fulltext
-                //1 Display below the article title
-                //2 Display at both position
-                if ($position == 1) {
-                    $text = $tagResult . $text;
-                }
-
-                else
-                    if ($position == 2) {
-                        // Both before and after Text
-                        $text = $tagResult . $text . $tagResult;
-                    } else {
-                        // After Text
-                        $text .= $tagResult;
-                    }
-            }
-
+            $CedTagSuggest->addJs($tagit, $id);
+            $tagResult = '<div class="cedtagplugin">';
+            $tagResult .= ' <div class="title">' . JText::_('TAGS:') . '</div>';
+            $tagResult .= ' <ul id="tags" class="tags"></ul>';
+            $tagResult .= '</div>';
         }
-        /* auto suggestion using ajax
-        $CedTagSuggest = new CedTagSuggest();
-        $CedTagSuggest->addJs();
-        JHtml::_('behavior.mootools');
-        $text .= '<span id="cedTagSuggestStatus">Start typing</span>
-        <input type="text" name="cedTagSuggest" id="cedTagSuggest" value="caliber30,kyosho" title="Search in plug-in title.">';
-        */
+        else {
+            $htmlList = "";
+            foreach ($tags as $tag) {
+                $htmlList .= '<li><a href="' . $tag->link . '" rel="tag" title="' . $tag->title . '" >' . $tag->tag . '</a></li> ';
+            }
+            $tagResult = '<div class="cedtag" />';
+            $tagResult .= ' <div class="title">' . JText::_('TAGS:') . '</div >';
+            $tagResult .= ' <ul class="cedtag" > ' . $htmlList . '</ul >';
+            $tagResult .= '</div > ';
+        }
 
-        $showAddTagButton = CedTagsHelper::param('ShowAddTagButton');
-        if ($showAddTagButton) {
-            $user = JFactory::getUser();
-            $canEdit = $this->canUserAddTags($user, $id);
-            if ($canEdit) {
-                $Itemid = JRequest::getVar('Itemid', false);
-                if (is_numeric($Itemid)) {
-                    $Itemid = intval($Itemid);
-                }
-                else {
-                    $Itemid = 1;
-                }
-                $text .= $this->addTagsButtonsHTML($id, $Itemid, $havingTags);
+        //0 Display after the article fulltext
+        //1 Display below the article title
+        //2 Display at both position
+        if ($position == 1) {
+            $text = $tagResult . $text;
+        }
+        else {
+            if ($position == 2) {
+                // Both before and after Text
+                $text = $tagResult . $text . $tagResult;
+            } else {
+                // After Text
+                $text .= $tagResult;
             }
         }
 
         $view = JRequest :: getVar('view');
+        $showRelatedArticles = CedTagsHelper::param('RelatedArticlesByTags', 0);
         if ($showRelatedArticles && !empty($termIds) && ($view == 'article')) {
-            $text .= $this->showReleatedArticlesByTags($id, $termIds);
+            $text .= $this->showRelatedArticlesByTags($id, $termIds);
         }
 
         return true;
     }
 
 
-
-    function showReleatedArticlesByTags($articleId, $termIds)
+    private function showRelatedArticlesByTags($articleId, $termIds)
     {
         $count = CedTagsHelper::param('RelatedArticlesCountByTags', 10);
         $relatedArticlesTitle = CedTagsHelper::param('RelatedArticlesTitleByTags', "Related Articles");
@@ -222,12 +176,12 @@ class plgContentCedTags extends JPlugin
         $now = JDate::getInstance()->toSql($date);
 
         $query = $dbo->getQuery(true);
-        $query->select('a.id');
-        $query->select('a.title');
-        $query->select('a.alias');
-        $query->select('a.access');
-        $query->select('CASE WHEN CHAR_LENGTH(a.alias) THEN CONCAT_WS(":", a.id, a.alias) ELSE a.id END as slug');
-        $query->select('CASE WHEN CHAR_LENGTH(cc.alias) THEN CONCAT_WS(":", cc.id, cc.alias) ELSE cc.id END as catslug');
+        $query->select('a . id');
+        $query->select('a . title');
+        $query->select('a . alias');
+        $query->select('a . access');
+        $query->select('CASE WHEN CHAR_LENGTH(a . alias) THEN CONCAT_WS(":", a . id, a . alias) ELSE a . id END as slug');
+        $query->select('CASE WHEN CHAR_LENGTH(cc . alias) THEN CONCAT_WS(":", cc . id, cc . alias) ELSE cc . id END as catslug');
 
         $query->from('#__content AS a');
 
@@ -264,8 +218,13 @@ class plgContentCedTags extends JPlugin
 
     }
 
-    public
-    function getUniqueArticleId($termIds, $articleId)
+    /**
+     * @param $termIds
+     * @param $id the store id.
+     * @return mixed
+     */
+    private
+    function getUniqueArticleId($termIds, $id)
     {
         $dbo = JFactory::getDBO();
         $query = $dbo->getQuery(true);
@@ -277,76 +236,12 @@ class plgContentCedTags extends JPlugin
 
         $query->select('distinct cid');
         $query->from('#__cedtag_term_content');
-        $query->where("tid in (' . $termIdsCondition . ')");
-        $query->where('cid<>' . $articleId);
+        $query->where("tid in(' . $termIdsCondition . ')");
+        $query->where('cid<>' . $id);
         $dbo->setQuery($query);
-        $cids = $dbo->loadColumn(0);
-        return $cids;
+        $ids = $dbo->loadColumn(0);
+        return $ids;
     }
-
-
-    function canUserAddTags($user, $article_id)
-    {
-        // A user must be logged in to add attachments
-        if ($user->get('username') == '') {
-            return false;
-        }
-
-        // If the user generally has permissions to add content, they qualify.
-        // (editor, publisher, admin, etc)
-        // NOTE: Exclude authors since they need to be handled separately.
-        $user_type = $user->get('usertype', false);
-        if (($user_type != 'Author') &&
-            $user->authorize('com_content', 'add', 'content', 'all')
-        ) {
-            return true;
-        }
-
-        // Make sure the article is valid and load its info
-        if ($article_id == null || $article_id == '' || !is_numeric($article_id)) {
-            return false;
-        }
-        $dbo = JFactory::getDBO();
-        $query = "SELECT created_by from #__content WHERE id='" . $article_id . "'";
-        $dbo->setQuery($query);
-        $rows = $dbo->loadObjectList();
-        if (count($rows) == 0) {
-            return false;
-        }
-        $created_by = $rows[0]->created_by;
-
-        //the created author can add tags.
-        if ($user->get('id') == $created_by) {
-            return true;
-        }
-
-        // No one else is allowed to add articles
-        return false;
-    }
-
-    function addTagsButtonsHTML($article_id, $Itemid, $havingTags)
-    {
-        $document = & JFactory::getDocument();
-        $document->addScript(JURI::root(true) . '/media/system/js/modal.js');
-        JHTML::_('behavior.modal', 'a.modal');
-
-        // Generate the HTML for a  button for the user to click to get to a form to add an attachment
-        $url = "index.php?option=com_cedtag&amp;task=add&amp;tmpl=component&amp;refresh=1&amp;article_id=" . $article_id;
-
-        $url = JRoute::_($url);
-        $icon_url = JURI::Base() . 'components/com_cedtag/images/logo.png';
-
-        $title = JText::_('ADD TAGS');
-        if ($havingTags) {
-            $title = JText::_('EDIT TAGS');
-        }
-
-        $modalLink = '<a class="modal" type="button" href="' . $url . '" rel="{handler: \'iframe\', size: {x: 500, y: 260}}\">';
-        $links = "$modalLink<img src=\"$icon_url\" /></a>";
-        $links .= $modalLink . $title . "</a>";
-        return "\n<div class=\"addtags\">$links</div>\n";
-    }
-
 
     /**
      * Auto extract meta keywords as tags
@@ -371,12 +266,12 @@ class plgContentCedTags extends JPlugin
             if ($isNew) {
                 $tags = $article->metakey;
                 $id = $article->id;
-
                 $combined = array();
                 $combined[$id] = $tags;
                 require_once(JPATH_ADMINISTRATOR . '/components/com_cedtag/models/tag.php');
-                $tmodel = new CedTagModelTag();
-                $tmodel->batchUpdate($combined);
+
+                $model = new CedTagModelTag();
+                $model->batchUpdate($combined);
             }
         }
         return true;

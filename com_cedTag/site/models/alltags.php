@@ -84,9 +84,10 @@ class CedTagModelAllTags extends JModel
         $params = $app->getParams();
 
         $document = JFactory::getDocument();
+        $cedTagsHelper = new CedTagsHelper();
 
         $description = CedTagsHelper::param($paramPrefixName . 'MetaDescription');
-        $document->setDescription(CedTagsHelper::truncate($description));
+        $document->setDescription($cedTagsHelper->truncate($description));
 
         $keywords = CedTagsHelper::param($paramPrefixName . 'MetaKeywords');
         $document->setMetadata($paramPrefixName . 'Keywords', $keywords);

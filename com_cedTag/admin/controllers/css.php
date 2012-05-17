@@ -18,6 +18,11 @@ require_once JPATH_COMPONENT_SITE . '/helper/themes.php';
 
 class CedTagControllerCss extends CedTagControllerFile
 {
+    function __construct()
+    {
+        parent::__construct();
+    }
+
     /**
      * @Override
      * @return string
@@ -33,7 +38,7 @@ class CedTagControllerCss extends CedTagControllerFile
      */
     public function getFile()
     {
-        $CedTagThemes  = new CedTagThemes();
+        $CedTagThemes = new CedTagThemes();
         return $CedTagThemes->getFile();
     }
 
@@ -60,10 +65,10 @@ class CedTagControllerCss extends CedTagControllerFile
 
     public function transform($fileContent)
     {
-        $useGoogleFonts = CedTagsHelper::param('useGoogleFonts','1');
+        $useGoogleFonts = CedTagsHelper::param('useGoogleFonts', '1');
         if ($useGoogleFonts) {
-            $googleFonts = explode("|",CedTagsHelper::param('googleFonts',"font-family: 'Open Sans', sans-serif;|Open+Sans"));
-            $fileContent = preg_replace ("/(font-family:.*;)/i", $googleFonts[0], $fileContent);
+            $googleFonts = explode("|", CedTagsHelper::param('googleFonts', "font-family: 'Open Sans', sans-serif;|Open+Sans"));
+            $fileContent = preg_replace("/(font-family:.*;)/i", $googleFonts[0], $fileContent);
         }
 
         return $fileContent;

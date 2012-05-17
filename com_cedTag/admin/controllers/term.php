@@ -12,6 +12,10 @@ jimport( 'joomla.application.input' );
 
 class CedTagControllerTerm extends JController
 {
+    function __construct()
+    {
+        parent::__construct();
+    }
 
     public function execute($task)
     {

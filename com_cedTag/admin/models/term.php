@@ -15,30 +15,32 @@ require_once JPATH_COMPONENT_SITE . DS . 'helper/helper.php';
 class CedTagModelTerm extends JModel
 {
 
-    function remove($ids)
+    public function remove($termId)
     {
-        $where = "";
-        if (count($ids) > 1) {
-            $where = ' id in(' . implode(',', $ids) . ')';
-        } else if (count($ids) == 1) {
-            $where = ' id=' . $ids[0];
+        $dbo = JFactory::getDbo();
+        $query = $dbo->getQuery(true);
+
+        $query->delete('#__cedtag_term');
+
+        if (count($termId) > 1) {
+            $query->where('id in(' . implode(',', $termId) . ')');
+        } else if (count($termId) == 1) {
+            $query->where('id=' . $termId[0]);
         } else {
             return false;
         }
-        $dbo = JFactory::getDbo();
 
-        $query = $dbo->getQuery(true);
-        $query->delete('#__cedtag_term');
-        $query->where($where);
         $dbo->setQuery($query);
 
         return $dbo->query();
     }
 
-    function update($id, $name, $description, $weight)
+    public function update($id, $name, $description = null, $weight = 0)
     {
         $dbo = JFactory::getDbo();
-        $name = CedTagsHelper::isValidName($name);
+
+        $cedTagsHelper = new CedTagsHelper();
+        $name = $cedTagsHelper->isValidName($name);
         if (!$name) {
             return false;
         }
@@ -47,17 +49,19 @@ class CedTagModelTerm extends JModel
         $query->update('#__cedtag_term');
         $query->set('name=' . $dbo->quote($name));
         $query->set('weight=' . $dbo->quote($weight));
-        $query->set('description=' . $dbo->quote(description));
+        $query->set('description=' . $dbo->quote($description));
         $query->where('id=' . $dbo->quote($id));
 
         $dbo->setQuery($query);
         return $dbo->query();
     }
 
-    function store($name, $description = NULL, $weight = 0)
+    public function store($name, $description = null, $weight = 0)
     {
         $dbo = JFactory::getDbo();
-        $name = CedTagsHelper::isValidName($name);
+
+        $cedTagsHelper = new CedTagsHelper();
+        $name = $cedTagsHelper->isValidName($name);
         if (!$name) {
             return false;
         }
@@ -113,7 +117,7 @@ class CedTagModelTerm extends JModel
         }
     }
 
-    function insertTerms($terms)
+    public function insertTerms($terms)
     {
         //$terms = CedTagsHelper::isValidName($terms);
         if (!$terms) {
@@ -131,7 +135,7 @@ class CedTagModelTerm extends JModel
         return $isok;
     }
 
-    function deleteContentTerms($cid)
+    public function deleteContentTerms($cid)
     {
         $dbo = JFactory::getDbo();
 

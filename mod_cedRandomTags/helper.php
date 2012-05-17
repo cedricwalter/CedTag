@@ -35,9 +35,6 @@ class modCedRandomTagsHelper
 
         $dbo->setQuery($query);
 
-        //$query = "select count(*) as frequency,name as name,t.hits as hits, t.created as created from #__cedtag_term_content as tc
-         //        inner join #__cedtag_term as t on t.id=tc.tid where t.published='1' group by(tid) ORDER BY RAND()";
-
         $count = intval($params->get('count', 25));
         $dbo->setQuery($query, 0, $count);
         $rows = $dbo->loadObjectList();

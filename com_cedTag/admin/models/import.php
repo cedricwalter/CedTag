@@ -53,9 +53,8 @@ class CedTagModelImport extends CedTagModelTag
                                 }
                             }
                         }
+
                         unset($keys);
-
-
 
                         $deleteTags = 'delete from #__cedtag_term_content where cid=' . $dbo->quote($cid);
                         $dbo->setQuery($deleteTags);

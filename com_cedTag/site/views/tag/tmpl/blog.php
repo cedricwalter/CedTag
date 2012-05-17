@@ -100,10 +100,11 @@ bbb
 
 <?php
 $document = JFactory::getDocument();
+$cedTagsHelper = new CedTagsHelper();
 if ($this->tagDescription) {
-    $document->setDescription(CedTagsHelper::truncate($this->tagDescription));
+    $document->setDescription($cedTagsHelper->truncate($this->tagDescription));
 } else {
-    $document->setDescription(CedTagsHelper::truncate($tag));
+    $document->setDescription($cedTagsHelper->truncate($tag));
 }
 $document->setTitle( JText::_('Items tagged with ') . $tag . ' | ' . $config->getValue('sitename'));
 $document->setMetadata('keywords', $tag);

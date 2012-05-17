@@ -20,7 +20,7 @@ class CedTagThemes extends JObject
         return JPATH_SITE . '/media/com_cedtag/css/' . $themes . '.css';
     }
 
-    static function addCss()
+    public function addCss()
     {
         $document = JFactory::getDocument();
         $themes = CedTagsHelper::param('themes', 'simple');

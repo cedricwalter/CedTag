@@ -374,10 +374,6 @@
         <field name="txtScale" type="text" default="2" label="txtScale"
                description="Scaling factor of text when converting to image in txtOpt mode."/>
 
-
-        <field name="aaa" type="text" default="aaa" label="aa" description="aaaaa"/>
-
-
         <field name="reverse" type="radio" default="false" label="Reverse"
                description="Set to true to reverse direction of movement relative to mouse position.">
             <option value="true">JYES</option>

@@ -16,6 +16,11 @@ require_once (JPATH_COMPONENT . '/controllers/file.php');
 class CedTagControllerStopWords extends CedTagControllerFile
 {
 
+    function __construct()
+    {
+        parent::__construct();
+    }
+
     /**
      * @Override
      * @return string

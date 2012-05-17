@@ -52,12 +52,12 @@ $rows = $this->termList->list;
         <tbody>
         <?php
         $k = 0;
-
+        $cedTagsHelper = new CedTagsHelper();
         if (count($rows)) {
             for ($i = 0, $n = count($rows); $i < $n; $i++) {
                 $row = &$rows[$i];
                 JFilterOutput::objectHtmlSafe($row);
-                $row->description = CedTagsHelper::truncate($row->description);
+                $row->description = $cedTagsHelper->truncate($row->description);
                 $link = 'index.php?option=com_cedtag&controller=term&task=edit&cid[]=' . $row->id;
                 $checked = JHTML::_('grid.id', $i, $row->id);
 

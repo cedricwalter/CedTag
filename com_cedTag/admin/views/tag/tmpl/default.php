@@ -164,6 +164,8 @@ $saveOrder	= $listOrder == 'a.ordering';
                     $tag = $item; ?>
 
                     <input type="hidden" name="id[]" value="<?php echo $tag->tagid;?>"/>
+
+
                     <input name="tag[]"
                            value="<?php echo $tag->tag; ?>"
                            id="<?php echo 'tag_' . $tag->tagid;?>"

@@ -94,7 +94,9 @@ class CedTagModelTag extends CedTagModelTags
         $tag = JRequest::getString('tag', null);
 
         //$tag=URLDecode($tag);
-        $tag = CedTagsHelper::unUrlTagname($tag);
+        $cedTagsHelper = new CedTagsHelper();
+
+        $tag = $cedTagsHelper->unUrlTagname($tag);
         $tag = explode("?start=", $tag);
         $tag = CedTagsHelper::preHandle($tag[0]);
 
