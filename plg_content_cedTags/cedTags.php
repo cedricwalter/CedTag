@@ -105,11 +105,10 @@ class plgContentCedTags extends JPlugin
 
     private function execute($context, $id, &$text, &$params, $page = 0, $position)
     {
-        $CedTagsHelper = new CedTagsHelper();
-
         $cedTagModelTags = new CedTagModelTags();
-
         $tags = $cedTagModelTags->getModelTags($id);
+
+        $CedTagsHelper = new CedTagsHelper();
         $canEdit = $CedTagsHelper->canUserDoTagOperations($id);
         if ($canEdit) {
             $CedTagSuggest = new CedTagSuggest();
@@ -120,7 +119,7 @@ class plgContentCedTags extends JPlugin
             $CedTagSuggest->addJs($tagit, $id);
             $tagResult = '<div class="cedtagplugin">';
             $tagResult .= ' <div class="title">' . JText::_('TAGS:') . '</div>';
-            $tagResult .= ' <ul id="tags" class="tags"></ul>';
+            $tagResult .= ' <ul id="tags'.$id.'" class="tags"></ul>';
             $tagResult .= '</div>';
         }
         else {

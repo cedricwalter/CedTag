@@ -12,7 +12,7 @@
     <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
     <authorEmail>cedric.walter@gmail.com</authorEmail>
     <authorUrl>www.waltercedric.org</authorUrl>
-    <version>2.5.1</version>
+    <version>2.5.2</version>
     <description>Latest Tags Module will show the latest tags.</description>
     <files>
         <filename module="mod_cedLatestTags">mod_cedLatestTags.php</filename>

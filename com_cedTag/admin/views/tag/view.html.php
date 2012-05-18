@@ -135,13 +135,15 @@ class cedtagViewtag extends JView
             $dbo->setQuery($query);
             $tags = $dbo->loadObjectList();
 
-            $tagname = array();
+            $tagit = array();
             if ($tags != null) {
                 foreach ($tags as $tag) {
-                    $tagname[] = $tag->name;
+                    $tagit[] = $tag->name;
                 }
             }
-            $item->tag = implode(",", $tagname);
+            $item->tag = implode(",", $tagit);
+            $item->tagit = $tagit;
+
             $item->tagid = $item->id;
         }
 
