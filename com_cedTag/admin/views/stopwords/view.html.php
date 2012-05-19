@@ -7,8 +7,10 @@
  **/
 defined('_JEXEC') or die();
 jimport('joomla.application.component.view');
-jimport( 'joomla.filesystem.file' );
+jimport('joomla.filesystem.file');
 
+// userhelper for acl
+require_once JPATH_SITE. '/administrator/components/com_users/helpers/users.php';
 
 class CedTagViewStopWords extends JView
 {
@@ -21,17 +23,22 @@ class CedTagViewStopWords extends JView
     function defaultTpl($tpl = null)
     {
         JToolBarHelper::title(JText::_('STOP WORDS'), 'tag.png');
-        JToolBarHelper::save();
-        JToolBarHelper::spacer();
-        JToolBarHelper::custom('restore', 'default', '', JText::_('RESTORE DEFAULT'), false);
-        JToolBarHelper::spacer();
+
+        $canDo = UsersHelper::getActions();
+        if ($canDo->get('core.create')) {
+            JToolBarHelper::save();
+            JToolBarHelper::spacer();
+            JToolBarHelper::custom('restore', 'default', '', JText::_('RESTORE DEFAULT'), false);
+            JToolBarHelper::spacer();
+        }
+
         JToolBarHelper::back(JText::_('CONTROL PANEL'), 'index.php?option=com_cedtag');
 
-        $lang = "".JFactory::getLanguage()->getDefault();
+        $lang = "" . JFactory::getLanguage()->getDefault();
 
-        $file = JPATH_ADMINISTRATOR.'/components/com_cedtag/stopwords/stopwords_'.$lang.'.php';
+        $file = JPATH_ADMINISTRATOR . '/components/com_cedtag/stopwords/stopwords_' . $lang . '.php';
         if (!is_file($file)) {
-            JFile::copy(JPATH_ADMINISTRATOR.'/components/com_cedtag/stopwords/stopwords_en-GB-default.php', $file);
+            JFile::copy(JPATH_ADMINISTRATOR . '/components/com_cedtag/stopwords/stopwords_en-GB-default.php', $file);
         }
 
         $isWritable = is_writable($file);

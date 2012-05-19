@@ -13,8 +13,12 @@ require_once JPATH_COMPONENT_ADMINISTRATOR . '/models/tag.php';
 class CedTagModelExport extends CedTagModelTag
 {
 
+    function __construct()
+    {
+        parent::__construct();
+    }
 
-    function getSqlFor($param, $field, &$sql)
+    private function getSqlFor($param, $field, &$sql)
     {
         $isfield = CedTagsHelper::param($param, '1');
         $sql .= $isfield ? "$field as $field," : "";
@@ -22,7 +26,7 @@ class CedTagModelExport extends CedTagModelTag
     }
 
 
-    function exportTagsToCsv()
+    public function exportTagsToCsv()
     {
         $app = JFactory::getApplication();
 
@@ -36,7 +40,7 @@ class CedTagModelExport extends CedTagModelTag
         $this->getSqlFor('export_csv_created', 'created', $sql);
         $this->getSqlFor('export_published_hits', 'hits', $sql);
 
-        $sql = substr_replace($sql ,"",-1);
+        $sql = substr_replace($sql, "", -1);
 
         $sql .= "  from #__cedtag_term;";
 
@@ -74,7 +78,7 @@ class CedTagModelExport extends CedTagModelTag
     }
 
 
-    function importTagsFromMetaKeys()
+    public function importTagsFromMetaKeys()
     {
         $dbo = JFactory::getDbo();
         $executionResult = true;
@@ -127,11 +131,11 @@ class CedTagModelExport extends CedTagModelTag
             $executionMessages .= JText::_('-FAIL');
         }
 
-        $msg = JText::_('Tags are successfully exported to all Joomla articles Meta Keywords');
+        $message = JText::_('Tags are successfully exported to all Joomla articles Meta Keywords');
 
         if (!$executionResult) {
-            $msg = JText::_('We met some problems while exporting tags, please check!');
-            $msg .= $executionMessages;
+            $message = JText::_('We met some problems while exporting tags, please check!');
+            $message .= $executionMessages;
         }
 
         return true;

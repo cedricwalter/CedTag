@@ -13,6 +13,12 @@ require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
 
 class CedTagModelImport extends CedTagModelTag
 {
+
+    function __construct()
+    {
+        parent::__construct();
+    }
+
     function termCheck($term)
     {
         $ignoreNumericTags = CedTagsHelper::param('IgnoeNumericTags', 0);

@@ -7,6 +7,10 @@
  **/
 defined('_JEXEC') or die('Restricted access');
 
+// userhelper for acl
+require_once JPATH_SITE . '/administrator/components/com_users/helpers/users.php';
+$canDo = UsersHelper::getActions();
+
 // Load the javascript
 JHtml::_('behavior.framework');
 JHtml::_('behavior.modal', 'a.modal');
@@ -31,6 +35,7 @@ require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
             <span><?php echo JText::_('TERM MANAGER');?></span></a></div>
     </div>
 
+    <?php if ($canDo->get('core.admin')) { ?>
     <div style="float: left;">
         <div class="icon">
             <a class="modal"
@@ -41,6 +46,9 @@ require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
                 alt="<?php echo JText::_('CONFIGURATION');?>"/>
                 <span><?php echo JText::_('CONFIGURATION');?></span></a></div>
     </div>
+    <?php } ?>
+
+    <?php if ($canDo->get('core.create')) { ?>
     <div style="float: left;">
         <div class="icon"><a href="index.php?option=com_cedtag&controller=css"
                              title="<?php echo JText::_('TEMPLATE MANAGER');?>"> <img
@@ -48,6 +56,7 @@ require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
             alt="<?php echo JText::_('TEMPLATE MANAGER');?>"/>
             <span><?php echo JText::_('TEMPLATE MANAGER');?></span></a></div>
     </div>
+
     <div style="float: left;">
         <div class="icon"><a href="index.php?option=com_cedtag&controller=stopwords"
                              title="<?php echo JText::_('STOPWORDS');?>"> <img
@@ -67,11 +76,12 @@ require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
             <img src="<? echo JURI::root() ?>/media/com_cedtag/images/export.png"/>
             <span><?php echo JText::_('EXPORT TAGS');?></span></a></div>
     </div>
+    <?php } ?>
     <div style="float: left;">
-            <div class="icon"><a href="index.php?option=com_cedtag&controller=statistics"
-                                 title="<?php echo JText::_('statistics');?>">
-                <img src="<? echo JURI::root() ?>/media/com_cedtag/images/statistics.png"/>
-                <span><?php echo JText::_('statistics');?></span></a></div>
+        <div class="icon"><a href="index.php?option=com_cedtag&controller=statistics"
+                             title="<?php echo JText::_('statistics');?>">
+            <img src="<? echo JURI::root() ?>/media/com_cedtag/images/statistics.png"/>
+            <span><?php echo JText::_('statistics');?></span></a></div>
     </div>
     <div style="float: left;">
         <div class="icon"><a href="http://www.waltercedric.com" target="_blank"

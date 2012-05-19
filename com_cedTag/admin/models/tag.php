@@ -7,7 +7,8 @@
  **/
 defined('_JEXEC') or die('Restricted access');
 
-require_once JPATH_SITE . '/components/com_cedtag/helper/helper.php';
+require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
+
 jimport('joomla.application.component.modellist');
 
 //reuse joomla model ContentModelArticles

@@ -9,6 +9,9 @@
 defined('_JEXEC') or die();
 jimport('joomla.application.component.view');
 
+// userhelper for acl
+require_once JPATH_SITE . '/administrator/components/com_users/helpers/users.php';
+
 class CedTagViewExport extends JView
 {
 
@@ -27,9 +30,11 @@ class CedTagViewExport extends JView
     {
         JToolBarHelper::title(JText::_('EXPORT TAGS TO OTHER COMPONENTS'), 'tag.png');
 
-        JToolBarHelper::spacer();
-        JToolBarHelper::custom('export', 'default', '', JText::_('EXPORT'), false);
-        JToolBarHelper::spacer();
+        $canDo = UsersHelper::getActions();
+        if ($canDo->get('core.create')) {
+            JToolBarHelper::custom('export', 'default', '', JText::_('EXPORT'), false);
+            JToolBarHelper::spacer();
+        }
         JToolBarHelper::back(JText::_('CONTROL PANEL'), 'index.php?option=com_cedtag');
 
     }

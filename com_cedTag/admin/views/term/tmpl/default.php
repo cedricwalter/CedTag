@@ -6,23 +6,35 @@
  * @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
  **/
 defined('_JEXEC') or die('Restricted access');
+
+
 $limitstart = JRequest::getVar('limitstart', 0, '', 'int');
 $mainframe = JFactory::getApplication();
 $search = $mainframe->getUserStateFromRequest('articleelement.search', 'search', '', 'string');
 $search = JString::strtolower($search);
 $rows = $this->termList->list;
+
+require_once JPATH_SITE . '/components/com_cedtag/helper/suggest.php';
+$CedTagSuggest = new CedTagSuggest();
+$CedTagSuggest->addJs(array(), null);
 ?>
 
 <form action="<?php echo JRoute::_('index.php?controller=term&option=com_cedtag'); ?>" method="post" name="adminForm" id="adminForm">
     <table>
         <tr>
-            <td width="100%"><?php echo JText::_('Filter'); ?>: <input
-                type="text" name="search" id="search" value="<?php echo($search);?>"
-                class="text_area" onchange="document.adminForm.submit();"/>
+            <td width="50%"><?php echo JText::_('Filter'); ?>:</br/>
+                <input
+                    type="text" name="search" id="search" value="<?php echo($search);?>"
+                    class="text_area" onchange="document.adminForm.submit();"/>
                 <button onclick="this.form.submit();"><?php echo JText::_('Go'); ?></button>
                 <button
                     onclick="document.getElementById('search').value='';this.form.submit();"><?php echo JText::_('Reset'); ?></button>
             </td>
+            <td width="500px">
+            <?php echo JText::_('Create new tags and press enter to create'); ?>:
+            <ul id="tags" class="tags" ></ul>
+            </td>
+
         </tr>
     </table>
     <table class="adminlist">

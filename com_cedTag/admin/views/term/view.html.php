@@ -7,7 +7,10 @@
  **/
 defined('_JEXEC') or die();
 jimport('joomla.application.component.view');
-jimport( 'joomla.application.input' );
+jimport('joomla.application.input');
+
+// userhelper for acl
+require_once JPATH_SITE . '/administrator/components/com_users/helpers/users.php';
 
 class CedTagViewTerm extends JView
 {
@@ -15,7 +18,7 @@ class CedTagViewTerm extends JView
     function display($tpl = null)
     {
         $layout = JRequest::getVar("layout");
-            //TODO JInput::get('layout', "", 'STRING'); <- dont work
+        //TODO JInput::get('layout', "", 'STRING'); <- dont work
         switch ($layout) {
             case 'edit':
                 $this->edit($tpl);
@@ -32,8 +35,12 @@ class CedTagViewTerm extends JView
     function batchAdd($tpl = null)
     {
         JToolBarHelper::title(JText::_('BATCH TERM ADD'), 'tag.png');
-        JToolBarHelper::custom('batchsave', 'save', '', JText::_('SAVE'), false);
-        JToolBarHelper::spacer();
+
+        $canDo = UsersHelper::getActions();
+        if ($canDo->get('core.create')) {
+            JToolBarHelper::custom('batchsave', 'save', '', JText::_('SAVE'), false);
+            JToolBarHelper::spacer();
+        }
         JToolBarHelper::back();
         //get params
         $params = JComponentHelper::getParams('com_cedtag');
@@ -50,8 +57,14 @@ class CedTagViewTerm extends JView
         } else {
             JToolBarHelper::title(JText::_('TERM ADD'), 'tag.png');
         }
-        JToolBarHelper::save();
-        JToolBarHelper::spacer();
+
+        $canDo = UsersHelper::getActions();
+
+        if ($canDo->get('core.edit')) {
+            JToolBarHelper::save();
+            JToolBarHelper::spacer();
+        }
+
         JToolBarHelper::back();
         //get params
         $params = JComponentHelper::getParams('com_cedtag');
@@ -60,7 +73,7 @@ class CedTagViewTerm extends JView
         $this->assignRef('term', $term);
 
         $editor = JFactory::getEditor();
-   		$this->assignRef('editor',		$editor);
+        $this->assignRef('editor', $editor);
 
         parent::display($tpl);
     }
@@ -68,16 +81,31 @@ class CedTagViewTerm extends JView
     function defaultTpl($tpl = null)
     {
         JToolBarHelper::title(JText::_('TERM MANAGER'), 'tag.png');
-        JToolBarHelper::editListX();
-        JToolBarHelper::spacer();
-        JToolBarHelper::addNewX();
-        JToolBarHelper::spacer();
-        JToolBarHelper::custom('batchadd', 'new', '', JText::_('BATCH ADD'), false);
-        JToolBarHelper::spacer();
-        JToolBarHelper::deleteListX();
-        JToolBarHelper::spacer();
+
+        $canDo = UsersHelper::getActions();
+        if ($canDo->get('core.create')) {
+            JToolBarHelper::custom('batchadd', 'new', '', JText::_('Batch Add'), false);
+            JToolBarHelper::spacer();
+        }
+        if ($canDo->get('core.edit')) {
+            JToolBarHelper::editListX();
+            JToolBarHelper::spacer();
+        }
+        if ($canDo->get('core.edit.state')) {
+            //publish / unpublish / archiveList / checkin
+        }
+        if ($canDo->get('core.delete')) {
+            JToolBarHelper::deleteList(JText::_('Confirm Suppression'), 'remove', JText::_('Delete'));
+            JToolBarHelper::spacer();
+        }
+        if ($canDo->get('core.edit.state')) {
+            //trash
+        }
+        if ($canDo->get('core.admin')) {
+            //preference
+        }
+
         JToolBarHelper::back(JText::_('CONTROL PANEL'), 'index.php?option=com_cedtag');
-        //JToolBarHelper::preferences( 'com_cedtag' );
 
         //get params
         $params = JComponentHelper::getParams('com_cedtag');

@@ -10,7 +10,10 @@
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.view');
-jimport( 'joomla.application.input' );
+jimport('joomla.application.input');
+
+// userhelper for acl
+require_once JPATH_SITE. '/administrator/components/com_users/helpers/users.php';
 
 /**
  * View class for a list of articles.
@@ -100,11 +103,31 @@ class cedtagViewtag extends JView
     protected function addToolbar()
     {
         JToolBarHelper::title(JText::_('Tag Manager'), 'tag.png');
-        JToolBarHelper::custom('batchsave', 'save', '', JText::_('SAVE'), false);
-        JToolBarHelper::spacer();
-        JToolBarHelper::custom('clearall', 'delete', '', JText::_('CLEAR ALL'), false);
-        JToolBarHelper::spacer();
-        JToolBarHelper::back(JText::_('CONTROL PANEL'), 'index.php?option=com_cedtag');
+
+        $canDo = UsersHelper::getActions();
+        if ($canDo->get('core.create')) {
+            //add new
+        }
+        if ($canDo->get('core.edit')) {
+            //edit
+        }
+        if ($canDo->get('core.edit.state')) {
+            //publish / unpublish / archiveList / checkin
+        }
+        if ($canDo->get('core.delete')) {
+            $bar = JToolBar::getInstance('toolbar');
+            $bar->appendButton('Confirm', JText::_('Remove all Tags from all articles?'), 'clearall', JText::_('Clear all'), 'clearall', false);
+            JToolBarHelper::spacer();
+            JToolBarHelper::divider();
+        }
+        if ($canDo->get('core.edit.state')) {
+            //trash
+        }
+        if ($canDo->get('core.admin')) {
+            //preference
+        }
+
+        JToolBarHelper::back(JText::_('Control Panel'), 'index.php?option=com_cedtag');
     }
 
     function add($tpl = null)
@@ -120,14 +143,15 @@ class cedtagViewtag extends JView
     }
 
 
-    function addTagsToJoomlaArticlesModel($items) {
+    function addTagsToJoomlaArticlesModel($items)
+    {
         //not pretty to refetch model in view instead of in model!
         $dbo = JFactory::getDbo();
         foreach ($items as $item) {
             $query = "select tagterm.id,tagterm.name from #__cedtag_term as tagterm
                                 left join #__cedtag_term_content as tagtermcontent
                                 on tagtermcontent.tid=tagterm.id
-                                where tagtermcontent.cid=".$dbo->quote($item->id)."
+                                where tagtermcontent.cid=" . $dbo->quote($item->id) . "
                                 and tagterm.published='1'
                                 group by(tid)
                                 order by tagterm.weight

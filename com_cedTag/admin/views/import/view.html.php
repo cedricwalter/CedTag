@@ -9,6 +9,9 @@
 defined('_JEXEC') or die();
 jimport('joomla.application.component.view');
 
+// userhelper for acl
+require_once JPATH_SITE . '/administrator/components/com_users/helpers/users.php';
+
 class CedTagViewImport extends JView
 {
 
@@ -21,9 +24,11 @@ class CedTagViewImport extends JView
     {
         JToolBarHelper::title(JText::_('IMPORT TAGS FROM OTHER COMPONENTS'), 'tag.png');
 
-        JToolBarHelper::spacer();
-        JToolBarHelper::custom('import', 'default', '', JText::_('IMPORT'), false);
-        JToolBarHelper::spacer();
+        $canDo = UsersHelper::getActions();
+        if ($canDo->get('core.create')) {
+            JToolBarHelper::custom('import', 'default', '', JText::_('IMPORT'), false);
+            JToolBarHelper::spacer();
+        }
         JToolBarHelper::back(JText::_('CONTROL PANEL'), 'index.php?option=com_cedtag');
 
         parent::display($tpl);

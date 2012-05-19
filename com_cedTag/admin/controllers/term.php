@@ -63,13 +63,13 @@ class CedTagControllerTerm extends JController
         $description = $input->get('description', '', 'POST', 'string', JREQUEST_ALLOWHTML);
         $weight = $input->get('weight', '', 'POST');
         $model = $this->getModel('term');
-        $isok = true;
+        $isOk = true;
         if (isset($id[0]) && $id[0]) {
-            $isok = $model->update($id[0], $name, $description, $weight);
+            $isOk = $model->update($id[0], $name, $description, $weight);
         } else {
-            $isok = $model->store($name, $description, $weight);
+            $isOk = $model->store($name, $description, $weight);
         }
-        if (!$isok) {
+        if (!$isOk) {
             $msg = JText::_('TERM COULD NOT BE CREATED PLEASE CHECK');
         } else {
             $msg = JText::_('TERM SUCCESSFULLY CREATED');
@@ -88,8 +88,8 @@ class CedTagControllerTerm extends JController
 
     function remove()
     {
-        $jinput = JFactory::getApplication()->input;
-        $ids = $jinput->get('cid', 0, 'POST');
+        $input = JFactory::getApplication()->input;
+        $ids = $input->get('cid', 0, 'POST');
         $model = $this->getModel('term');
         if (!$model->remove($ids)) {
             $msg = JText::_('TERM COULD NOT BE REMOVED PLEASE CHECK');
@@ -109,15 +109,15 @@ class CedTagControllerTerm extends JController
 
     function batchSave()
     {
-        $jinput = JFactory::getApplication()->input;
-        $terms = $jinput->get('names', '', 'POST');
+        $input = JFactory::getApplication()->input;
+        $terms = $input->get('names', '', 'POST');
         $msg = null;
         $terms = trim($terms);
         if (isset($terms) && $terms) {
             $model = $this->getModel('term');
-            $isok = $model->insertTerms($terms);
+            $isOk = $model->insertTerms($terms);
 
-            if (!$isok) {
+            if (!$isOk) {
                 $msg = JText::_('TERMS COULD NOT BE CREATED PLEASE CHECK, Tems <').$terms.JText::_('> IS/ARE INVALID OR IN EXCLUDED LIST');
             } else {
                 $msg = JText::_('TERMS <').$terms.JText::_('> SUCCESSFULLY CREATED');

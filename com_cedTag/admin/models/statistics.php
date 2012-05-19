@@ -10,10 +10,15 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.model');
-require_once JPATH_COMPONENT_SITE . DS . 'helper/helper.php';
+require_once JPATH_COMPONENT_SITE .'/helper/helper.php';
 
 class CedTagModelStatistics extends JModel
 {
+
+    function __construct()
+    {
+        parent::__construct();
+    }
 
     public function getStatistics()
     {

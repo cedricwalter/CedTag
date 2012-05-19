@@ -10,10 +10,15 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.model');
-require_once JPATH_COMPONENT_SITE . DS . 'helper/helper.php';
+require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
 
 class CedTagModelTerm extends JModel
 {
+
+    public function __construct($config = array())
+    {
+        parent::__construct($config);
+    }
 
     public function remove($termId)
     {
@@ -135,13 +140,13 @@ class CedTagModelTerm extends JModel
         return $isok;
     }
 
-    public function deleteContentTerms($cid)
+    public function deleteContentTerms($id)
     {
         $dbo = JFactory::getDbo();
 
         $query = $dbo->getQuery(true);
         $query->delete('#__cedtag_term_content');
-        $query->where('cid=' . $dbo->quote($cid));
+        $query->where('cid=' . $dbo->quote($id));
         $dbo->setQuery($query);
 
         $dbo->query();
@@ -167,7 +172,7 @@ class CedTagModelTerm extends JModel
         $dbo->query();
     }
 
-    function termsForContent($cid)
+    function termsForContent($id)
     {
         $dbo = JFactory::getDbo();
 
@@ -177,7 +182,7 @@ class CedTagModelTerm extends JModel
         $query->select('t.name as name');
         $query->from('#__cedtag_term as t');
         $query->leftJoin('#__cedtag_term_content as c  on c.tid=t.id');
-        $query->where('c.cid=' . $dbo->quote($cid));
+        $query->where('c.cid=' . $dbo->quote($id));
         $query->where('t.published=\'1\'');
         $query->order('t.weight desc,t.name');
 
@@ -186,6 +191,7 @@ class CedTagModelTerm extends JModel
         return $dbo->loadColumn();
     }
 
+    //TODO Unused
     function getTermList()
     {
         $dbo = JFactory::getDbo();
@@ -216,11 +222,13 @@ class CedTagModelTerm extends JModel
         return $this;
     }
 
+
+    //TODO Unused
     function getTerm()
     {
         $dbo = JFactory::getDbo();
-        $jinput = JFactory::getApplication()->input;
-        $id = $jinput->get('cid', array(0), '', 'array');
+        $input = JFactory::getApplication()->input;
+        $id = $input->get('cid', array(0), '', 'array');
 
         $query = 'select * from #__cedtag_term  where id=' . $id[0];
 

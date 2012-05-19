@@ -22,7 +22,7 @@ class CedTagViewCss extends JView
     {
         $this->addToolbar();
 
-        $CedTagThemes  = new CedTagThemes();
+        $CedTagThemes = new CedTagThemes();
         $tagCssFile = $CedTagThemes->getFile();
         $isCssWritable = is_writable($tagCssFile);
 
@@ -37,10 +37,14 @@ class CedTagViewCss extends JView
     function addToolbar()
     {
         JToolBarHelper::title(JText::_('TEMPLATE MANAGER'), 'tag.png');
-        JToolBarHelper::save();
-        JToolBarHelper::spacer();
-        JToolBarHelper::custom('restore', 'default', '', JText::_('RESTORE DEFAULT'), false);
-        JToolBarHelper::spacer();
+
+        $canDo = UsersHelper::getActions();
+        if ($canDo->get('core.create')) {
+            JToolBarHelper::save();
+            JToolBarHelper::spacer();
+            JToolBarHelper::custom('restore', 'default', '', JText::_('RESTORE DEFAULT'), false);
+            JToolBarHelper::spacer();
+        }
         JToolBarHelper::back(JText::_('CONTROL PANEL'), 'index.php?option=com_cedtag');
     }
 
