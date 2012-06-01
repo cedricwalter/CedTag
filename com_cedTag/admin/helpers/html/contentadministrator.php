@@ -14,9 +14,12 @@ defined('_JEXEC') or die;
 abstract class JHtmlContentAdministrator
 {
 	/**
-	 * @param	int $value	The state value
-	 * @param	int $i
-	 */
+     * @static
+     * @param int $value
+     * @param $i
+     * @param bool $canChange
+     * @return mixed|string
+     */
 	static function featured($value = 0, $i, $canChange = true)
 	{
 		// Array of image, task, title, action

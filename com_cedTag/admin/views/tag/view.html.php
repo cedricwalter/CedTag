@@ -13,7 +13,7 @@ jimport('joomla.application.component.view');
 jimport('joomla.application.input');
 
 // userhelper for acl
-require_once JPATH_SITE. '/administrator/components/com_users/helpers/users.php';
+require_once JPATH_SITE . '/administrator/components/com_users/helpers/users.php';
 
 /**
  * View class for a list of articles.
@@ -44,9 +44,8 @@ class cedtagViewtag extends JView
     }
 
     /**
-     * Display the view
-     *
-     * @return    void
+     * @param null $tpl
+     * @throws Exception
      */
     public function defaultTpl($tpl = null)
     {
@@ -68,8 +67,7 @@ class cedtagViewtag extends JView
 
         // Check for errors.
         if (count($errors = $this->get('Errors'))) {
-            JError::raiseError(500, implode("\n", $errors));
-            return false;
+            throw new Exception(implode("\n", $errors), 500);
         }
 
         // Levels filter.
@@ -133,7 +131,8 @@ class cedtagViewtag extends JView
     function add($tpl = null)
     {
         $tags = $this->get('tagsForArticle');
-        $this->assignRef('tags', $tags);
+        $tagit = explode(",", $tags);
+        $this->assignRef('tags', $tagit);
         parent::display($tpl);
     }
 

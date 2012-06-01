@@ -8,8 +8,7 @@
 defined('_JEXEC') or die('Restricted access');
 ?>
 
-<form action="<?php echo JRoute::_('index.php'); ?>" method="post" name="adminForm" id="adminForm"
-      autocomplete="off">
+<form action="<?php echo JRoute::_('index.php'); ?>" method="post" name="adminForm" id="adminForm">
     <table border="0" cellpadding="1" cellspacing="1" width="100%">
         <tr>
             <td width="220">

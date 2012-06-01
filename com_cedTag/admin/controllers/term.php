@@ -8,7 +8,7 @@
 defined('_JEXEC') or die();
 
 jimport('joomla.application.controller');
-jimport( 'joomla.application.input' );
+jimport('joomla.application.input');
 
 class CedTagControllerTerm extends JController
 {
@@ -36,14 +36,27 @@ class CedTagControllerTerm extends JController
             case 'batchsave':
                 $this->batchSave();
                 break;
+            case 'autofilldescription':
+                $this->autofilldescription();
+                break;
             default:
                 $this->display();
         }
     }
 
+    private function autofilldescription()
+    {
+        $model = $this->getModel('term');
+        $message = $model->autofillDescriptions();
+
+        $this->setRedirect("index.php?option=com_cedtag&controller=term", $message);
+    }
+
+
+
     /**
-     * display the form
-     * @return void
+     * @param bool $cachable
+     * @param bool $urlparams
      */
     public function display($cachable = false, $urlparams = false)
     {
@@ -55,6 +68,7 @@ class CedTagControllerTerm extends JController
     /**
      * save categories
      */
+    private
     function save()
     {
         $input = JFactory::getApplication()->input;
@@ -79,6 +93,7 @@ class CedTagControllerTerm extends JController
         //$this->getEditor()->save($this->description);
     }
 
+    private
     function edit()
     {
         JFactory::getApplication()->input->set('view', 'term');
@@ -86,6 +101,7 @@ class CedTagControllerTerm extends JController
         parent::display();
     }
 
+    private
     function remove()
     {
         $input = JFactory::getApplication()->input;
@@ -99,6 +115,7 @@ class CedTagControllerTerm extends JController
         $this->setRedirect("index.php?option=com_cedtag&controller=term", $msg);
     }
 
+    private
     function batchAdd()
     {
         JFactory::getApplication()->input->set('view', 'term');
@@ -107,6 +124,7 @@ class CedTagControllerTerm extends JController
 
     }
 
+    private
     function batchSave()
     {
         $input = JFactory::getApplication()->input;
@@ -118,9 +136,9 @@ class CedTagControllerTerm extends JController
             $isOk = $model->insertTerms($terms);
 
             if (!$isOk) {
-                $msg = JText::_('TERMS COULD NOT BE CREATED PLEASE CHECK, Tems <').$terms.JText::_('> IS/ARE INVALID OR IN EXCLUDED LIST');
+                $msg = JText::_('TERMS COULD NOT BE CREATED PLEASE CHECK, Tems <') . $terms . JText::_('> IS/ARE INVALID OR IN EXCLUDED LIST');
             } else {
-                $msg = JText::_('TERMS <').$terms.JText::_('> SUCCESSFULLY CREATED');
+                $msg = JText::_('TERMS <') . $terms . JText::_('> SUCCESSFULLY CREATED');
             }
         } else {
             $msg = JText::_('TERMS CAN NOT BE BLANK');
@@ -130,4 +148,3 @@ class CedTagControllerTerm extends JController
     }
 }
 
-?>

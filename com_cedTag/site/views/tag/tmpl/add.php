@@ -21,7 +21,9 @@ defined('_JEXEC') or die('Restricted access');
     <div style="clear: both;"></div>
 
     <div style="float: left;">
-        <textarea id="tags" name="tags" rows="5" cols="60"><?php echo($this->tags);?></textarea>
+        <label for="tags">
+            <textarea id="tags" name="tags" rows="5" cols="60"><?php echo($this->tags);?></textarea>
+        </label>
     </div>
 
     <div style="clear: both;"></div>

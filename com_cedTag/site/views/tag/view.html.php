@@ -57,7 +57,7 @@ class CedTagViewTag extends JView
             $params = JComponentHelper::getParams('com_cedtag');
 
             $defaultLayout = $params->get('layout', 'default');
-            $layout = JInput::get('layout', $defaultLayout, 'STRING');
+            $layout = JFactory::getApplication()->input->get('layout', $defaultLayout, 'STRING');
 
             $this->setLayout($layout);
 

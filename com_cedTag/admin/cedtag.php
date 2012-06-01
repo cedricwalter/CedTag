@@ -10,14 +10,14 @@ defined('_JEXEC') or die('Restricted access');
 // Include dependencies
 jimport('joomla.application.component.controller');
 
-require_once (JPATH_COMPONENT . '/controller.php');
-require_once (JPATH_COMPONENT . '/controllers/tag.php');
-require_once (JPATH_COMPONENT . '/controllers/term.php');
-require_once (JPATH_COMPONENT . '/controllers/css.php');
-require_once (JPATH_COMPONENT . '/controllers/stopwords.php');
-require_once (JPATH_COMPONENT . '/controllers/import.php');
-require_once (JPATH_COMPONENT . '/controllers/export.php');
-require_once (JPATH_COMPONENT . '/controllers/statistics.php');
+require_once (dirname(__FILE__) . '/controller.php');
+require_once (dirname(__FILE__) . '/controllers/tag.php');
+require_once (dirname(__FILE__) . '/controllers/term.php');
+require_once (dirname(__FILE__) . '/controllers/css.php');
+require_once (dirname(__FILE__) . '/controllers/stopwords.php');
+require_once (dirname(__FILE__) . '/controllers/import.php');
+require_once (dirname(__FILE__) . '/controllers/export.php');
+require_once (dirname(__FILE__) . '/controllers/statistics.php');
 
 $document = JFactory::getDocument();
 $document->addStyleSheet(JURI::root() . '/media/com_cedtag/css/admintag.css');
@@ -35,5 +35,3 @@ $controller->execute($task);
 
 // Redirect if set by the controller
 $controller->redirect();
-
-?>

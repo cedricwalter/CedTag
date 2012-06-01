@@ -10,17 +10,91 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.model');
-require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
+
+require_once JPATH_SITE . '/components/com_cedtag/helper/helper.php';
+require_once JPATH_SITE . '/administrator/components/com_cedtag/helpers/wikipedia.php';
 
 class CedTagModelTerm extends JModel
 {
+
+    var $page = null;
+    var $list = null;
+    var $authors = null;
 
     public function __construct($config = array())
     {
         parent::__construct($config);
     }
 
-    public function remove($termId)
+    /**
+     * @return string
+     */
+    public function autofillDescriptions()
+    {
+        $dbo = JFactory::getDbo();
+
+        //Get all Tags
+        $query = $dbo->getQuery(true);
+        $query->select('t.id as tid');
+        $query->select('t.name as name');
+        $query->select('t.description as description');
+        $query->from('#__cedtag_term as t');
+        $query->order('tid ASC');
+        $dbo->setQuery($query);
+        $tags = $dbo->loadObjectList();
+
+        //
+        $wikipedia = new wikipedia();
+        $wikipediaAutocompleteStrategy = CedTagsHelper::param('wikipediaAutocompleteStrategy', '0');
+
+        //some variables for statistics purposes
+        $imported = 0;
+        $scanned = 0;
+        $termsNotFoundInWikipedia = array();
+
+        foreach ($tags as $tag) {
+            $updateTerm = (strlen($tag->description) == 0) && ($wikipediaAutocompleteStrategy == 0) ||
+                ($wikipediaAutocompleteStrategy == 1);
+
+            if ($updateTerm) {
+                $descriptions = $wikipedia->wikidefinition($tag->name);
+                $definitionfoundInWikipedia = is_array($descriptions);
+
+                if ($definitionfoundInWikipedia) {
+                    //TODO offer a template manager
+                    $descriptionText = "<h1>$descriptions[0]</h1>
+                    <p>$descriptions[1] <a href='" . $descriptions[2] . "'>[$descriptions[2]]</a></p>";
+
+                    $query->clear();
+                    $query->update('#__cedtag_term');
+                    $query->set('description=' . $dbo->quote($descriptionText));
+                    $query->where('id=' . $dbo->quote($tag->tid));
+                    $dbo->setQuery($query);
+                    $dbo->query();
+                    $imported++;
+                } else {
+                    $termsNotFoundInWikipedia[] = $tag->name;
+                }
+            }
+            $scanned++;
+        }
+
+        $message = "";
+        if ($imported != 0) {
+            $message = JText::_('Went through ') . $scanned . JText::_(' term(s) and did imported successfully ') . $imported . JText::_(' term(s) description from ') . $wikipedia->wikipediaServer;
+        } else {
+            $message = JText::_('Went through ') . $scanned . JText::_(' term(s) and did not import any new descriptions from ') . $wikipedia->wikipediaServer . JText::_(' as you have decided to not overwrite existing descriptions.');
+        }
+
+        if (sizeof($termsNotFoundInWikipedia) > 0) {
+            $message .= JText::_(' Also CedTag did not found any definitions for ') . implode(",", $termsNotFoundInWikipedia);
+        }
+        return $message;
+    }
+
+
+    public
+    function remove($termId)
     {
         $dbo = JFactory::getDbo();
         $query = $dbo->getQuery(true);
@@ -40,7 +114,8 @@ class CedTagModelTerm extends JModel
         return $dbo->query();
     }
 
-    public function update($id, $name, $description = null, $weight = 0)
+    public
+    function update($id, $name, $description = null, $weight = 0)
     {
         $dbo = JFactory::getDbo();
 
@@ -61,7 +136,8 @@ class CedTagModelTerm extends JModel
         return $dbo->query();
     }
 
-    public function store($name, $description = null, $weight = 0)
+    public
+    function store($name, $description = null, $weight = 0)
     {
         $dbo = JFactory::getDbo();
 
@@ -122,7 +198,8 @@ class CedTagModelTerm extends JModel
         }
     }
 
-    public function insertTerms($terms)
+    public
+    function insertTerms($terms)
     {
         //$terms = CedTagsHelper::isValidName($terms);
         if (!$terms) {
@@ -140,7 +217,8 @@ class CedTagModelTerm extends JModel
         return $isok;
     }
 
-    public function deleteContentTerms($id)
+    public
+    function deleteContentTerms($id)
     {
         $dbo = JFactory::getDbo();
 
@@ -152,13 +230,15 @@ class CedTagModelTerm extends JModel
         $dbo->query();
     }
 
+    public
     function insertContentTerms($cid, $tids)
     {
         foreach ($tids as $tid) {
-            insertContentterm($tid, $cid);
+            $this->insertContentterm($tid, $cid);
         }
     }
 
+    public
     function insertContentterm($tid, $cid)
     {
         $dbo = JFactory::getDbo();
@@ -172,6 +252,7 @@ class CedTagModelTerm extends JModel
         $dbo->query();
     }
 
+    public
     function termsForContent($id)
     {
         $dbo = JFactory::getDbo();
@@ -191,7 +272,8 @@ class CedTagModelTerm extends JModel
         return $dbo->loadColumn();
     }
 
-    //TODO Unused
+//TODO Unused
+    public
     function getTermList()
     {
         $dbo = JFactory::getDbo();
@@ -223,7 +305,8 @@ class CedTagModelTerm extends JModel
     }
 
 
-    //TODO Unused
+//TODO Unused
+    public
     function getTerm()
     {
         $dbo = JFactory::getDbo();

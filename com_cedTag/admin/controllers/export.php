@@ -29,8 +29,8 @@ class CedTagControllerExport extends JController
     }
 
     /**
-     * display the form
-     * @return void
+     * @param bool $cachable
+     * @param bool $urlparams
      */
     public function display($cachable = false, $urlparams = false)
     {
@@ -41,10 +41,10 @@ class CedTagControllerExport extends JController
     private function export()
     {
         $model = $this->getModel('export');
-        $jinput = JFactory::getApplication()->input;
+        $input = JFactory::getApplication()->input;
 
-        $destination = $jinput->get('destination', 'meta-keys');
-
+        $destination = $input->get('destination', 'meta-keys');
+        $exportMessage = "";
         if ($destination == 'meta-keys') {
             $exportMessage = $model->exportTagsToMetaKeys();
         } else if ($destination == 'csv') {
@@ -61,4 +61,3 @@ class CedTagControllerExport extends JController
 
 }
 
-?>

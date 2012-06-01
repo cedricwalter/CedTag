@@ -86,6 +86,8 @@ class CedTagViewTerm extends JView
         if ($canDo->get('core.create')) {
             JToolBarHelper::custom('batchadd', 'new', '', JText::_('Batch Add'), false);
             JToolBarHelper::spacer();
+            JToolBarHelper::custom('autofilldescription', 'new', '', JText::_('AutoFill Descriptions'), false);
+            JToolBarHelper::spacer();
         }
         if ($canDo->get('core.edit')) {
             JToolBarHelper::editListX();

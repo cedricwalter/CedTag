@@ -7,35 +7,26 @@
  **/
 defined('_JEXEC') or die('Restricted access');
 
+require_once JPATH_SITE . '/components/com_cedtag/helper/suggest.php';
+$id = strval(intval(JRequest::getString('article_id')));
+$CedTagSuggest = new CedTagSuggest();
+$CedTagSuggest->addJs($this->tags, $id);
+
 ?>
 
 <h1><?php echo JText::_('Joomla cedTag');?></h1>
 
 <form action="<?php echo JRoute::_('index.php'); ?>" method="post" name="adminForm" id="adminForm">
-    <table class="adminlist">
-        <thead>
-        <tr>
-            <th><?php echo JText::_('TAGS');?></th>
-        </tr>
-        </thead>
+    <?php
+    echo JText::_('You type tags and when you hit Enter, Comma or Space they will become a little nice formatted box with the value. You can click on the boxes to remove them (a little x on the corner).');
+    echo JText::_('You can also remove already typed tags with Backspace.');
+    echo JText::_('There is also a autocomplete, so if you type, say "jav" it will appear java and javascript (for example).');
+    ?>
+    <div class="clr"></div>
 
-        <tbody>
-        <tr>
-            <td><textarea id="tags" name="tags" rows="5" cols="60"><?php echo($this->tags);?></textarea></td>
-        </tr>
-        <tr>
-            <td>
-                <input type="submit" value="<?php echo JText::_('SAVE');?>"/>
-                <input type="button" name="cancel" value="<?php echo JText::_('CANCEL'); ?>"
-                       onClick="document.getElementById('sbox-window').close();"/>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <input type="hidden" name="cid" value="<?php echo strval(intval(JRequest::getString('article_id')))?>"/>
-    <input type="hidden" name="boxchecked" value="0"/>
-    <input type="hidden" name="task" value="save">
-    <input type="hidden" name="controller" value="cedtag">
-    <input type="hidden" name="option" value="com_cedtag">
-    <?php echo JHTML::_('form.token'); ?>
+    <ul id="tags<?php echo $id; ?>" style="width: 500px;"></ul>
+    <div class="clr"></div>
+    <input type="button" name="cancel" value="<?php echo JText::_('CANCEL'); ?>"
+           onClick="document.getElementById('sbox-window').close();"/>
+
 </form>

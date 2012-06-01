@@ -43,8 +43,8 @@ class CedTagControllerTag extends JController
     }
 
     /**
-     * display the form
-     * @return void
+     * @param bool $cachable
+     * @param bool $urlparams
      */
     public function display($cachable = false, $urlparams = false)
     {
@@ -129,5 +129,3 @@ class CedTagControllerTag extends JController
         return $result;
     }
 }
-
-?>

@@ -12,7 +12,7 @@ defined('_JEXEC') or die('Restricted access');
     <table class="admintable">
         <tr>
             <td class="key">
-                <label for="source"><?php echo JText::_('SOURCE');?>:</label>
+                <label for="sourcekey"><?php echo JText::_('SOURCE');?>:</label>
             </td>
             <td>
                 <select name="source" id="section" class="inputbox" size="4">

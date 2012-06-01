@@ -129,48 +129,40 @@ require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
         <div class="icon">
             <a href="http://extensions.joomla.org/extensions/search-a-indexing/tags-a-clouds/20423"
                target="_blank"
-               title="<?php echo JText::_('JED VOTE');?>"> <img
+               title="<?php echo JText::_('EXTENSIONS VOTE');?>"> <img
                 src="<? echo JURI::root() ?>/media/com_cedtag/images/jed.png"/>
-                <span><?php echo JText::_('JED VOTE');?></span></a>
+                <span><?php echo JText::_('EXTENSIONS VOTE');?></span></a>
+        </div>
+    </div>
+    <div style="float: left;">
+        <div class="icon">
+            <a href="http://extensions.joomla.org/extensions/owner/cedric_walter"
+               target="_blank"
+               title="<?php echo JText::_('Other Extensions By the Same Author');?>"> <img
+                src="<? echo JURI::root() ?>/media/com_cedtag/images/jed.png"/>
+                <span><?php echo JText::_('OTHER EXTENSIONS');?></span></a>
         </div>
     </div>
     <div style="float: left;">
         <div class="icon">
             <a href="http://www.waltercedric.com/downloads/cedtags.html"
                target="_blank"
-               title="<?php echo JText::_('Download');?>"> <img
-                src="<? echo JURI::root() ?>/media/com_cedthumbnails/images/download.png"/>
-                <span><?php echo JText::_('Download');?></span></a>
+               title="<?php echo JText::_('Download Latest Version');?>"> <img
+                src="<? echo JURI::root() ?>/media/com_cedtag/images/download.png"/>
+                <span><?php echo JText::_('DOWNLOAD LATEST VERSION');?></span></a>
         </div>
     </div>
-
 </div>
 
 <div class="tagversion">
 
-    <p><a href="http://extensions.joomla.org/extensions/search-a-indexing/tags-a-clouds/20423" target="_blank">Joomla
-        cedTag</a> v<?php echo(CedTagsHelper::getComponentVersion());?>
-    </p>
-
-    <p>
-
     <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-        <input type="hidden" name="cmd" value="_s-xclick">
-        <input type="hidden" name="hosted_button_id" value="48HP9A7JU7BVS">
-        <img src="<? echo JURI::root() ?>/media/com_cedtag/images/paypal-donate.jpg"
-             width="174px" heght="153px"
-             border="0" name="submit" title="PayPal - The safer, easier way to pay online!"/>
-        <img alt="" border="0" src="https://www.paypalobjects.com/fr_FR/i/scr/pixel.gif" width="1"
-             height="1">
+    <input type="hidden" name="cmd" value="_s-xclick">
+    <input type="hidden" name="hosted_button_id" value="QH6UGCKWW9KVL">
+    <input type="image" src="<? echo JURI::root() ?>/media/com_cedtag/images/paypal-donate.jpg" title="Thanks you for donations to waltercedric.com Joomla extensions development" name="submit" alt="PayPal - The safer, easier way to pay online!" style="width:174px;height:153px;">
+    <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
     </form>
-    </p>
 
-    <p>
-        <?php echo JText::_('VOTE at');?>
-        <a target="_blank"
-           href="http://extensions.joomla.org/extensions/search-a-indexing/tags-a-clouds/20423">Joomla
-            Extensions Directory</a>
-    </p>
 
     <p>
         &copy; 2012 <a href="http://www.waltercedric.com">www.waltercedric.com</a> GNU-GPL v3.0<br/>

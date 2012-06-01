@@ -7,7 +7,7 @@
  **/
 defined('_JEXEC') or die('Restricted access');
 
-require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
+require_once JPATH_SITE . '/components/com_cedtag/helper/helper.php';
 
 jimport('joomla.application.component.modellist');
 
@@ -109,6 +109,33 @@ class CedTagModelTag extends ContentModelArticles
                 return implode(',', $tagsInArray);
             }
         }
+
+/*
+        $cid = JFactory::getApplication()->input->get('article_id', '', 'int');
+        $cid = strval(intval($cid));
+        if ($cid < 0) {
+            $cid = 0;
+        }
+
+        if (isset($cid)) {
+            $dbo = JFactory::getDBO();
+            $query = $dbo->getQuery(true);
+            $query->select('tagterm.name as name');
+            $query->leftJoin('#__cedtag_term_content as tagtermcontent on tagtermcontent.tid=tagterm.id');
+
+            $query->from('#__cedtag_term as tagterm');
+
+            $query->where('tagtermcontent.cid = ' . $dbo->quote($cid));
+            $query->where('tagterm.published=1');
+
+            $query->group('tid');
+            $query->order('tagterm.name');
+
+            $dbo->setQuery($query);
+            $terms = $dbo->loadObjectList();
+            return $terms;
+        }
+*/
 
         return '';
     }

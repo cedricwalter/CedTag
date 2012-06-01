@@ -76,5 +76,3 @@ class CedTagControllerCss extends CedTagControllerFile
 
 
 }
-
-?>

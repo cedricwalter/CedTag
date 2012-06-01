@@ -63,21 +63,27 @@ class plgCedSearchTags extends JPlugin
             return array();
         }
 
+        $dbo = JFactory::getDBO();
+        $query = $dbo->getQuery(true);
+
+        $query->from('#__cedtag_term as t');
+
+        $query->select('name');
+        $query->select('name as title');
+        $query->select('description as text');
+
         $text = $db->Quote('%' . $db->escape($text, true) . '%', false);
-        $query = "select name,name as title,description as text from #__cedtag_term as t where t.name like " . $text . " and t.published='1' order by weight desc,name";
+        $query->where('t.name like'.$text);
+        $query->where('t.published=\'1\'');
+        $query->order('weight desc,name');
 
         $db->setQuery($query, 0, $limit);
         $rows = $db->loadObjectList();
 
         $count = count($rows);
-        $i = 0;
         for ($i = 0; $i < $count; $i++) {
-
-
-            //$link='index.php?option=com_cedtag&task=tag&tag='.urlencode($rows[$i]->name);
             $link = 'index.php?option=com_cedtag&task=tag&tag=' . CedTagsHelper::urlTagname($rows[$i]->name);
             $rows[$i]->href = JRoute::_($link);
-            //print_r($rows[i]);
             $rows[$i]->section = JText::_('TAG');
         }
 
@@ -86,7 +92,6 @@ class plgCedSearchTags extends JPlugin
             if (searchHelper::checkNoHTML($tag, $searchText, array('name', 'title', 'text'))) {
                 $return[] = $tag;
             }
-
         }
 
         return $return;

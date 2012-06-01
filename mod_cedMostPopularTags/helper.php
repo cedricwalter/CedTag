@@ -20,7 +20,7 @@ class modCedMostPopularTagsHelper
 
         $count = intval($params->get('count', 25));
         $sorting = $params->get('sorting', 'sizeasort');
-        $reverse = intval($params->get('reverse', 1));
+        $reverse = intval($params->get('reverse', 0));
 
         return $CedTagsHelper->getPopularTagModel($count, $sorting, $reverse);
     }

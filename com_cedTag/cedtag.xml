@@ -8,7 +8,7 @@
     <authorUrl>www.waltercedric.com</authorUrl>
     <copyright>(c) 2011 Cedric Walter www.waltercedric.com</copyright>
     <license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
-    <version>2.5.2</version>
+    <version>2.5.4</version>
     <description><![CDATA[<h2>A real free tag system for joomla!</h2>]]></description>
 
     <install> <!-- Runs on install -->
@@ -31,8 +31,7 @@
     <!-- Extension Update Specification -->
     <!-- Note: No spaces or linebreaks allowed between the server tags -->
     <updateservers>
-        <server type="extension" priority="1" name="Extension Update Site">http://www.waltercedric.com/update/components/com_cedtag/extension.xml</server>
-        <server type="collection" priority="2" name="Collection Update Site">http://www.waltercedric.com/update/update.xml</server>
+        <server type="extension" priority="1" name="Extension Update Site">http://updates.waltercedric.com/components/com_cedtag/update.xml</server>
     </updateservers>
 
     <languages folder="site">
@@ -40,10 +39,11 @@
         <language tag="zh-CN">language/zh-CN.com_cedtag.ini</language>
     </languages>
 
-    <media destination="com_cedtag">
+    <media folder="media" destination="com_cedtag">
         <folder>css</folder>
         <folder>images</folder>
         <folder>js</folder>
+        <filename>index.html</filename>
     </media>
 
     <files folder="site">

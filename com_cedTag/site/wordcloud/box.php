@@ -60,6 +60,7 @@ class Box {
 
   /**
    * Return a string representing the HTML imagemap coords of the rect
+   * @return string
    */
   public function get_map_coords() {
     return "{$this->left},{$this->top},{$this->right},{$this->bottom}";

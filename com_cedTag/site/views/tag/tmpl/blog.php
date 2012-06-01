@@ -83,7 +83,6 @@ function readmore($item, $user)
     </tbody>
 
 </table>
-aaaa
 <?php if (($comContentParams->def('show_pagination', 1) == 1  || ($comContentParams->get('show_pagination') == 2)) && ($comContentParams->get('pages.total') > 1)) : ?>
 		<div class="pagination">
 						<?php  if ($comContentParams->def('show_pagination_results', 1)) : ?>
@@ -95,7 +94,6 @@ aaaa
 				<?php echo $this->pagination->getPagesLinks(); ?>
 		</div>
 <?php  endif; ?>
-bbb
 
 
 <?php

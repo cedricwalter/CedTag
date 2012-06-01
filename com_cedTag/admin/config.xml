@@ -29,7 +29,11 @@
             <option value="1">Display below the article title</option>
             <option value="2">Display at both position</option>
         </field>
-
+        <field name="showFrontPageTagTitle" type="radio" default="0" label="Show Tags title in FrontPage"
+               description="Show Tags For FrontPage, Default is Yes.">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
         <field name="page_limit" type="text" size="20" default="10" label="Page Limit"
                description="How many articles to show on each page.">
         </field>
@@ -102,8 +106,24 @@
             <option value="1">JYES</option>
             <option value="0">JNO</option>
         </field>
-        <field name="autoMetaKeywordsExtractor" type="radio" default="1" label="Auto extract meta keywords as tags"
-               description="Auto extract meta keywords as tags, only applies to new created articles.">
+        <field name="autoMetaKeywordsExtractor" type="radio" default="1" label="Auto extract meta keywords as tags for NEW articles"
+               description="Auto extract from article meta keywords to tags, only applies to NEW created articles.">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field name="metaKeywordsAreSourceForExistingArticles" type="radio" default="0"
+               label="Force Existing articles get their tags always from article meta keywords at save time"
+               description="Existing articles get their tags always from article meta keywords at save time.">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+
+        <field name="spacesAllowedWithoutQuotes" type="radio" default="0" label="Spaces in Tag allowed"
+               description="You can already do multiword tags with spaces in them by default, but those must be wrapped in quotes.
+                       A new option in 2.5.4 will lets you use spaces without requiring the user to quote the input.
+                       There are normally 5 ways to insert a tag after inputting some text: space, comma, enter, selecting
+                       an autocomplete option, or defocusing the widget. With this set to true option set to true, space no
+                       longer inserts a tag, it just adds a space to the current tag input.">
             <option value="1">JYES</option>
             <option value="0">JNO</option>
         </field>
@@ -127,6 +147,20 @@
             <!--<option value="fixedbuckets">Fixed number of Bucket by Frequency</option> -->
         </field>
 
+        <field name="wikipediaServer" type="list" default="http://www.wikipedia.org" label="Autofill wikipedia source"
+               description="Choose your main language for description autofilling using WikiPedia openSearch API. (Require Curl to be installed in PHP)">
+            <option value="http://www.wikipedia.org">english</option>
+            <option value="http://fr.wikipedia.org">french</option>
+            <option value="http://de.wikipedia.org">german</option>
+            <option value="http://ed.wikipedia.org">spanish</option>
+            <option value="http://ja.wikipedia.org">japanase</option>
+        </field>
+
+        <field name="wikipediaAutocompleteStrategy" type="list" default="0" label="Autofill wikipedia description"
+               description="How your existing terms descriptions will be treated">
+            <option value="0">Only autofill empty descriptions</option>
+            <option value="1">CAUTION: Always autofill All descriptions (you loose all your manual changes!)</option>
+        </field>
 
     </fieldset>
 
@@ -197,13 +231,17 @@
             <option value="1">JYES</option>
             <option value="0">JNO</option>
         </field>
-        <field name="FrontPageTagArticleViewTagPosition" type="list" default="0" label="Tags Article View Position"
+        <field name="ArticleViewTagPosition" type="list" default="0" label="Tags Article View Position"
                description="Tag positions, default is show at the bottom of the content.">
             <option value="0">Display after the article fulltext</option>
             <option value="1">Display below the article title</option>
             <option value="2">Display at both position</option>
         </field>
-
+        <field name="showArticleTagTitle" type="radio" default="0" label="Show Tags title in FrontPage"
+               description="Show Tags For FrontPage, Default is Yes.">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
         <field name="ShowAddTagButton" type="radio" default="1" label="Show Add Tag Button"
                description="Show Add Tag Button for the Author.">
             <option value="1">JYES</option>
@@ -252,10 +290,10 @@
     <fieldset name="Export" label="Export">
 
         <field name="export_csv_delimiter" type="text" default="," label="CSV delimiter" size="1"
-               description="The optional delimiter parameter sets the field delimiter (one character only)">
+               description="The optional delimiter parameter sets the field delimiter (one character only, default is comma)">
         </field>
-        <field name="export_csv_enclosure" type="text" default="" label="Min Tag Length" size="1"
-               description="The optional enclosure parameter sets the field enclosure (one character only)">
+        <field name="export_csv_enclosure" type="text" default="" label="CSV enclosure" size="1"
+               description="The optional enclosure parameter sets the field enclosure (one character only, default is empty)">
         </field>
         <field name="export_csv_id" type="list" default="1" label="id"
                description="export id in csv">

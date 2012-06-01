@@ -29,8 +29,8 @@ class CedTagControllerImport extends JController
     }
 
     /**
-     * display the form
-     * @return void
+     * @param bool $cachable
+     * @param bool $urlparams
      */
     public function display($cachable = false, $urlparams = false)
     {
@@ -43,6 +43,7 @@ class CedTagControllerImport extends JController
     {
         $model = $this->getModel('import');
         $source = JFactory::getApplication()->input->get('source', 'meta-keys');
+        $importMessage = "";
         if ($source == 'meta-keys') {
             $importMessage = $model->importTagsFromMetaKeys();
         } else if ($source == 'jtags') {
@@ -62,5 +63,3 @@ class CedTagControllerImport extends JController
     }
 
 }
-
-?>

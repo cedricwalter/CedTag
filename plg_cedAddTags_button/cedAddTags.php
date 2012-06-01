@@ -33,7 +33,7 @@ class plgButtonCedAddTags extends JPlugin
      *
      * @return a button
      */
-    function onDisplay($name)
+    function onDisplay($name, $asset, $author)
     {
         // Avoid displaying the button for anything except content articles
         $option = JRequest::getVar('option');
@@ -71,7 +71,7 @@ class plgButtonCedAddTags extends JPlugin
                 $link = "index.php?option=com_cedtag&controller=tag&amp;task=warning&amp;tmpl=component&amp;tagsWarning=FIRST_SAVE_WARNING";
             }
             else {
-                $button->set('options', "{handler: 'iframe', size: {x: 500, y: 300}}");
+                $button->set('options', "{handler: 'iframe', size: {x: 600, y: 300}}");
                 $link = "index.php?option=com_cedtag&amp;controller=tag&amp;task=add&amp;article_id=" . $id . "&amp;tmpl=component";
             }
         }

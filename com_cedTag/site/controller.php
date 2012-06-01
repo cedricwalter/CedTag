@@ -72,13 +72,17 @@ class CedTagController extends JController
     {
         $id = JFactory::getApplication()->input->get('cid', 0, 'int');
         $CedTagsHelper = new CedTagsHelper();
-        if ($CedTagsHelper->canUserDoTagOperations($id)) {
+
+        //here in backend it is not authorized beacuse not logger in
+
+//ewdwewe
+        if ($CedTagsHelper->canUserDoTagOperations($id)) { }
             $tags = JFactory::getApplication()->input->get('tags', '', 'string');
             $combined = array();
             $combined[$id] = $tags;
             $ok = $CedTagsHelper->getTagModel()->batchUpdate($combined, false);
-            $message = $ok ? JText::_('Tags could not be Saved, please check!') : JText::_('Tags successfully saved!');
-        }
+            //$message = $ok ? JText::_('Tags could not be Saved, please check!') : JText::_('Tags successfully saved!');
+
     }
 
     /*

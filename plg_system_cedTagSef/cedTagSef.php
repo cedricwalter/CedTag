@@ -38,7 +38,6 @@ class plgSystemCedTagSef extends JPlugin
             return true;
         }
         $uir = $_SERVER['REQUEST_URI'];
-        //$uir	= JURI::getInstance()->;
 
         if (strpos($uir, '/cedtag/index.php') !== false) {
             return true;
@@ -81,6 +80,4 @@ class plgSystemCedTagSef extends JPlugin
         JResponse::setBody($buffer);
         return true;
     }
-
-
 }

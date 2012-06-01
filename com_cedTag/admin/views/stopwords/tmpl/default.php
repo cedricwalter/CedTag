@@ -27,7 +27,8 @@ defined('_JEXEC') or die('Restricted access');
                             <?php echo($this->FileName);?>
                         </li>
                         <li>
-                            <textarea <?php if (!$this->isWritable) {
+
+                                <textarea <?php if (!$this->isWritable) {
                                 echo('readonly');
                             };?>
                                 style="width: 100%; height: 600px;"

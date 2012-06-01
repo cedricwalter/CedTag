@@ -10,6 +10,9 @@ jimport('joomla.application.component.view');
 jimport('joomla.filesystem.file');
 require_once JPATH_COMPONENT_SITE . '/helper/themes.php';
 
+// userhelper for acl
+require_once JPATH_SITE . '/administrator/components/com_users/helpers/users.php';
+
 class CedTagViewCss extends JView
 {
 

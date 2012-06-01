@@ -2,7 +2,7 @@
 /**
  * @package Plugin cedtags for Joomla! 2.5
  * @author waltercedric.com
- * @copyright (C) 2012 http://www.waltercedric.com 2010- http://www.joomlatags.org
+ * @copyright (C) 2012 http://www.waltercedric.com
  * @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
  **/
 defined('_JEXEC') or  die('Restricted access');
@@ -27,6 +27,11 @@ class plgContentCedTags extends JPlugin
     }
 
     /**
+     * this method allow cedTag to insert tags in Front page
+     *  - Display after the article fulltext
+     *  - Display below the article title
+     *  - Display at both position
+     *
      * @param $context
      * @param $article
      * @param $params
@@ -43,18 +48,24 @@ class plgContentCedTags extends JPlugin
         $frontPageTagView = CedTagsHelper::param('FrontPageTagView', '1');
         $view = JRequest :: getVar('view');
 
-        if (($view == 'frontpage') && !$frontPageTagView) {
+        if ($frontPageTagView == '0') {
             return;
         }
 
         //0 Display after the article fulltext
         //1 Display below the article title
         //2 Display at both position
-        $frontPageTagViewTagPosition = CedTagsHelper::param('FrontPageTagViewTagPosition', '1');
-        $this->execute($context, $article->id, $article->introtext, $params, $page, $frontPageTagViewTagPosition);
+        $position = CedTagsHelper::param('FrontPageTagViewTagPosition', '1');
+        $showTagTitle = CedTagsHelper::param('showFrontPageTagTitle', '0');
+        $this->execute($context, $article->id, $article->introtext, $params, $page, $position, $showTagTitle);
     }
 
     /**
+     * this method allow cedTag to insert tags when viewing an article
+     *  - Display after the article fulltext
+     *  - Display below the article title
+     *  - Display at both position
+     *
      * @param $context
      * @param $row
      * @param $params
@@ -68,18 +79,19 @@ class plgContentCedTags extends JPlugin
             return true;
         }
 
-        //do not work in admin
+        //do not run in administrator area
         $app = JFactory::getApplication();
         if ($app->isAdmin()) {
             return true;
         }
 
-        //dont display if user want so
+        //don't display if user want so
         $frontPageTagArticleView = CedTagsHelper::param('FrontPageTagArticleView', '1');
         if (!$frontPageTagArticleView) {
             return true;
         }
 
+        //no content id, no chance to run
         if (isset($row) && (!isset($row->id) || is_null($row->id))) {
             return true;
         }
@@ -98,12 +110,13 @@ class plgContentCedTags extends JPlugin
         //0 Display after the article fulltext
         //1 Display below the article title
         //2 Display at both position
-        $frontPageTagArticleViewTagPosition = CedTagsHelper::param('FrontPageTagArticleViewTagPosition', '0');
-        return $this->execute($context, $row->id, $row->text, $params, $page, $frontPageTagArticleViewTagPosition);
+        $position = CedTagsHelper::param('ArticleViewTagPosition', '0');
+        $showTagTitle = CedTagsHelper::param('showArticleTagTitle', '0');
+        return $this->execute($context, $row->id, $row->text, $params, $page, $position, $showTagTitle);
     }
 
 
-    private function execute($context, $id, &$text, &$params, $page = 0, $position)
+    private function execute($context, $id, &$text, &$params, $page = 0, $position, $showTagTitle)
     {
         $cedTagModelTags = new CedTagModelTags();
         $tags = $cedTagModelTags->getModelTags($id);
@@ -112,14 +125,15 @@ class plgContentCedTags extends JPlugin
         $canEdit = $CedTagsHelper->canUserDoTagOperations($id);
         if ($canEdit) {
             $CedTagSuggest = new CedTagSuggest();
-            $tagit = array();
+            $tagIt = array();
             foreach ($tags as $tag) {
-                $tagit[] = $tag->tag;
+                $tagIt[] = $tag->tag;
             }
-            $CedTagSuggest->addJs($tagit, $id);
+            $CedTagSuggest->addJs($tagIt, $id);
             $tagResult = '<div class="cedtagplugin">';
             $tagResult .= ' <div class="title">' . JText::_('TAGS:') . '</div>';
-            $tagResult .= ' <ul id="tags'.$id.'" class="tags"></ul>';
+            $tagResult .= ' <div>' . JText::_('There is 4 ways to insert a tag after inputting some text: comma, enter, selecting an auto-complete option, or de-focusing the widget. You can <ul><li>enter tags with space,</li><li>cut and paste list of tags separated by comma and hit enter.</li></ul>') . '</div>';
+            $tagResult .= ' <ul id="tags' . $id . '" class="tags"></ul>';
             $tagResult .= '</div>';
         }
         else {
@@ -128,7 +142,9 @@ class plgContentCedTags extends JPlugin
                 $htmlList .= '<li><a href="' . $tag->link . '" rel="tag" title="' . $tag->title . '" >' . $tag->tag . '</a></li> ';
             }
             $tagResult = '<div class="cedtag" />';
-            $tagResult .= ' <div class="title">' . JText::_('TAGS:') . '</div >';
+            if ($showTagTitle) {
+                $tagResult .= ' <div class="title">' . JText::_('TAGS:') . '</div >';
+            }
             $tagResult .= ' <ul class="cedtag" > ' . $htmlList . '</ul >';
             $tagResult .= '</div > ';
         }
@@ -254,23 +270,23 @@ class plgContentCedTags extends JPlugin
     public
     function onContentAfterSave($context, &$article, $isNew)
     {
-        // Check we are handling the frontend edit form.
-        if ($context != 'com_content.form') {
-            return true;
-        }
+        $frontendEditArticleForm = $context == 'com_content.form';
+        $backendEditArticleForm = $context == 'com_content.article';
 
-        $autoMetaKeywordsExtractor = CedTagsHelper::param('FrontPageTag') &&
-            CedTagsHelper::param('autoMetaKeywordsExtractor');
-        if ($autoMetaKeywordsExtractor) {
-            if ($isNew) {
-                $tags = $article->metakey;
-                $id = $article->id;
-                $combined = array();
-                $combined[$id] = $tags;
-                require_once(JPATH_ADMINISTRATOR . '/components/com_cedtag/models/tag.php');
+        if ($frontendEditArticleForm || $backendEditArticleForm) {
+            $autoMetaKeywordsExtractor = CedTagsHelper::param('autoMetaKeywordsExtractor', '1');
+            if ($autoMetaKeywordsExtractor) {
+                $metaKeywordsAreSourceForExistingArticles = CedTagsHelper::param('metaKeywordsAreSourceForExistingArticles', '0');
+                if ($isNew || $metaKeywordsAreSourceForExistingArticles) {
+                    $tags = $article->metakey;
+                    $id = $article->id;
+                    $combined = array();
+                    $combined[$id] = $tags;
+                    require_once(JPATH_SITE . '/administrator/components/com_cedtag/models/tag.php');
 
-                $model = new CedTagModelTag();
-                $model->batchUpdate($combined);
+                    $model = new CedTagModelTag();
+                    $model->batchUpdate($combined);
+                }
             }
         }
         return true;

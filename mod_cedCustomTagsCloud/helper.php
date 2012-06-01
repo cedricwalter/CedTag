@@ -67,8 +67,7 @@ class modCedCustomTagsCloudHelper
             $CedTagThemes = new CedTagThemes();
             $CedTagThemes->addCss();
 
-
-            if (intval($params->get('reverse', 1))) {
+            if (intval($params->get('reverse', 0))) {
                 $rows = array_reverse($rows);
             }
         }

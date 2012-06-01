@@ -22,10 +22,10 @@ $CedTagSuggest->addJs(array(), null);
 <form action="<?php echo JRoute::_('index.php?controller=term&option=com_cedtag'); ?>" method="post" name="adminForm" id="adminForm">
     <table>
         <tr>
-            <td width="50%"><?php echo JText::_('Filter'); ?>:</br/>
-                <input
+            <td width="50%"><?php echo JText::_('Filter'); ?>:<br/>
+                <label for="search"><input
                     type="text" name="search" id="search" value="<?php echo($search);?>"
-                    class="text_area" onchange="document.adminForm.submit();"/>
+                    class="text_area" onchange="document.adminForm.submit();"/></label>
                 <button onclick="this.form.submit();"><?php echo JText::_('Go'); ?></button>
                 <button
                     onclick="document.getElementById('search').value='';this.form.submit();"><?php echo JText::_('Reset'); ?></button>

@@ -53,5 +53,3 @@ class CedTagControllerStopWords extends CedTagControllerFile
     }
 
 }
-
-?>

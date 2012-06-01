@@ -71,5 +71,3 @@ class CedTagControllerFile extends JController
         parent::display();
     }
 }
-
-?>
