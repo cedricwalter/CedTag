@@ -18,6 +18,7 @@ require_once (dirname(__FILE__) . '/controllers/stopwords.php');
 require_once (dirname(__FILE__) . '/controllers/import.php');
 require_once (dirname(__FILE__) . '/controllers/export.php');
 require_once (dirname(__FILE__) . '/controllers/statistics.php');
+require_once (dirname(__FILE__) . '/controllers/diagnostic.php');
 
 $document = JFactory::getDocument();
 $document->addStyleSheet(JURI::root() . '/media/com_cedtag/css/admintag.css');

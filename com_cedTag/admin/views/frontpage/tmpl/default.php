@@ -152,6 +152,18 @@ require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
                 <span><?php echo JText::_('DOWNLOAD LATEST VERSION');?></span></a>
         </div>
     </div>
+    <div style="float: left;">
+            <div class="icon">
+                <a href="index.php?option=com_cedtag&controller=diagnostic"
+                    title="<?php echo JText::_('DIAGNOSTIC');?>"> <img
+                    src="<? echo JURI::root() ?>/media/com_cedtag/images/diagnostic.png"/>
+                    <span><?php echo JText::_('DIAGNOSTIC');?></span></a>
+            </div>
+        </div>
+
+
+
+
 </div>
 
 <div class="tagversion">
