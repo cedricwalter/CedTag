@@ -46,12 +46,18 @@ class CedTagControllerTerm extends JController
 
     private function autofilldescription()
     {
+        $input = JFactory::getApplication()->input;
+        $id = $input->get('cid', 0, 'POST');
+        $name = $input->get('name', '', 'POST');
+        $description = $input->get('description', '', 'POST');
+
+        $message = "";
+        $redirectTo = "";
         $model = $this->getModel('term');
-        $message = $model->autofillDescriptions();
+        $model->autofillDescriptions($id, $name, $description, $message, $redirectTo);
 
-        $this->setRedirect("index.php?option=com_cedtag&controller=term", $message);
+        $this->setRedirect($redirectTo, $message);
     }
-
 
 
     /**
@@ -74,8 +80,13 @@ class CedTagControllerTerm extends JController
         $input = JFactory::getApplication()->input;
         $id = $input->get('cid', 0, 'POST');
         $name = $input->get('name', '', 'POST');
-        $description = $input->get('description', '', 'POST', 'string', JREQUEST_ALLOWHTML);
-        $weight = $input->get('weight', '', 'POST');
+
+        //Argh this work
+        $description = JRequest::getVar( 'description', '', 'post', 'string', JREQUEST_ALLOWHTML );
+        //but not is one
+        //  $input->get('description', '', 'post', 'string', JREQUEST_ALLOWHTML);
+
+        $weight = $input->get('weight', '', 'post');
         $model = $this->getModel('term');
         $isOk = true;
         if (isset($id[0]) && $id[0]) {

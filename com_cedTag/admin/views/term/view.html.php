@@ -61,11 +61,16 @@ class CedTagViewTerm extends JView
         $canDo = UsersHelper::getActions();
 
         if ($canDo->get('core.edit')) {
+            JToolBarHelper::custom('autofilldescription', 'new', '', JText::_('Wikipedia: AutoFill Descriptions'), false);
+            JToolBarHelper::spacer();
             JToolBarHelper::save();
+            JToolBarHelper::spacer();
+            JToolBarHelper::cancel();
             JToolBarHelper::spacer();
         }
 
         JToolBarHelper::back();
+
         //get params
         $params = JComponentHelper::getParams('com_cedtag');
         $this->assignRef('params', $params);
@@ -86,7 +91,7 @@ class CedTagViewTerm extends JView
         if ($canDo->get('core.create')) {
             JToolBarHelper::custom('batchadd', 'new', '', JText::_('Batch Add'), false);
             JToolBarHelper::spacer();
-            JToolBarHelper::custom('autofilldescription', 'new', '', JText::_('AutoFill Descriptions'), false);
+            JToolBarHelper::custom('autofilldescription', 'new', '', JText::_('Wikipedia: AutoFill All Descriptions'), false);
             JToolBarHelper::spacer();
         }
         if ($canDo->get('core.edit')) {

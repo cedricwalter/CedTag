@@ -38,10 +38,10 @@ if (isset($this->term)) {
                 <?php
                 $params = array(
                     'smilies' => 0,
-                    'style' => 0,
-                    'layer' => 0,
-                    'table' => 0,
-                    'clear_entities' => 0
+                                        'style' => 1,
+                                        'layer' => 0,
+                                        'table' => 0,
+                                        'clear_entities' => 0
                 );
                 echo $this->editor->display('description', $description, '100%', '400px', '150', '20', true, $params); ?>
                 </li>

@@ -29,67 +29,90 @@ class CedTagModelTerm extends JModel
     /**
      * @return string
      */
-    public function autofillDescriptions()
+    public function autofillDescriptions($id, $name, $description, &$message, &$redirectTo)
+    {
+        $autocompleteStrategy = CedTagsHelper::param('wikipediaAutocompleteStrategy', '0');
+
+        //Only supported source is Wikipedia
+        $wikipedia = new CedTagWikipedia();
+
+        //Update single tag
+        if (isset($name) && strlen($name) > 0) {
+            $tag = new stdClass();
+            $tag->id = $id[0];
+            $tag->name = $name;
+            $tag->description = $description;
+
+            $updateTerm = (strlen($tag->description) == 0) && ($autocompleteStrategy == 0) ||
+                ($autocompleteStrategy == 1);
+
+            $this->updateDescriptionForTag($wikipedia, $updateTerm, $tag);
+            $redirectTo = "index.php?option=com_cedtag&controller=term&task=edit&cid[]=" . $id[0];
+        } else {
+            //Update all tags
+            $tags = $this->getAllTags();
+            foreach ($tags as $tag) {
+                $updateTerm = (strlen($tag->description) == 0) && ($autocompleteStrategy == 0) ||
+                    ($autocompleteStrategy == 1);
+
+                $this->updateDescriptionForTag($wikipedia, $updateTerm, $tag);
+            }
+            $redirectTo = "index.php?controller=term&option=com_cedtag";
+        }
+
+        $message = JText::_('Using ') . $wikipedia->getWikipediaServer() . ".";
+        $message .= JText::_(' Did Search for ') . $wikipedia->getRequested() . ' term(s).';
+        $message .= JText::_(' Did found ') . $wikipedia->getFound() . JText::_(' term(s) description(s) ');
+
+        if (sizeof($wikipedia->getNotFound()) > 0) {
+            $message .= JText::_('Did not found ').sizeof($wikipedia->getNotFound()). JText::_(' term(s) description(s) ');
+            foreach ($wikipedia->getNotFound() as $term) {
+                //  $message .= "<a href='/index.php?option=com_cedtag&controller=term&task=edit&cid[]=".$term->tid.">$term->name</a> - ";
+                $message .= $term->name;
+            }
+        }
+    }
+
+    /**
+     * @return list of tags as array
+     */
+    public function getAllTags()
     {
         $dbo = JFactory::getDbo();
 
-        //Get all Tags
-        $query = $dbo->getQuery(true);
-        $query->select('t.id as tid');
-        $query->select('t.name as name');
-        $query->select('t.description as description');
-        $query->from('#__cedtag_term as t');
-        $query->order('tid ASC');
-        $dbo->setQuery($query);
+        $updateQuery = $dbo->getQuery(true);
+        $updateQuery->select('t.id as id');
+        $updateQuery->select('t.name as name');
+        $updateQuery->select('t.description as description');
+        $updateQuery->from('#__cedtag_term as t');
+        $updateQuery->order('id ASC');
+
+        $dbo->setQuery($updateQuery);
+
         $tags = $dbo->loadObjectList();
+        return $tags;
+    }
 
-        //
-        $wikipedia = new wikipedia();
-        $wikipediaAutocompleteStrategy = CedTagsHelper::param('wikipediaAutocompleteStrategy', '0');
+    public function updateDescriptionForTag($source, $updateTerm, $tag)
+    {
+        if ($updateTerm) {
+            $descriptions = $source->getDefinition($tag->name);
+            $definitionFound = is_array($descriptions);
 
-        //some variables for statistics purposes
-        $imported = 0;
-        $scanned = 0;
-        $termsNotFoundInWikipedia = array();
-
-        foreach ($tags as $tag) {
-            $updateTerm = (strlen($tag->description) == 0) && ($wikipediaAutocompleteStrategy == 0) ||
-                ($wikipediaAutocompleteStrategy == 1);
-
-            if ($updateTerm) {
-                $descriptions = $wikipedia->wikidefinition($tag->name);
-                $definitionfoundInWikipedia = is_array($descriptions);
-
-                if ($definitionfoundInWikipedia) {
-                    //TODO offer a template manager
-                    $descriptionText = "<h1>$descriptions[0]</h1>
+            if ($definitionFound) {
+                //TODO offer a template manager
+                $descriptionText = "<h1>$descriptions[0]</h1>
                     <p>$descriptions[1] <a href='" . $descriptions[2] . "'>[$descriptions[2]]</a></p>";
 
-                    $query->clear();
-                    $query->update('#__cedtag_term');
-                    $query->set('description=' . $dbo->quote($descriptionText));
-                    $query->where('id=' . $dbo->quote($tag->tid));
-                    $dbo->setQuery($query);
-                    $dbo->query();
-                    $imported++;
-                } else {
-                    $termsNotFoundInWikipedia[] = $tag->name;
-                }
+                $dbo = JFactory::getDbo();
+                $updateQuery = $dbo->getQuery(true);
+                $updateQuery->update('#__cedtag_term');
+                $updateQuery->set('description=' . $dbo->quote($descriptionText));
+                $updateQuery->where('id=' . $dbo->quote($tag->id));
+                $dbo->setQuery($updateQuery);
+                $dbo->query();
             }
-            $scanned++;
         }
-
-        $message = "";
-        if ($imported != 0) {
-            $message = JText::_('Went through ') . $scanned . JText::_(' term(s) and did imported successfully ') . $imported . JText::_(' term(s) description from ') . $wikipedia->wikipediaServer;
-        } else {
-            $message = JText::_('Went through ') . $scanned . JText::_(' term(s) and did not import any new descriptions from ') . $wikipedia->wikipediaServer . JText::_(' as you have decided to not overwrite existing descriptions.');
-        }
-
-        if (sizeof($termsNotFoundInWikipedia) > 0) {
-            $message .= JText::_(' Also CedTag did not found any definitions for ') . implode(",", $termsNotFoundInWikipedia);
-        }
-        return $message;
     }
 
 
@@ -272,9 +295,7 @@ class CedTagModelTerm extends JModel
         return $dbo->loadColumn();
     }
 
-//TODO Unused
-    public
-    function getTermList()
+    public function getTermList()
     {
         $dbo = JFactory::getDbo();
         $mainframe = JFactory::getApplication();

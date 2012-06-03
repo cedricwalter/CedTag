@@ -147,13 +147,48 @@
             <!--<option value="fixedbuckets">Fixed number of Bucket by Frequency</option> -->
         </field>
 
-        <field name="wikipediaServer" type="list" default="http://www.wikipedia.org" label="Autofill wikipedia source"
+        <field name="wikipediaServer" type="list" default="http://en.wikipedia.org" label="Autofill wikipedia source"
                description="Choose your main language for description autofilling using WikiPedia openSearch API. (Require Curl to be installed in PHP)">
-            <option value="http://www.wikipedia.org">english</option>
-            <option value="http://fr.wikipedia.org">french</option>
-            <option value="http://de.wikipedia.org">german</option>
-            <option value="http://ed.wikipedia.org">spanish</option>
-            <option value="http://ja.wikipedia.org">japanase</option>
+               <option value="http://ar.wikipedia.org/">العربية</option>
+            <option value="http://bg.wikipedia.org/">Български</option>
+            <option value="http://ca.wikipedia.org/">Català</option>
+            <option value="http://cs.wikipedia.org/">Česky</option>
+            <option value="http://da.wikipedia.org/">Dansk</option>
+            <option value="http://de.wikipedia.org/">Deutsch</option>
+            <option value="http://en.wikipedia.org/">English</option>
+            <option value="http://es.wikipedia.org/">Español</option>
+            <option value="http://eo.wikipedia.org/">Esperanto</option>
+            <option value="http://eu.wikipedia.org/">Euskara</option>
+            <option value="http://fa.wikipedia.org/">فارسی</option>
+            <option value="http://fr.wikipedia.org/">Français</option>
+            <option value="http://ko.wikipedia.org/">한국어</option>
+            <option value="http://hi.wikipedia.org/">हिन्दी</option>
+            <option value="http://hr.wikipedia.org/">Hrvatski</option>
+            <option value="http://id.wikipedia.org/">Bahasa Indonesia</option>
+            <option value="http://it.wikipedia.org/">Italiano</option>
+            <option value="http://he.wikipedia.org/">עברית</option>
+            <option value="http://lt.wikipedia.org/">Lietuvių</option>
+            <option value="http://hu.wikipedia.org/">Magyar</option>
+            <option value="http://ms.wikipedia.org/">Bahasa Melayu</option>
+            <option value="http://nl.wikipedia.org/">Nederlands</option>
+            <option value="http://ja.wikipedia.org/">日本語</option>
+            <option value="http://no.wikipedia.org/">Norsk (bokmål)</option>
+            <option value="http://pl.wikipedia.org/">Polski</option>
+            <option value="http://pt.wikipedia.org/">Português</option>
+            <option value="http://kk.wikipedia.org/">Қазақша</option>
+            <option value="http://ro.wikipedia.org/">Română</option>
+            <option value="http://ru.wikipedia.org/">Русский</option>
+            <option value="http://sk.wikipedia.org/">Slovenčina</option>
+            <option value="http://sl.wikipedia.org/">Slovenščina</option>
+            <option value="http://sr.wikipedia.org/">Српски</option>
+            <option value="http://fi.wikipedia.org/">Suomi</option>
+            <option value="http://sv.wikipedia.org/">Svenska</option>
+            <option value="http://tr.wikipedia.org/">Türkçe</option>
+            <option value="http://uk.wikipedia.org/">Українська</option>
+            <option value="http://vi.wikipedia.org/">Tiếng Việt</option>
+            <option value="http://vo.wikipedia.org/">Volapük</option>
+            <option value="http://war.wikipedia.org/">Winaray</option>
+            <option value="http://zh.wikipedia.org/">Zhōngwén">中文</option>
         </field>
 
         <field name="wikipediaAutocompleteStrategy" type="list" default="0" label="Autofill wikipedia description"

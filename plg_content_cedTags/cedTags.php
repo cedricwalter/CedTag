@@ -132,7 +132,7 @@ class plgContentCedTags extends JPlugin
             $CedTagSuggest->addJs($tagIt, $id);
             $tagResult = '<div class="cedtagplugin">';
             $tagResult .= ' <div class="title">' . JText::_('TAGS:') . '</div>';
-            $tagResult .= ' <div>' . JText::_('There is 4 ways to insert a tag after inputting some text: comma, enter, selecting an auto-complete option, or de-focusing the widget. You can <ul><li>enter tags with space,</li><li>cut and paste list of tags separated by comma and hit enter.</li></ul>') . '</div>';
+            $tagResult .= ' <div>' . JText::_('There is 4 ways to insert a tag after inputting some text: comma, enter, selecting an auto-complete option, or de-focusing the widget. You can <ul><li>Enter tags with space,</li><li>Cut and paste list of tags separated by comma and hit enter.</li></ul>') . '</div>';
             $tagResult .= ' <ul id="tags' . $id . '" class="tags"></ul>';
             $tagResult .= '</div>';
         }

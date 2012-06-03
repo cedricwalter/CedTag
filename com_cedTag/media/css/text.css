@@ -1,0 +1,353 @@
+/*
+ * @package Package cedTag for Joomla! 2.5 by http://www.waltercedric.com
+ * @author waltercedric.com
+ * @copyright (C) 2012 http://www.waltercedric.com
+ * @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
+ * @documentation at http://wiki.waltercedric.com/index.php?title=Main_Page#Taxonomies_and_Tags_support_for_Joomla
+*/
+.clearfix {
+    clear: both;
+    display: block;
+    overflow: hidden;
+    visibility: hidden;
+    width: 0;
+    height: 0;
+}
+
+/************************************************
+*	All tags component page
+* access with index.php?option=com_cedtag&view=alltags or by defining a menu
+************************************************/
+.alltags .title {
+    font-size: 120%;
+}
+
+.alltags .legend {
+    /* display: hidden; uncomment to hide the legend*/
+    color: gray;
+    font-size: 90%;
+    padding-bottom: 15px;
+}
+
+.alltags .cloud {
+    /*   border: 1px solid #2484B0;*/
+    /*   border-radius: 9px;*/
+}
+
+.alltags .copyright {
+    text-align: center;
+}
+
+/***********************************************************************************************
+*	Wordle component page
+* access with index.php?option=com_cedtag&view=alltags&layout=wordle or by defining a menu
+***********************************************************************************************/
+.alltags .title {
+    font-size: 120%;
+}
+
+.alltags .legend {
+    /* display: hidden; uncomment to hide the legend*/
+    color: gray;
+    font-size: 90%;
+    padding-bottom: 15px;
+}
+
+.alltags .cloud {
+    font-family: 'Open Sans', sans-serif;
+    /*   border: 1px solid #2484B0;*/
+    /*   border-radius: 9px;*/
+}
+
+.alltags .copyright {
+    text-align: center;
+}
+
+/************************************************
+*	Frontend inline edit Tag
+************************************************/
+
+.cedtag {
+    margin: 0;
+    padding: 0;
+    color: #999;
+    display: inline;
+}
+
+.cedtag ul {
+    margin: 0;
+    padding: 0;
+    display: inline;
+}
+
+.cedtag li {
+    list-style-type: none;
+    display: inline;
+    /*background: -moz-linear-gradient(center top, #FFFFFF, #CCCCCC) repeat scroll 0 0 transparent;*/
+}
+
+.cedtag li a {
+}
+
+.cedtag li a:hover {
+    -webkit-transition-delay: 0s;
+    -webkit-transition-duration: 0.5s;
+    -webkit-transition-property: color;
+    -webkit-transition-timing-function: linear;
+    cursor: auto;
+    color: #2484B0;
+}
+
+.cedtag li:after {
+    content: ", "; /* you can place here a , or any character to clearly separate tags */
+    padding-right: 2px;
+}
+
+.cedtag li:last-child:before {
+    /*content: "and ";*/
+}
+
+.cedtag li:last-child:after {
+    content: " "; /* you can use a dot here */
+    padding-right: 2px;
+}
+
+/*************************************************
+*   Add Tags
+**************************************************/
+
+div.addtags {
+    margin-top: 4px;
+    color: blue;
+}
+
+div.addtags a:link {
+    text-decoration: none;
+}
+
+div.addtags a:visited {
+    text-decoration: none;
+}
+
+div.addtags a:hover {
+    text-decoration: underline;
+}
+
+div.addtags a:active {
+    text-decoration: none;
+}
+
+div.addtags a img {
+    vertical-align: text-bottom;
+}
+
+div.addtags img {
+    padding-right: 3px;
+}
+
+/************************************************
+*	Tag Cloud
+************************************************/
+
+.tagCloud a:hover {
+    -webkit-transition-delay: 0s;
+    -webkit-transition-duration: 0.5s;
+    -webkit-transition-property: color;
+    -webkit-transition-timing-function: linear;
+
+    outline-color: #2484B0;
+    cursor: auto;
+    color: #2484B0;
+}
+
+/**************************************
+*Warnings 
+***************************************/
+div.warning {
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
+div.warning h1 {
+    line-height: normal;
+    font-size: 200%;
+    font-weight: bold;
+    text-align: center;
+    color: red;
+}
+
+div.warning h2 {
+    text-align: center;
+    line-height: normal;
+    font-size: 150%;
+    font-weight: bold;
+}
+
+/*****************************************************
+*Joomla Tags
+********************************************************/
+div.joomlatags {
+    margin-left: 220px;
+    text-align: center;
+    font-size: 9px;
+    display: block;
+    color: orange;
+    padding: 4px;
+}
+
+/***************************************************************
+*Add Tags
+*******************************************************************/
+.button2-left .add_Tags {
+    background: url(../images/addTags.png) 100% 0 no-repeat;
+}
+
+.cloud {
+
+}
+
+/*
+When using Mapping frequency = Pareto Ditribution
+only this css class is used
+*/
+.cloud .cedtag {
+    -webkit-transition-delay: 0s;
+    -webkit-transition-duration: 0.5s;
+    -webkit-transition-property: color;
+    -webkit-transition-timing-function: linear;
+
+    color: #2484B0;
+
+    /* box around term */
+    padding: 0px 6px 0px 6px !important;
+    /*
+    border: 1px solid #2484B0;
+    border-radius: 9px;
+    */
+    /* end box around term */
+
+    cursor: auto;
+}
+
+/*
+When using Mapping frequency = Dynamic Buckets
+all these 7 css class are used
+*/
+.cloud .cedtag1 {
+    -webkit-transition-delay: 0s;
+    -webkit-transition-duration: 0.5s;
+    -webkit-transition-property: color;
+    -webkit-transition-timing-function: linear;
+
+    color: #2484B0;
+
+    /* box around term */
+    padding: 0px 6px 0px 6px !important;
+    border: 1px solid #2484B0;
+    border-radius: 9px;
+    /* end box around term */
+
+    cursor: auto;
+}
+
+.cloud .cedtag2 {
+    -webkit-transition-delay: 0s;
+    -webkit-transition-duration: 0.5s;
+    -webkit-transition-property: color;
+    -webkit-transition-timing-function: linear;
+
+    color: #2484B0;
+
+    /* box around term */
+    padding: 0px 6px 0px 6px !important;
+    border: 1px solid #2484B0;
+    border-radius: 9px;
+    /* end box around term */
+
+    cursor: auto;
+}
+
+.cloud .cedtag3 {
+    -webkit-transition-delay: 0s;
+    -webkit-transition-duration: 0.5s;
+    -webkit-transition-property: color;
+    -webkit-transition-timing-function: linear;
+
+    color: #2484B0;
+
+    /* box around term */
+    padding: 0px 6px 0px 6px !important;
+    border: 1px solid #2484B0;
+    border-radius: 9px;
+    /* end box around term */
+
+    cursor: auto;
+}
+
+.cloud .cedtag4 {
+    -webkit-transition-delay: 0s;
+    -webkit-transition-duration: 0.5s;
+    -webkit-transition-property: color;
+    -webkit-transition-timing-function: linear;
+
+    color: #2484B0;
+
+    /* box around term */
+    padding: 0px 6px 0px 6px !important;
+    border: 1px solid #2484B0;
+    border-radius: 9px;
+    /* end box around term */
+
+    cursor: auto;
+}
+
+.cloud .cedtag5 {
+    -webkit-transition-delay: 0s;
+    -webkit-transition-duration: 0.5s;
+    -webkit-transition-property: color;
+    -webkit-transition-timing-function: linear;
+
+    color: #2484B0;
+
+    /* box around term */
+    padding: 0px 6px 0px 6px !important;
+    border: 1px solid #2484B0;
+    border-radius: 9px;
+    /* end box around term */
+
+    cursor: auto;
+}
+
+.cloud .cedtag6 {
+    -webkit-transition-delay: 0s;
+    -webkit-transition-duration: 0.5s;
+    -webkit-transition-property: color;
+    -webkit-transition-timing-function: linear;
+
+    color: #2484B0;
+
+    /* box around term */
+    padding: 0px 6px 0px 6px !important;
+    border: 1px solid #2484B0;
+    border-radius: 9px;
+    /* end box around term */
+
+    cursor: auto;
+}
+
+.cloud .cedtag7 {
+    -webkit-transition-delay: 0s;
+    -webkit-transition-duration: 0.5s;
+    -webkit-transition-property: color;
+    -webkit-transition-timing-function: linear;
+
+    color: #2484B0;
+
+    /* box around term */
+    padding: 0px 6px 0px 6px !important;
+    border: 1px solid #2484B0;
+    border-radius: 9px;
+    /* end box around term */
+
+    cursor: auto;
+}
