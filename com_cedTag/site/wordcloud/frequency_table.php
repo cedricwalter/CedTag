@@ -34,7 +34,7 @@ class FrequencyTable
     private $vertical_freq = FrequencyTable::WORDS_MAINLY_HORIZONTAL;
     private $total_occurences = 0;
     private $min_font_size = 16;
-    private $max_font_size = 72;
+    private $max_font_size = 25;
 
     private $max_count = 1;
     private $min_count = 1;
@@ -48,13 +48,26 @@ class FrequencyTable
      * @param string $font The TTF font file
      * @param integer $vertical_freq Frequency of vertical words (0 - 10, 0 = All horizontal, 10 = All vertical)
      */
-    public function __construct($font, $text = '', $vertical_freq = FrequencyTable::WORDS_MAINLY_HORIZONTAL, $words_limit = null)
+    public function __construct($minFontSize, $maxFontSize,
+                                $font, $text = '',
+                                $vertical_freq = FrequencyTable::WORDS_MAINLY_HORIZONTAL,
+                                $words_limit = null)
     {
         $this->words_limit = $words_limit;
         $this->font = $font;
         $this->vertical_freq = $vertical_freq;
+        $this->min_font_size = $minFontSize;
+        $this->max_font_size = $maxFontSize;
+    }
+
+    public function processText($text)
+    {
         $words = preg_split("/[\n\r\t ]+/", $text);
         $this->create_frequency_table($words);
+    }
+
+    public function buildCloud()
+    {
         $this->process_frequency_table();
     }
 
@@ -90,13 +103,16 @@ class FrequencyTable
         $word = strtolower($word);
         if (($reject) && ((strlen($word) < 3) || (in_array($word, $this->rejected_words)))) {
             return;
-        }
-        else {
-            if ($cleanup) $word = $this->cleanup_word($word);
+        } else {
+
+            if ($cleanup) {
+                $word = $this->cleanup_word($word);
+            }
+
+
             if (array_key_exists($word, $this->table)) {
                 $this->table[$word]->count += $count;
-            }
-            else {
+            } else {
                 $this->table[$word] = new StdClass();
                 $this->table[$word]->count = $count;
                 $this->table[$word]->word = $word;
@@ -117,7 +133,6 @@ class FrequencyTable
      */
     private function create_frequency_table($words)
     {
-
         foreach ($words as $key => $word) {
             $this->insert_word($word);
         }

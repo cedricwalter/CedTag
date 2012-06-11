@@ -52,6 +52,7 @@ class CedTagModelTags extends JModel
                 }
 
                 $tag = new stdClass();
+                $tag->id = $term->id;
                 $tag->link = JRoute::_('index.php?option=com_cedtag&task=tag&tag=' . CedTagsHelper::urlTagname($term->name));
                 $tag->title = $hrefTitle;
                 $tag->tag = CedTagsHelper::ucwords($term->name);

@@ -159,8 +159,25 @@ require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
                     src="<? echo JURI::root() ?>/media/com_cedtag/images/diagnostic.png"/>
                     <span><?php echo JText::_('DIAGNOSTIC');?></span></a>
             </div>
+    </div>
+    <div style="float: left;">
+        <div class="icon">
+            <a href="https://www.facebook.com/pages/C%C3%A9dric-Walter-dot-com/113977625305022"
+               target="_blank"
+               title="<?php echo JText::_('Like on Facebook');?>"> <img
+                src="<? echo JURI::root() ?>/media/com_cedtag/images/facebook.png"/>
+                <span><?php echo JText::_('Like on Facebook');?></span></a>
         </div>
-
+    </div>
+    <div style="float: left;">
+        <div class="icon">
+            <a href="http://twitter.com/cedricwalter"
+               target="_blank"
+               title="<?php echo JText::_('Follow Me on Twitter');?>"> <img
+                src="<? echo JURI::root() ?>/media/com_cedtag/images/twitter.png"/>
+                <span><?php echo JText::_('Follow Me on Twitter');?></span></a>
+        </div>
+    </div>
 
 
 

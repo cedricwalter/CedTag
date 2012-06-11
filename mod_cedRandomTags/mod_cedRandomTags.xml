@@ -12,7 +12,7 @@
     <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
     <authorEmail>cedric.walter@gmail.com</authorEmail>
     <authorUrl>www.waltercedric.com</authorUrl>
-    <version>2.5.5</version>
+    <version>2.5.6</version>
     <description>Random Tags Module show a number of tags randomly.</description>
     <files>
         <filename module="mod_cedRandomTags">mod_cedRandomTags.php</filename>

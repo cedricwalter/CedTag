@@ -9,11 +9,12 @@ defined('_JEXEC') or die('Restricted access');
 ?>
 <?php if (isset($this->cloud) && !empty($this->cloud)) { ?>
 <div class="wordle">
-    <div class="title">
-        <?php echo JText::_('All Tags');?>
-    </div>
+    <h1><?php echo JText::_('COM_CEDTAG_WORDLE_H1');?></h1>
+    <h2><?php echo JText::_('COM_CEDTAG_WORDLE_H2');?></h2>
+    <h3><?php echo JText::_('COM_CEDTAG_WORDLE_H3');?></h3>
+
     <div class="legend">
-        <?php echo JText::_('A tag is like a subject or category. This page shows all tags in weighted order. The bigger the text, the more active the tag is.');?>
+        <?php echo JText::_('COM_CEDTAG_WORDLE_TEXT');?>
     </div>
     <div class="cloud">
         <img usemap="#mymap" src="data:image/png;base64,<?php echo $this->img64 ?>" border="0"/>
@@ -21,12 +22,11 @@ defined('_JEXEC') or die('Restricted access');
             <?php foreach ($this->cloud->get_image_map() as $map): ?>
             <area shape="rect"
                   coords="<?php echo $map[1]->get_map_coords() ?>"
-                  onclick="alert('You clicked: <?php echo $map[0] ?>');"
+                  onmouseover="cedric"
+                  title="<?php echo $map[0] ?>"
+                  href="index.php/cedtag/<?php echo $map[0] ?>"
                 />
             <?php endforeach ?>
-
-
-            <!--  href="<?php echo $map[3] ?>" -->
         </map>
     </div>
     <div class="copyright">

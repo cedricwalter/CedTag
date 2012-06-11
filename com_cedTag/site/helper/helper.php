@@ -10,7 +10,7 @@ defined('_JEXEC') or die('Restricted access');
 
 require_once dirname(__FILE__) . '/FrequencyMapping.php';
 require_once dirname(__FILE__) . '/themes.php';
-
+jimport('joomla.error.log');
 class CedTagsHelper
 {
 
@@ -263,6 +263,12 @@ class CedTagsHelper
         //TagCanvas.Start('cedMostReadTags1','cedMostReadTags2', oopts);
         //TagCanvas.Start('cedMostPopularTags1','cedMostPopularTags2', oopts);
 
+    }
+
+    static function log($comment)
+    {
+        JLog::getInstance("cedTag.php")->addEntry(array(
+            'comment' => 'JError::handleCallback() is deprecated.'));
     }
 
 

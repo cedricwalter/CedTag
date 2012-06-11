@@ -131,19 +131,18 @@ class plgContentCedTags extends JPlugin
             }
             $CedTagSuggest->addJs($tagIt, $id);
             $tagResult = '<div class="cedtagplugin">';
-            $tagResult .= ' <div class="title">' . JText::_('TAGS:') . '</div>';
-            $tagResult .= ' <div>' . JText::_('There is 4 ways to insert a tag after inputting some text: comma, enter, selecting an auto-complete option, or de-focusing the widget. You can <ul><li>Enter tags with space,</li><li>Cut and paste list of tags separated by comma and hit enter.</li></ul>') . '</div>';
+            $tagResult .= ' <div class="title">' . JText::_('PLG_CONTENT_CEDTAGS_ARTICLE_TAGGED') . '</div>';
+            $tagResult .= ' <div>' . JText::_('PLG_CONTENT_CEDTAGS_DOCUMENTATION') . '</div>';
             $tagResult .= ' <ul id="tags' . $id . '" class="tags"></ul>';
             $tagResult .= '</div>';
-        }
-        else {
+        } else {
             $htmlList = "";
             foreach ($tags as $tag) {
                 $htmlList .= '<li><a href="' . $tag->link . '" rel="tag" title="' . $tag->title . '" >' . $tag->tag . '</a></li> ';
             }
             $tagResult = '<div class="cedtag" />';
             if ($showTagTitle) {
-                $tagResult .= ' <div class="title">' . JText::_('TAGS:') . '</div >';
+                $tagResult .= ' <div class="title">' . JText::_('PLG_CONTENT_CEDTAGS_ARTICLE_TAGGED') . '</div >';
             }
             $tagResult .= ' <ul class="cedtag" > ' . $htmlList . '</ul >';
             $tagResult .= '</div > ';
@@ -154,8 +153,7 @@ class plgContentCedTags extends JPlugin
         //2 Display at both position
         if ($position == 1) {
             $text = $tagResult . $text;
-        }
-        else {
+        } else {
             if ($position == 2) {
                 // Both before and after Text
                 $text = $tagResult . $text . $tagResult;
@@ -167,93 +165,105 @@ class plgContentCedTags extends JPlugin
 
         $view = JRequest :: getVar('view');
         $showRelatedArticles = CedTagsHelper::param('RelatedArticlesByTags', 0);
-        if ($showRelatedArticles && !empty($termIds) && ($view == 'article')) {
-            $text .= $this->showRelatedArticlesByTags($id, $termIds);
+        if ($showRelatedArticles && !empty($tags) && ($view == 'article')) {
+            $text .= $this->showRelatedArticlesByTags($id, $tags);
         }
 
         return true;
     }
 
 
-    private function showRelatedArticlesByTags($articleId, $termIds)
+    private function showRelatedArticlesByTags($id, $tags)
     {
         $count = CedTagsHelper::param('RelatedArticlesCountByTags', 10);
         $relatedArticlesTitle = CedTagsHelper::param('RelatedArticlesTitleByTags', "Related Articles");
         //$max=max(intval($relatedArticlesCount),array_count_values($termIds));
 
         //find the unique article ids
-        $cids = $this->getUniqueArticleId($termIds, $articleId);
+        $cids = $this->getUniqueArticleId($tags, $id);
 
-        $dbo = JFactory::getDBO();
-        $nullDate = $dbo->getNullDate();
+        $html = "";
+        if (is_array($cids) && sizeof($cids) > 0) {
 
-        $date = JFactory::getDate();
-        $now = JDate::getInstance()->toSql($date);
+            $dbo = JFactory::getDBO();
+            $nullDate = $dbo->getNullDate();
 
-        $query = $dbo->getQuery(true);
-        $query->select('a . id');
-        $query->select('a . title');
-        $query->select('a . alias');
-        $query->select('a . access');
-        $query->select('CASE WHEN CHAR_LENGTH(a . alias) THEN CONCAT_WS(":", a . id, a . alias) ELSE a . id END as slug');
-        $query->select('CASE WHEN CHAR_LENGTH(cc . alias) THEN CONCAT_WS(":", cc . id, cc . alias) ELSE cc . id END as catslug');
+            $date = JFactory::getDate();
+            $now = JDate::getInstance()->toSql($date);
 
-        $query->from('#__content AS a');
+            $query = $dbo->getQuery(true);
+            $query->select('a . id');
+            $query->select('a . title');
+            $query->select('a . alias');
+            $query->select('a . access');
+            $query->select('CASE WHEN CHAR_LENGTH(a . alias) THEN CONCAT_WS(":", a . id, a . alias) ELSE a . id END as slug');
+            $query->select('CASE WHEN CHAR_LENGTH(cc . alias) THEN CONCAT_WS(":", cc . id, cc . alias) ELSE cc . id END as catslug');
 
-        $query->innerJoin('#__categories AS cc ON cc.id = a.catid');
-        $query->where('a.id in(' . @implode(',', $cids) . ')');
-        $query->where('a.state = 1');
-        $query->where('( a.publish_up = ' . $dbo->Quote($nullDate) . ' OR a.publish_up <= ' . $dbo->Quote($now) . ' )');
-        $query->where('( a.publish_down = ' . $dbo->Quote($nullDate) . ' OR a.publish_down >= ' . $dbo->Quote($now) . ' )');
-        $query->where('cc.published = 1');
+            $query->from('#__content AS a');
 
-        $dbo->setQuery($query, 0, $count);
-        $rows = $dbo->loadObjectList();
+            $query->innerJoin('#__categories AS cc ON cc.id = a.catid');
+            $query->where('a.id in(' . @implode(',', $cids) . ')');
+            $query->where('a.state = 1');
+            $query->where('( a.publish_up = ' . $dbo->Quote($nullDate) . ' OR a.publish_up <= ' . $dbo->Quote($now) . ' )');
+            $query->where('( a.publish_down = ' . $dbo->Quote($nullDate) . ' OR a.publish_down >= ' . $dbo->Quote($now) . ' )');
+            $query->where('cc.published = 1');
 
-        if (empty($rows)) {
-            return '';
-        }
-        $user = JFactory::getUser();
-        $aid = $user->get('aid', 0);
+            $dbo->setQuery($query, 0, $count);
+            $queryDump = $query->dump();
+            $rows = $dbo->loadObjectList();
 
-        $html = '
-        <div class="relateditemsbytags">' . $relatedArticlesTitle . '</div><ul class="relateditems">';
-        $link = "";
-        foreach ($rows as $row) {
-
-            if ($row->access <= $aid) {
-                $link = JRoute::_(ContentHelperRoute::getArticleRoute($row->slug, $row->catslug, $row->sectionid));
-            } else {
-                $link = JRoute::_('index.php?option=com_user&view=login');
+            if (empty($rows)) {
+                return '';
             }
-            $html .= '<li> <a href="' . $link . '">' . htmlspecialchars($row->title) . '</a></li>';
-        }
-        $html .= '</ul></div>';
-        return $html;
+            $user = JFactory::getUser();
+            $aid = $user->get('aid', 0);
 
+            $html = '
+                    <div class="relateditemsbytags">' . $relatedArticlesTitle . '</div>
+                    <ul class="relateditems">';
+            $link = "";
+            foreach ($rows as $row) {
+
+                if ($row->access <= $aid) {
+                    $link = JRoute::_(ContentHelperRoute::getArticleRoute($row->slug, $row->catslug, $row->sectionid));
+                } else {
+                    $link = JRoute::_('index.php?option=com_user&view=login');
+                }
+                $html .= '<li> <a href="' . $link . '">' . htmlspecialchars($row->title) . '</a></li>';
+            }
+            $html .= '</ul></div>';
+
+        }
+        return $html;
     }
 
     /**
-     * @param $termIds
-     * @param $id the store id.
+     * @param $tags
+     * @param $id
      * @return mixed
      */
-    private
-    function getUniqueArticleId($termIds, $id)
+    private function getUniqueArticleId($tags, $id)
     {
         $dbo = JFactory::getDBO();
         $query = $dbo->getQuery(true);
 
         $relatedArticlesCount = 0;
-        $max = max(intval($relatedArticlesCount), count($termIds));
-        $termIds = array_slice($termIds, 0, $max);
-        $termIdsCondition = @implode(',', $termIds);
+        $max = max(intval($relatedArticlesCount), count($tags));
+        $tags = array_slice($tags, 0, $max);
+
+        $tagIds = array();
+        foreach ($tags as $tag) {
+            $tagIds[] = $tag->id;
+        }
+        $tagIdsCondition = @implode(',', $tagIds);
 
         $query->select('distinct cid');
         $query->from('#__cedtag_term_content');
-        $query->where("tid in(' . $termIdsCondition . ')");
+        $query->where('tid in('.$tagIdsCondition.')');
         $query->where('cid<>' . $id);
         $dbo->setQuery($query);
+        $text = $query->dump();
+
         $ids = $dbo->loadColumn(0);
         return $ids;
     }

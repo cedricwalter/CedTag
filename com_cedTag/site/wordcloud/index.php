@@ -15,26 +15,42 @@ The automated notification of Joomla! core and extension updates is a new built-
 A major usability enhancement, this auto-updating feature eliminates the need to manually transfer and replace files on the server, converting a time-consuming, error-prone process into a seamless, effective, and time-saving experience.
 EOT;
 
+/*
 $full_text =
     array(
-        array('word' => "cedric", 'count' => "25", 'title' => "cedric", 'link' => "cedric"),
-        array('word' => "walter", 'count' => "5", 'title' => "cedric", 'link' => "cedric"),
-        array('word' => "toto", 'count' => "12", 'title' => "1", 'link' => "cedric"),
-        array('word' => "cedric", 'count' => "2", 'title' => "cedric", 'link' => "cedric"),
-        array('word' => "aaaa", 'count' => "4", 'title' => "cedric", 'link' => "cedric"),
-        array('word' => "bbbbb", 'count' => "25", 'title' => "cedric", 'link' => "cedric"),
-        array('word' => "rrrrrr", 'count' => "8", 'title' => "cedric", 'link' => "cedric"),
+        array('word' => "cedric", 'count' => "0", 'title' => "cedric", 'link' => "cedric"),
+        array('word' => "cedric", 'count' => "0", 'title' => "cedric", 'link' => "cedric"),
+        array('word' => "cedric", 'count' => "0", 'title' => "cedric", 'link' => "cedric"),
+        array('word' => "cedric", 'count' => "0", 'title' => "cedric", 'link' => "cedric"),
+        array('word' => "aaaa", 'count' => "0", 'title' => "cedric", 'link' => "cedric"),
+        array('word' => "bbbbb", 'count' => "8", 'title' => "cedric", 'link' => "cedric"),
+        array('word' => "bbbbb", 'count' => "0", 'title' => "cedric", 'link' => "cedric"),
+        array('word' => "bbbbb", 'count' => "0", 'title' => "cedric", 'link' => "cedric"),
+        array('word' => "bbbbb", 'count' => "5", 'title' => "cedric", 'link' => "cedric"),
+        array('word' => "rrrrrr", 'count' => "2", 'title' => "cedric", 'link' => "cedric"),
 
+    );
+*/
+
+$palettes = array(
+    'aqua' => array('BED661', '89E894', '78D5E3', '7AF5F5', '34DDDD', '93E2D5'),
+    'yellow/blue' => array('FFCC00', 'CCCCCC', '666699'),
+    'grey' => array('87907D', 'AAB6A2', '555555', '666666'),
+    'brown' => array('CC6600', 'FFFBD0', 'FF9900', 'C13100'),
+    'army' => array('595F23', '829F53', 'A2B964', '5F1E02', 'E15417', 'FCF141'),
+    'pastel' => array('EF597B', 'FF6D31', '73B66B', 'FFCB18', '29A2C6'),
+    'red' => array('FFFF66', 'FFCC00', 'FF9900', 'FF0000'),
 );
 
-
-$yellowRed = array('FFA700', 'FFDF00', 'FF4F00', 'FFEE73');
 
 $font = dirname(__FILE__) . '/Arial.ttf';
 $width = 600;
 $height = 600;
-$cloud = new WordCloud($width, $height, $font, $full_text);
-$palette = Palette::get_palette_from_hex($cloud->get_image(), array('CC6600', 'FFFBD0', 'FF9900', 'C13100'));
+//$width, $height, $font, $text = null, $imagecolor = array(0, 0, 0, 127), $words_limit = null, $vertical_freq = FrequencyTable::WORDS_MAINLY_HORIZONTAL
+$cloud = new WordCloud(16, 72, $width, $height, $font, $full_text);
+
+
+$palette = Palette::get_palette_from_hex($cloud->get_image(), $palettes['grey'], 0, FrequencyTable::WORDS_MAINLY_HORIZONTAL);
 $cloud->render($palette);
 
 // Render the cloud in a temporary file, and return its base64-encoded content
@@ -47,10 +63,7 @@ imagedestroy($cloud->get_image());
 
 <img usemap="#mymap" src="data:image/png;base64,<?php echo $img64 ?>" border="0"/>
 <map name="mymap">
-<?php foreach($cloud->get_image_map() as $map): ?>
-<area
-    style="height: 600px; width: 600px"
-
-    shape="rect" coords="<?php echo $map[1]->get_map_coords() ?>" onclick="alert('You clicked: <?php echo $map[0] ?>');" />
-<?php endforeach ?>
+    <?php foreach ($cloud->get_image_map() as $map): ?>
+    <area shape="rect" coords="<?php echo $map[1]->get_map_coords() ?>" onclick="alert('You clicked: <?php echo $map[0] ?>');"/>
+    <?php endforeach ?>
 </map>

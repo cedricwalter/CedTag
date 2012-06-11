@@ -74,8 +74,6 @@ class CedTagController extends JController
         $CedTagsHelper = new CedTagsHelper();
 
         //here in backend it is not authorized beacuse not logger in
-
-//ewdwewe
         if ($CedTagsHelper->canUserDoTagOperations($id)) { }
             $tags = JFactory::getApplication()->input->get('tags', '', 'string');
             $combined = array();

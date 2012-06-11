@@ -21,7 +21,12 @@ class WordCloud
     private $image;
     private $imagecolor;
 
-    public function __construct($width, $height, $font, $text = null, $imagecolor = array(0, 0, 0, 127), $words_limit = null, $vertical_freq = FrequencyTable::WORDS_MAINLY_HORIZONTAL)
+    public function __construct(
+        $minFontSize, $maxFontSize,
+        $width, $height,
+        $font, $text = null,
+        $imagecolor = array(0, 0, 0, 127), $words_limit = null,
+        $vertical_freq = FrequencyTable::WORDS_MAINLY_HORIZONTAL)
     {
         $this->width = $width;
         $this->height = $height;
@@ -29,23 +34,29 @@ class WordCloud
         $this->imagecolor = $imagecolor;
 
         $this->mask = new Mask();
+
+        $this->table = new FrequencyTable($minFontSize, $maxFontSize, $font, '', $vertical_freq, $words_limit); //, $text);
+        $this->table->setMinFontSize($minFontSize);
+        $this->table->setMaxFontSize($maxFontSize);
+
         if (is_array($text)) {
-            $this->table = new FrequencyTable($font, '', $vertical_freq, $words_limit); //, $text);
             foreach ($text as $row) {
                 if (!isset($row['title'])) $row['title'] = null;
                 $this->table->add_word($row['word'], $row['count'], $row['title'], $row['link']);
             }
         } else {
-            $this->table = new FrequencyTable($font, $text, $vertical_freq, $words_limit);
+            $this->table->processText($text);
         }
-        $this->table->setMinFontSize(10);
-        $this->table->setMaxFontSize(72);
-        // $this->table = new FrequencyTable($font);//, $text);
-        // $this->table->add_word('word1');
-        // $this->table->add_word('word2', 2);
-        // $this->table->add_word('word3');
-        // $this->table->add_word('word4', 4);
-        // $this->table->add_word('word5');
+        $this->table->buildCloud();
+
+
+        /*
+        $this->table = new FrequencyTable($font);//, $text);
+        $this->table->add_word('word1');
+        $this->table->add_word('word2', 2);
+        $this->table->add_word('word3');
+        $this->table->add_word('word4', 4);
+        $this->table->add_word('word5');*/
         // for($i = 6; $i <= 20; $i++) $this->table->add_word('word'.$i, $i % 5);
 
         $this->image = imagecreatetruecolor($width, $height);
@@ -72,8 +83,7 @@ class WordCloud
             if ($val->angle == 0) {
                 $cx = $this->width / 3;
                 $cy = $this->height / 2;
-            }
-            else {
+            } else {
                 $cx = $this->width / 3 + rand(0, $this->width / 10);
                 $cy = $this->height / 2 + rand(-$this->height / 10, $this->height / 10);
             }
@@ -135,7 +145,7 @@ class WordCloud
         $i = 0;
         foreach ($words as $key => $val) {
             $map[] = array($key, $boxes[$i], $val->title, $val->link);
-            $i += 1;
+            $i++;
         }
 
         return $map;

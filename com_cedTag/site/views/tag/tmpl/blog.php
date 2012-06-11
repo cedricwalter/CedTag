@@ -74,16 +74,12 @@ function readmore($item, $user)
             echo('<tr><td>' . ads_bottom_content . '</td></tr>');
         }
         ?>
-        <td>
-            <div align="center"><?php echo $this->pagination->getPagesLinks(); ?>
-            </div>
-        </td>
     </tr>
     <!-- Tags for Joomla by www.waltercedric.com -->
     </tbody>
 
 </table>
-<?php if (($comContentParams->def('show_pagination', 1) == 1  || ($comContentParams->get('show_pagination') == 2)) && ($comContentParams->get('pages.total') > 1)) : ?>
+<?php if (($comContentParams->def('show_pagination', 1) == 1  || ($comContentParams->get('show_pagination') == 2)) && ($this->pagination->get('pages.total') > 1)) : ?>
 		<div class="pagination">
 						<?php  if ($comContentParams->def('show_pagination_results', 1)) : ?>
 						<p class="counter">
