@@ -32,6 +32,7 @@ class CedTagModelTag extends CedTagModelTags
     var $_total = null;
 
     var $_termExist = false;
+    var $_termArticles = false;
 
     var $_pagination = null;
 
@@ -53,6 +54,20 @@ class CedTagModelTag extends CedTagModelTags
         return $this->_termExist;
     }
 
+    /**
+     * Return the number of articles having the tag
+     */
+    function getTermArticles()
+    {
+        return $this->_termArticles;
+    }
+
+    function setTermArticles($termArticles)
+    {
+        $this->_termArticles = $termArticles;
+    }
+
+
     function getData()
     {
         return $this->_data;
@@ -63,16 +78,16 @@ class CedTagModelTag extends CedTagModelTags
         return $this->_tagDescription;
     }
 
-    function _loadData()
+    private function _loadData()
     {
         $query = $this->_buildQuery();
-        if ($this->_termExist) {
-            $limitstart = JFactory::getApplication()->input->get('limitstart', 0, 'int');
-            $this->_data = $this->_getList($query, $limitstart, $this->_defaultLimit);
+        if ($this->getTermExist()) {
+            $limitStart = JFactory::getApplication()->input->get('limitstart', 0, 'int');
+            $this->_data = $this->_getList($query, $limitStart, $this->_defaultLimit);
         }
     }
 
-    function getTotal()
+    public function getTotal()
     {
         return $this->_total;
     }
@@ -81,15 +96,15 @@ class CedTagModelTag extends CedTagModelTags
     {
         // Lets load the content if it doesn't already exist
         if (empty($this->_pagination)) {
-            $limitstart = JFactory::getApplication()->input->get('limitstart', 0, 'int');
+            $limitStart = JFactory::getApplication()->input->get('limitstart', 0, 'int');
             jimport('joomla.html.pagination');
-            $this->_pagination = new JPagination($this->getTotal(), $limitstart, $this->_defaultLimit);
+            $this->_pagination = new JPagination($this->getTotal(), $limitStart, $this->_defaultLimit);
         }
 
         return $this->_pagination;
     }
 
-    function _buildQuery()
+    private function _buildQuery()
     {
         $tag = JRequest::getString('tag', null);
 
@@ -107,17 +122,7 @@ class CedTagModelTag extends CedTagModelTags
         $ids = $this->_ids;
         if (!isset($this->_tagDescription)) {
 
-            $query = $dbo->getQuery(true);
-            $query->from('#__cedtag_term as t');
-            $query->select('id AS id');
-            $query->select('description AS description');
-            $query->where('binary t.name=' . $dbo->quote($tag));
-            $query->where("t.published='1'");
-            $dbo->setQuery($query);
-            $this->_tagDescription = $dbo->loadResult();
-
-            $tagObj = $dbo->loadObject();
-            $this->_tagDescription = $tagObj->description;
+            $tagObj = $this->getTabObjectByTagName($tag);
 
             if (isset($tagObj) && $tagObj->id) {
                 $this->_termExist = true;
@@ -126,6 +131,7 @@ class CedTagModelTag extends CedTagModelTags
                 return '';
             }
 
+            $this->_tagDescription = $tagObj->description;
             $this->incrementHitsForTagId($tagObj->id);
 
             $this->_total = $this->countNumberOfArticleForTagId($tagObj->id);
@@ -139,10 +145,7 @@ class CedTagModelTag extends CedTagModelTags
             $this->_ids = $ids;
         }
 
-        if (empty($ids)) {
-            JError::raiseError(404, JText::_("Could not find tag \"$tag\""));
-        }
-
+        $this->setTermArticles(!empty($ids));
 
         $nullDate = $dbo->getNullDate();
         jimport('joomla.utilities.date');
@@ -178,7 +181,24 @@ class CedTagModelTag extends CedTagModelTags
 
     }
 
-    function _buildOrderBy($order)
+    private function getTabObjectByTagName($tag)
+    {
+        $dbo = JFactory::getDBO();
+        $query = $dbo->getQuery(true);
+
+        $query->from('#__cedtag_term as t');
+        $query->select('id AS id');
+        $query->select('description AS description');
+        $query->where('binary t.name=' . $dbo->quote($tag));
+        $query->where("t.published='1'");
+        $dbo->setQuery($query);
+        $this->_tagDescription = $dbo->loadResult();
+
+        $tagObj = $dbo->loadObject();
+        return $tagObj;
+    }
+
+    private function _buildOrderBy($order)
     {
         switch ($order) {
             case 'date' :

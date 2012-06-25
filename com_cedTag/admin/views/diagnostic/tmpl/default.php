@@ -16,6 +16,7 @@ JHtml::_('behavior.framework');
 JHtml::_('behavior.modal', 'a.modal');
 
 require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
+
 ?>
 
 <div class="tagpanel">
@@ -32,14 +33,16 @@ require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
         </tr>
 
         </thead>
+        <?php foreach ($this->diagnostics as $diagnostic) { ?>
         <tr>
-            <td><?php echo JText::_('Curl') ?></td>
-            <td><?php echo JText::_('Optionnal') ?></td>
-            <td style="background-color: <?php echo $this->diagnostic->curl ? 'green;' : 'red;' ?>"><?php echo $this->diagnostic->curl ? JText::_('JYES') : JText::_('JNO') ?></td>
-            <td><?php echo JText::_('JYES') ?></td>
-            <td><?php echo JText::_('WikiPedia import of terms descriptions') ?></td>
-            <td><?php echo $this->diagnostic->curl == 0 ? JText::_('Required Root access or contacting your hosting company to activate cURL. cURL is a computer software project providing a library and command-line tool for transferring data using various protocols. The cURL project produces two products, libcurl and cURL. It was first released in 1997.') : '' ?></td>
+            <td><?php echo $diagnostic->title ?></td>
+            <td><?php echo $diagnostic->optionnal ?></td>
+            <td style="background-color: <?php echo $diagnostic->color ?>"><?php echo $diagnostic->status ?></td>
+            <td><?php echo $diagnostic->recommendedValue ?></td>
+            <td><?php echo $diagnostic->usedBy ?></td>
+            <td><?php echo $diagnostic->resolution ?></td>
         </tr>
+        <?php } ?>
 
     </table>
 

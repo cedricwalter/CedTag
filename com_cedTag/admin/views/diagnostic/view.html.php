@@ -19,8 +19,9 @@ class CedTagViewDiagnostic extends JView
     {
         $this->addToolbar();
 
-        $diagnostic = $this->get('diagnostic');
-        $this->assign('diagnostic', $diagnostic);
+        //get Model
+        $diagnostics = $this->get('diagnostic');
+        $this->assign('diagnostics', $diagnostics);
 
         parent::display($tpl);
     }

@@ -104,8 +104,8 @@ class CedTagModelImport extends CedTagModelTag
     {
         $dbo = JFactory::getDbo();
 
-        $queryCopyTagsIntoTerm = "INSERT INTO j17_cedtag_term (id,name,hits,weight,created) SELECT id, tagname, hits, weight, created FROM jos_tag_tags;";
-        $queryTagsAssociationToContentInfoTermContent = "INSERT INTO j17_cedtag_term_content (tid,cid) SELECT tagid,contentid FROM jos_tag_category_map having count( Col1) > 1);";
+        $queryCopyTagsIntoTerm = "INSERT INTO #__cedtag_term (id,name,hits,weight,created) SELECT id, tagname, hits, weight, created FROM #__tag_tags;";
+        $queryTagsAssociationToContentInfoTermContent = "INSERT INTO #__cedtag_term_content (tid,cid) SELECT tid,cid FROM #__tag_term_content;";
 
         try {
             $dbo->setQuery($queryCopyTagsIntoTerm);

@@ -22,7 +22,6 @@ defined('_JEXEC') or die('Restricted access');
             <?php foreach ($this->cloud->get_image_map() as $map): ?>
             <area shape="rect"
                   coords="<?php echo $map[1]->get_map_coords() ?>"
-                  onmouseover="cedric"
                   title="<?php echo $map[0] ?>"
                   href="index.php/cedtag/<?php echo $map[0] ?>"
                 />
@@ -34,5 +33,6 @@ defined('_JEXEC') or die('Restricted access');
            style="font: normal normal normal 10px/normal arial; color: rgb(187, 187, 187); border-bottom-style: none; border-bottom-width: inherit; border-bottom-color: inherit; text-decoration: none; "
            onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'" target="_blank"><b>cedTag</b></a>
     </div>
+    <!-- CedTag Free Tagging system for Joomla by www.waltercedric.com -->
 </div>
 <?php } ?>

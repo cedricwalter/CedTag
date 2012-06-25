@@ -16,7 +16,7 @@ $CedTagSuggest->addJs($this->tags, $id);
 
 <h1><?php echo JText::_('Joomla cedTag');?></h1>
 
-<form action="<?php echo JRoute::_('index.php'); ?>" method="post" name="adminForm" id="adminForm">
+<form method="post" name="adminForm" id="adminForm">
     <?php
     echo JText::_('You type tags and when you hit Enter, Comma or Space they will become a little nice formatted box with the value. You can click on the boxes to remove them (a little x on the corner).');
     echo JText::_('You can also remove already typed tags with Backspace.');

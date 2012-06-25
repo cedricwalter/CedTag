@@ -11,7 +11,7 @@ require_once JPATH_COMPONENT_SITE . '/helper/themes.php';
 
 $tag = JRequest::getVar('tag', null);
 
-$tagKeyword = JText::_('Posts Tagged ').JText::_('‘') . $tag.JText::_('’');
+$tagKeyword = JText::_('Posts Tagged ') . JText::_('‘') . $tag . JText::_('’');
 $config = JFactory::getConfig();
 
 $params = JComponentHelper::getParams('com_cedtag');
@@ -23,10 +23,10 @@ $showTagDescription = $params->get('description');
 
 function readmore($item, $user)
 {
-   // if ($item->access <= $user->get('aid', 0)) {
-        //$item->readmore_link = JRoute::_('index.php?view=article&catid='.$this->category->slug.'&id='.$item->slug);
-        $item->readmore_link = JRoute::_(ContentHelperRoute::getArticleRoute($item->slug, $item->catslug));
-        $item->readmore_register = false;
+    // if ($item->access <= $user->get('aid', 0)) {
+    //$item->readmore_link = JRoute::_('index.php?view=article&catid='.$this->category->slug.'&id='.$item->slug);
+    $item->readmore_link = JRoute::_(ContentHelperRoute::getArticleRoute($item->slug, $item->catslug));
+    $item->readmore_register = false;
     /*}
     else
     {
@@ -42,7 +42,7 @@ function readmore($item, $user)
 
 ?>
 
-<h1><?php echo JText::_('Posts Tagged')." ".JText::_('‘') . $tag.JText::_('’') ?></h1>
+<h1><?php echo JText::_('Posts Tagged') . " " . JText::_('‘') . $tag . JText::_('’') ?></h1>
 
 <table class="blog" cellpadding="0" cellspacing="0">
     <tbody>
@@ -75,21 +75,21 @@ function readmore($item, $user)
         }
         ?>
     </tr>
-    <!-- Tags for Joomla by www.waltercedric.com -->
+    <!-- CedTag Free Tagging system for Joomla by www.waltercedric.com -->
     </tbody>
 
 </table>
-<?php if (($comContentParams->def('show_pagination', 1) == 1  || ($comContentParams->get('show_pagination') == 2)) && ($this->pagination->get('pages.total') > 1)) : ?>
-		<div class="pagination">
-						<?php  if ($comContentParams->def('show_pagination_results', 1)) : ?>
-						<p class="counter">
-								<?php echo $this->pagination->getPagesCounter(); ?>
-						</p>
+<?php if (($comContentParams->def('show_pagination', 1) == 1 || ($comContentParams->get('show_pagination') == 2)) && ($this->pagination->get('pages.total') > 1)) : ?>
+<div class="pagination">
+    <?php  if ($comContentParams->def('show_pagination_results', 1)) : ?>
+    <p class="counter">
+        <?php echo $this->pagination->getPagesCounter(); ?>
+    </p>
 
-				<?php endif; ?>
-				<?php echo $this->pagination->getPagesLinks(); ?>
-		</div>
-<?php  endif; ?>
+    <?php endif; ?>
+    <?php echo $this->pagination->getPagesLinks(); ?>
+</div>
+<?php endif; ?>
 
 
 <?php
@@ -100,10 +100,9 @@ if ($this->tagDescription) {
 } else {
     $document->setDescription($cedTagsHelper->truncate($tag));
 }
-$document->setTitle( JText::_('Items tagged with ') . $tag . ' | ' . $config->getValue('sitename'));
+$document->setTitle(JText::_('Items tagged with ') . $tag . ' | ' . $config->getValue('sitename'));
 $document->setMetadata('keywords', $tag);
 $CedTagThemes = new CedTagThemes();
 $CedTagThemes->addCss();
-
 
 ?>

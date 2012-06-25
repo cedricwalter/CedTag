@@ -1,4 +1,8 @@
 <?php
+
+// Check to ensure this file is included in Joomla!
+defined('_JEXEC') or die('Restricted access');
+
 /**
  * @package Component cedTag for Joomla! 2.5
  * @author waltercedric.com
@@ -15,7 +19,6 @@ function cedtagBuildRoute(&$query)
         $segments[] = $query['tag'];
         unset($query['tag']);
     }
-
     if (isset($query['view'])) {
         unset($query['view']);
     }
@@ -26,6 +29,7 @@ function cedtagBuildRoute(&$query)
     if (isset($query['layout'])) {
         unset($query['layout']);
     }
+
     return $segments;
 }
 

@@ -209,23 +209,23 @@ class plgContentCedTags extends JPlugin
             $query->where('cc.published = 1');
 
             $dbo->setQuery($query, 0, $count);
-            $queryDump = $query->dump();
+            //$queryDump = $query->dump();
             $rows = $dbo->loadObjectList();
 
             if (empty($rows)) {
                 return '';
             }
             $user = JFactory::getUser();
-            $aid = $user->get('aid', 0);
+            $aid = (JVERSION < 1.6)? $user->get('aid', 0) : max ($user->getAuthorisedViewLevels());
 
-            $html = '
-                    <div class="relateditemsbytags">' . $relatedArticlesTitle . '</div>
+            $html = '<div class="relateditemsbytags">' . $relatedArticlesTitle . '</div>
+                    <div>
                     <ul class="relateditems">';
-            $link = "";
+
             foreach ($rows as $row) {
 
                 if ($row->access <= $aid) {
-                    $link = JRoute::_(ContentHelperRoute::getArticleRoute($row->slug, $row->catslug, $row->sectionid));
+                    $link = (JVERSION < 1.6)? JRoute::_(ContentHelperRoute::getArticleRoute($row->slug, $row->catslug, $row->sectionid)) : JRoute::_(ContentHelperRoute::getArticleRoute($row->slug, $row->catslug));
                 } else {
                     $link = JRoute::_('index.php?option=com_user&view=login');
                 }

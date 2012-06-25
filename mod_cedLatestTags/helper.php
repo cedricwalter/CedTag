@@ -20,7 +20,7 @@ class modCedLatestTagsHelper
         $query	= $dbo->getQuery(true);
 
         $query->select('count(*) as frequency');
-        $query->select('name as name');
+        $query->select('t.name as name');
         $query->select('t.hits as hits');
         $query->select('t.created as created');
 

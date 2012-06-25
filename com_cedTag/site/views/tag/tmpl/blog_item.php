@@ -8,7 +8,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 $params = JComponentHelper::getParams('com_cedtag');
-$comContentParams = JComponentHelper::getParams('com_content');
+    $comContentParams   = JComponentHelper::getParams('com_content');
 
 $showMeta = $params->get('contentMeta', '1');
 
@@ -74,4 +74,5 @@ if ($readmore) {
     </a>
     <?php }?>
     <div class="item-separator"></div>
+    <?php //echo $this->item->event->afterDisplayContent; ?>
 </div>

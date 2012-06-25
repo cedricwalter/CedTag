@@ -17,7 +17,8 @@ class CedTagViewFrontpage extends JView
 
     function defaultTpl($tpl = null)
     {
-        JToolBarHelper::title(JText::_('CedTags'), 'tag.png');
+        JToolBarHelper::title(JText::_('CedTag'), 'tag.png'); //JURI::root().'media/com_cedtag/images/tag_logo48.png'
+        //JToolBarHelper::help('JHELP_SITE_SYSTEM_INFORMATION');
         parent::display($tpl);
     }
 }

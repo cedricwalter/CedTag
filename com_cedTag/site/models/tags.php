@@ -46,9 +46,9 @@ class CedTagModelTags extends JModel
                         $termIds[] = $term->id;
                     }
                 }
-                $hrefTitle = $ct . ' items tagged with ' . $term->name;
+                $hrefTitle = $ct . JText::_('COM_CEDTAG_HOVER') . $term->name;
                 if ($displayHitsNumber) {
-                    $hrefTitle .= ' | Hits:' . $term->hits;
+                    $hrefTitle .= JText::_('COM_CEDTAG_HOVER2') . $term->hits;
                 }
 
                 $tag = new stdClass();
@@ -88,9 +88,10 @@ class CedTagModelTags extends JModel
         $query->select('tagterm.id');
         $query->select('tagterm.name');
         $query->select('tagterm.hits');
-        $query->leftJoin('#__cedtag_term_content as tagtermcontent on tagtermcontent.tid=tagterm.id');
 
-        $query->from('#__cedtag_term as tagterm');
+        $query->leftJoin(' #__cedtag_term_content as tagtermcontent on tagtermcontent.tid=tagterm.id ');
+
+        $query->from(' #__cedtag_term as tagterm');
 
         $query->where('tagtermcontent . cid = ' . $dbo->quote($id));
         $query->where('tagterm.published=1');
@@ -100,6 +101,9 @@ class CedTagModelTags extends JModel
         $query->order('tagterm.name');
 
         $dbo->setQuery($query);
+
+        $t = $query->dump();
+
         $terms = $dbo->loadObjectList();
         return $terms;
     }

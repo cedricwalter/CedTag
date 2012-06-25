@@ -59,7 +59,7 @@ $config = JFactory::getConfig();
         echo('<tr><td>' . $bottomAds . '</td></tr>');
     }
     ?>
-    <!-- Tags for Joomla by www.waltercedric.com -->
+    <!-- CedTag Free Tagging system for Joomla by www.waltercedric.com -->
 </table>
 <div class="pagination">
     <p class="counter">

@@ -96,11 +96,10 @@ class CedTagModelAllTags extends JModel
                     $selectedPalette
                 );
             }
-
             $cloud->render($palette);
 
             // Render the cloud in a temporary file, and return its base64-encoded content
-            $file = JPATH_SITE . "/cache/com_cedtag/".md5($params).".png";
+            $file = JPATH_SITE . "/cache/com_cedtag/wordle".uniqid().".png";
             imagepng($cloud->get_image(), $file);
             $img64 = base64_encode(file_get_contents($file));
             unlink($file);

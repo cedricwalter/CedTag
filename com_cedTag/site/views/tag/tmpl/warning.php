@@ -18,12 +18,10 @@ if ($firstWarning) {
     ?>
 
 <div class="warning">
-    <h1><?php echo JText::_('WARNING');?></h1>
-
-    <h2><?php echo JText::_($warning);?></h2>
-
 </div>
-<!-- Tags for Joomla by www.waltercedric.com -->
+<h1><?php echo $this->tag; ?></h1>
+<h2><?php echo JText::_($warning);?></h2>
+<!-- CedTag Free Tagging system for Joomla by www.waltercedric.com -->
 
 <?php
 }

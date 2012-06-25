@@ -12,9 +12,13 @@ defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.plugin.plugin');
 
+require_once JPATH_SITE . '/components/com_cedtag/helper/helper.php';
+
 
 class plgSystemCedTagSef extends JPlugin
 {
+    var $sefTagBase = null;
+
     /**
      * Constructor
      *
@@ -29,25 +33,27 @@ class plgSystemCedTagSef extends JPlugin
     public function plgSystemCedTagSef(&$subject, $config)
     {
         parent::__construct($subject, $config);
+        $this->sefTagBase = CedTagsHelper::param('sefUrlBase', 'tag');
     }
 
     public function onAfterInitialise()
     {
         $app = JFactory::getApplication();
-        if ($app->getName() != 'site') {
+        if ($app->getName() != 'site' || $app->getCfg('sef') == '0') {
             return true;
         }
+
         $uir = $_SERVER['REQUEST_URI'];
 
         if (strpos($uir, '/cedtag/index.php') !== false) {
             return true;
         }
-        if (strpos($uir, '/cedtag/') !== false && strpos($uir, '/component/cedtag/') === false) {
-            $_SERVER['REQUEST_URI'] = str_replace('/cedtag/', '/component/cedtag/', $uir);
+        if (strpos($uir, '/' . $this->sefTagBase . '/') !== false && strpos($uir, '/component/cedtag/') === false) {
+            $_SERVER['REQUEST_URI'] = str_replace('/' . $this->sefTagBase . '/', '/component/cedtag/', $uir);
             $this->prehandle($uir);
 
         } else if (strpos($uir, 'cedtag/') === 0) {
-            $_SERVER['REQUEST_URI'] = str_replace('cedtag/', 'component/cedtag/', $uir);
+            $_SERVER['REQUEST_URI'] = str_replace('' . $this->sefTagBase . '/', 'component/cedtag/', $uir);
             $this->prehandle($uir);
         }
         return true;
@@ -70,13 +76,13 @@ class plgSystemCedTagSef extends JPlugin
     public function onAfterRender()
     {
         $app = JFactory::getApplication();
-
-        if ($app->getName() != 'site') {
+        if ($app->getName() != 'site' || $app->getCfg('sef') == '0') {
             return true;
         }
+
         $buffer = JResponse::getBody();
         $regex = '#component/cedtag/#m';
-        $buffer = preg_replace($regex, 'cedtag/', $buffer);
+        $buffer = preg_replace($regex, '' . $this->sefTagBase . '/', $buffer);
         JResponse::setBody($buffer);
         return true;
     }

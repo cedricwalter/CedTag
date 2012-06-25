@@ -22,17 +22,17 @@ require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
 
     <div style="float: left;">
         <div class="icon"><a href="index.php?option=com_cedtag&controller=tag"
-                             title="<?php echo JText::_('TAG　MANAGER');?>"> <img
+                             title="<?php echo JText::_('Articles Manager');?>"> <img
             src="<? echo JURI::root() ?>/media/com_cedtag/images/article.png"
-            alt="<?php echo JText::_('TAG　MANAGER');?>"/> <span><?php echo JText::_('TAG　MANAGER');?></span></a>
+            alt="<?php echo JText::_('Articles Manager');?>"/> <span><?php echo JText::_('Articles　Manager');?></span></a>
         </div>
     </div>
     <div style="float: left;">
         <div class="icon"><a href="index.php?option=com_cedtag&controller=term"
-                             title="<?php echo JText::_('TERM MANAGER');?>"> <img
+                             title="<?php echo JText::_('Tag Manager');?>"> <img
             src="<? echo JURI::root() ?>/media/com_cedtag/images/tag.png"
             alt="<?php echo JText::_('TERM MANAGER');?>"/>
-            <span><?php echo JText::_('TERM MANAGER');?></span></a></div>
+            <span><?php echo JText::_('Tag Manager');?></span></a></div>
     </div>
 
     <?php if ($canDo->get('core.admin')) { ?>
@@ -164,16 +164,16 @@ require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
         <div class="icon">
             <a href="https://www.facebook.com/pages/C%C3%A9dric-Walter-dot-com/113977625305022"
                target="_blank"
-               title="<?php echo JText::_('Like on Facebook');?>"> <img
+               title="<?php echo JText::_('Like waltercedric.com.co on Facebook');?>"> <img
                 src="<? echo JURI::root() ?>/media/com_cedtag/images/facebook.png"/>
-                <span><?php echo JText::_('Like on Facebook');?></span></a>
+                <span><?php echo JText::_('Like Us on Facebook');?></span></a>
         </div>
     </div>
     <div style="float: left;">
         <div class="icon">
             <a href="http://twitter.com/cedricwalter"
                target="_blank"
-               title="<?php echo JText::_('Follow Me on Twitter');?>"> <img
+               title="<?php echo JText::_('Follow Me on Twitter, get the latest development news');?>"> <img
                 src="<? echo JURI::root() ?>/media/com_cedtag/images/twitter.png"/>
                 <span><?php echo JText::_('Follow Me on Twitter');?></span></a>
         </div>
@@ -184,6 +184,7 @@ require_once JPATH_COMPONENT_SITE . '/helper/helper.php';
 </div>
 
 <div class="tagversion">
+    <h1><img src="<?php echo JURI::root() ?>media/com_cedtag/images/tag_logo48.png"/>CedTag</h1>
 
     <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
     <input type="hidden" name="cmd" value="_s-xclick">

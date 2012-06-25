@@ -36,6 +36,8 @@ $CedTagThemes->addCss();
            style="font: normal normal normal 10px/normal arial; color: rgb(187, 187, 187); border-bottom-style: none; border-bottom-width: inherit; border-bottom-color: inherit; text-decoration: none; "
            onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'" target="_blank"><b>cedTag</b></a>
     </div>
+
+    <!-- CedTag Free Tagging system for Joomla by www.waltercedric.com -->
 </div>
 <?php } ?>
 

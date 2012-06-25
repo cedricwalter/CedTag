@@ -21,7 +21,16 @@ defined('_JEXEC') or die('Restricted access'); ?>
         <?php echo $item->name; ?>
     </a>
     <?php }?>
-    <div style="text-align: center;">
-     <a href="http://www.waltercedric.com" style="font: normal normal normal 10px/normal arial; color: rgb(187, 187, 187); border-bottom-style: none; border-bottom-width: initial; border-bottom-color: initial; text-decoration: none; " onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'" target="_blank"><b>cedTag</b></a>
-    </div>
+
+    <?php if (intval(CedTagsHelper::param('removeCopyright', 0)) == 0) { ?>
+        <div style="text-align: center;">
+         <a href="http://www.waltercedric.com" style="font: normal normal normal 10px/normal arial; color: rgb(187, 187, 187);
+            border-bottom-style: none; border-bottom-width: initial; border-bottom-color: initial; text-decoration: none; "
+            onmouseover="this.style.textDecoration='underline'"
+            onmouseout="this.style.textDecoration='none'"
+            target="_blank"><b>cedTag</b></a>
+        </div>
+    <?php } ?>
+
+
 </div><?php } ?>

@@ -6,7 +6,11 @@
  * @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
  **/
 // no direct access
-defined('_JEXEC') or die('Restricted access'); ?>
+defined('_JEXEC') or die('Restricted access');
+
+require_once JPATH_BASE . '/components/com_cedtag/helper/helper.php';
+
+?>
 
 <?php if (isset($list) && !empty($list)) { ?>
 <div class="tagCloud<?php echo $moduleclass_sfx; ?>">
@@ -18,7 +22,15 @@ defined('_JEXEC') or die('Restricted access'); ?>
         <?php echo $item->name; ?>
     </a>
     <?php }?>
-    <div style="text-align: center;">
-     <a href="http://www.waltercedric.com" style="font: normal normal normal 10px/normal arial; color: rgb(187, 187, 187); border-bottom-style: none; border-bottom-width: initial; border-bottom-color: initial; text-decoration: none; " onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'" target="_blank"><b>cedTag</b></a>
-    </div>
+
+    <?php if (intval(CedTagsHelper::param('removeCopyright', 0)) == 0) { ?>
+        <div style="text-align: center;">
+         <a href="http://www.waltercedric.com" style="font: normal normal normal 10px/normal arial; color: rgb(187, 187, 187);
+            border-bottom-style: none; border-bottom-width: initial; border-bottom-color: initial; text-decoration: none; "
+            onmouseover="this.style.textDecoration='underline'"
+            onmouseout="this.style.textDecoration='none'"
+            target="_blank"><b>cedTag</b></a>
+        </div>
+    <?php } ?>
+
 </div><?php } ?>

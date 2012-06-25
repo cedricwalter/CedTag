@@ -7,7 +7,7 @@
                description="Select theme, switch off for now, a work in progress">
             <option value="simple">Simple style - rounded boxes - hover glowing effect</option>
             <option value="text">Simple style - text only - hover glowing effect</option>
-
+            <option value="stylish">Stylish Tag</option>
             <option value="tag">Tag style</option>
             <option value="flickr">Flickr style</option>
             <option value="quora">Quora style</option>
@@ -86,6 +86,21 @@
             <option value="rhits">Least Hits</option>
         </field>
 
+        <field name="tagNotFoundUseWarningPage" type="list" default="1" label="When tag is not found"
+               description="Use http error 404 when tag is not found or use view /components/com_cedtag/views/tag/tmpl/requested_tag_do_not_exist.php (default).">
+            <option value="0">Http 404 error</option>
+            <option value="1">Warning page</option>
+        </field>
+
+        <field name="sefUrlBase" type="text" size="20" default="tag" label="SEF Url Base"
+               description="How the urls will look like, if you use tag the url will be http://yoursite/tag/${tagname} (default is tag).">
+        </field>
+
+        <field name="removeCopyright" type="radio" default="0" label="Remove Copyright"
+               description="Remove Copyright (Default is No)">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
     </fieldset>
 
     <fieldset name="Parameters for Backend" label="Backend">

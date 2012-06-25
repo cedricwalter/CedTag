@@ -44,11 +44,12 @@ class CedTagController extends JController
 
     public function display($cachable = false, $urlparams = false)
     {
-        $view = JFactory::getApplication()->input->get('view', 'tag', 'string');
+        $view = JFactory::getApplication()->input->get('view', null, 'string');
         //Set default view
         if (!isset($view)) {
             JFactory::getApplication()->input->set('view', 'tag');
         }
+
         parent::display();
     }
 

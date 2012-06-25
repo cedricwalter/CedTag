@@ -22,10 +22,23 @@ class CedTagModelDiagnostic extends JModel
 
     public function getDiagnostic()
     {
-        $diagnostic = new stdClass();
-        $diagnostic->curl = in_array('curl', get_loaded_extensions());
+        $diagnostics = array();
+
+        $curlDiagnostic = new stdClass();
+        $hasCurl = in_array('curl', get_loaded_extensions()) == 1;
+
+        $curlDiagnostic->title = JText::_('Curl');
+        $curlDiagnostic->optionnal = JText::_('Optionnal');
+        $curlDiagnostic->color = $hasCurl ? 'green;' : 'red;';
+        $curlDiagnostic->status = $hasCurl ? JText::_('JYES') : JText::_('JNO');
+        $curlDiagnostic->recommendedValue = JText::_('JYES');
+        $curlDiagnostic->usedBy = JText::_('WikiPedia import of terms descriptions');
+        $curlDiagnostic->resolution = JText::_('Required Root access or contacting your hosting company to activate cURL. cURL is a computer software project providing a library and command-line tool for transferring data using various protocols. The cURL project produces two products, libcurl and cURL. It was first released in 1997.');
+        $diagnostics[] = $curlDiagnostic;
+
         //ini_get('allow_url_fopen');
 
-        return $diagnostic;
+
+        return $diagnostics;
     }
 }

@@ -31,6 +31,167 @@ class CedTagModelTag extends ContentModelArticles
         parent::__construct($config);
     }
 
+    protected function populateState($ordering = null, $direction = null)
+    {
+        // Adjust the context to support modal layouts.
+        if ($layout = JRequest::getVar('layout')) {
+            $this->context .= '.' . $layout;
+        }
+
+        $search = $this->getUserStateFromRequest($this->context . '.tag.filter.search', 'tag_filter_search');
+        $this->setState('tag.filter.search', $search);
+
+        // List state information.
+        parent::populateState('a.title', 'asc');
+    }
+
+
+    protected function getStoreId($id = '')
+    {
+        // Compile the store id.
+        $id .= ':' . $this->getState('tag.filter.search');
+        return parent::getStoreId($id);
+    }
+
+
+    protected function getListQuery()
+    {
+        // Create a new query object.
+        $db = $this->getDbo();
+        $query = $db->getQuery(true);
+        $user = JFactory::getUser();
+
+        // Select the required fields from the table.
+        $query->select(
+            $this->getState(
+                'list.select',
+                'a.id, a.title, a.alias, a.checked_out, a.checked_out_time, a.catid' .
+                    ', a.state, a.access, a.created, a.created_by, a.ordering, a.featured, a.language, a.hits' .
+                    ', a.publish_up, a.publish_down'
+            )
+        );
+        $query->from('#__content AS a');
+
+        // Join over the language
+        $query->select('l.title AS language_title');
+        $query->join('LEFT', $db->quoteName('#__languages') . ' AS l ON l.lang_code = a.language');
+
+        // Join over the users for the checked out user.
+        $query->select('uc.name AS editor');
+        $query->join('LEFT', '#__users AS uc ON uc.id=a.checked_out');
+
+        // Join over the asset groups.
+        $query->select('ag.title AS access_level');
+        $query->join('LEFT', '#__viewlevels AS ag ON ag.id = a.access');
+
+        // Join over the categories.
+        $query->select('c.title AS category_title');
+        $query->join('LEFT', '#__categories AS c ON c.id = a.catid');
+
+        // Join over the users for the author.
+        $query->select('ua.name AS author_name');
+        $query->join('LEFT', '#__users AS ua ON ua.id = a.created_by');
+
+        // Filter by access level.
+        if ($access = $this->getState('filter.access')) {
+            $query->where('a.access = ' . (int)$access);
+        }
+
+        // Implement View Level Access
+        if (!$user->authorise('core.admin')) {
+            $groups = implode(',', $user->getAuthorisedViewLevels());
+            $query->where('a.access IN (' . $groups . ')');
+        }
+
+        // Filter by published state
+        $published = $this->getState('filter.published');
+        if (is_numeric($published)) {
+            $query->where('a.state = ' . (int)$published);
+        } elseif ($published === '') {
+            $query->where('(a.state = 0 OR a.state = 1)');
+        }
+
+        // Filter by a single or group of categories.
+        $baselevel = 1;
+        $categoryId = $this->getState('filter.category_id');
+        if (is_numeric($categoryId)) {
+            $cat_tbl = JTable::getInstance('Category', 'JTable');
+            $cat_tbl->load($categoryId);
+            $rgt = $cat_tbl->rgt;
+            $lft = $cat_tbl->lft;
+            $baselevel = (int)$cat_tbl->level;
+            $query->where('c.lft >= ' . (int)$lft);
+            $query->where('c.rgt <= ' . (int)$rgt);
+        } elseif (is_array($categoryId)) {
+            JArrayHelper::toInteger($categoryId);
+            $categoryId = implode(',', $categoryId);
+            $query->where('a.catid IN (' . $categoryId . ')');
+        }
+
+        // Filter on the level.
+        if ($level = $this->getState('filter.level')) {
+            $query->where('c.level <= ' . ((int)$level + (int)$baselevel - 1));
+        }
+
+        // Filter by author
+        $authorId = $this->getState('filter.author_id');
+        if (is_numeric($authorId)) {
+            $type = $this->getState('filter.author_id.include', true) ? '= ' : '<>';
+            $query->where('a.created_by ' . $type . (int)$authorId);
+        }
+
+        // Filter by search in title.
+        $search = $this->getState('filter.search');
+        if (!empty($search)) {
+            if (stripos($search, 'id:') === 0) {
+                $query->where('a.id = ' . (int)substr($search, 3));
+            } elseif (stripos($search, 'author:') === 0) {
+                $search = $db->Quote('%' . $db->escape(substr($search, 7), true) . '%');
+                $query->where('(ua.name LIKE ' . $search . ' OR ua.username LIKE ' . $search . ')');
+            }
+            else {
+                $search = $db->Quote('%' . $db->escape($search, true) . '%');
+                $query->where('(a.title LIKE ' . $search . ' OR a.alias LIKE ' . $search . ')');
+            }
+        }
+
+        // Filter by tag search.
+        $tagSearch = $this->getState('tag.filter.search');
+        if (!empty($tagSearch)) {
+            $tag = substr($tagSearch, 3);
+            $tags = explode(",", $tag);
+
+
+            $query->where("a.id in (SELECT cid FROM #__cedtag_term_content where tid in (SELECT id FROM #__cedtag_term where name like '%".$tag."%'))");
+        }
+
+
+        // Filter on the language.
+        if ($language = $this->getState('filter.language')) {
+            $query->where('a.language = ' . $db->quote($language));
+        }
+
+        // Add the list ordering clause.
+        $orderCol = $this->state->get('list.ordering', 'a.title');
+        $orderDirn = $this->state->get('list.direction', 'asc');
+        if ($orderCol == 'a.ordering' || $orderCol == 'category_title') {
+            $orderCol = 'c.title ' . $orderDirn . ', a.ordering';
+        }
+        //sqlsrv change
+        if ($orderCol == 'language')
+            $orderCol = 'l.title';
+        if ($orderCol == 'access_level')
+            $orderCol = 'ag.title';
+        $query->order($db->escape($orderCol . ' ' . $orderDirn));
+
+        // echo nl2br(str_replace('#__','jos_',$query));
+
+        $sql = $query->dump();
+
+        return $query;
+    }
+
+
     function clearAll()
     {
         $db = JFactory::getDbo();
@@ -110,32 +271,32 @@ class CedTagModelTag extends ContentModelArticles
             }
         }
 
-/*
-        $cid = JFactory::getApplication()->input->get('article_id', '', 'int');
-        $cid = strval(intval($cid));
-        if ($cid < 0) {
-            $cid = 0;
-        }
+        /*
+                $cid = JFactory::getApplication()->input->get('article_id', '', 'int');
+                $cid = strval(intval($cid));
+                if ($cid < 0) {
+                    $cid = 0;
+                }
 
-        if (isset($cid)) {
-            $dbo = JFactory::getDBO();
-            $query = $dbo->getQuery(true);
-            $query->select('tagterm.name as name');
-            $query->leftJoin('#__cedtag_term_content as tagtermcontent on tagtermcontent.tid=tagterm.id');
+                if (isset($cid)) {
+                    $dbo = JFactory::getDBO();
+                    $query = $dbo->getQuery(true);
+                    $query->select('tagterm.name as name');
+                    $query->leftJoin('#__cedtag_term_content as tagtermcontent on tagtermcontent.tid=tagterm.id');
 
-            $query->from('#__cedtag_term as tagterm');
+                    $query->from('#__cedtag_term as tagterm');
 
-            $query->where('tagtermcontent.cid = ' . $dbo->quote($cid));
-            $query->where('tagterm.published=1');
+                    $query->where('tagtermcontent.cid = ' . $dbo->quote($cid));
+                    $query->where('tagterm.published=1');
 
-            $query->group('tid');
-            $query->order('tagterm.name');
+                    $query->group('tid');
+                    $query->order('tagterm.name');
 
-            $dbo->setQuery($query);
-            $terms = $dbo->loadObjectList();
-            return $terms;
-        }
-*/
+                    $dbo->setQuery($query);
+                    $terms = $dbo->loadObjectList();
+                    return $terms;
+                }
+        */
 
         return '';
     }
