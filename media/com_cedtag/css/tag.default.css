@@ -1,0 +1,93 @@
+/* credits to http://cssglobe.com/post/9435/pure-css3-post-tags/ */
+
+ul.cedtag {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* Height (and line-height) of the list item LI and anchor A is set. */
+.cedtag li, .cedtag a {
+    float: left;
+    height: 24px;
+    line-height: 24px;
+    position: relative;
+    font-size: 11px;
+}
+
+/* Next to style is the anchor element. We're adding margins and paddings and some rounded corners on the right hand side. */
+.cedtag a {
+    margin-left: 20px;
+    padding: 0 10px 0 12px;
+
+    /* Change here color of the tag */
+    /*background:  #0089e0; */ /* blue */
+    background: #FFC200; /* yellow */
+
+    color: #fff;
+    text-decoration: none;
+    -moz-border-radius-bottomright: 4px;
+    -webkit-border-bottom-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    -moz-border-radius-topright: 4px;
+    -webkit-border-top-right-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+/*
+To achieve the pointed edge we are adding a :before pseudo-element.
+The element has the width and height set to zero, that way we are only using it's borders.
+To "draw" an arrow pointing left we are showing only the right border.
+*/
+.cedtag a:before {
+    content: "";
+    float: left;
+    position: absolute;
+    top: 0;
+    left: -12px;
+    width: 0;
+    height: 0;
+    /*border-color: transparent #0089e0 transparent transparent;*/ /* blue */
+    border-color: transparent #FFC200 transparent transparent; /* yellow */
+    border-style: solid;
+    border-width: 12px 12px 12px 0;
+}
+
+/*
+The last element to add is the :after pseudo-element. This will act as that rounded hole.
+What we're doing here is creating an empty square, and we're rounding it's edges so we create a circle
+(and of course we position it with position: absolute).
+*/
+.cedtag a:after {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 0;
+    float: left;
+    width: 4px;
+    height: 4px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    background: #fff;
+    -moz-box-shadow: -1px -1px 2px #004977;
+    -webkit-box-shadow: -1px -1px 2px #004977;
+    box-shadow: -1px -1px 2px #004977;
+}
+
+/* also adding a :hover state for the anchor:*/
+.cedtag a:hover {
+    background: #555;
+}
+
+.cedtag a:hover:before {
+    border-color: transparent #555 transparent transparent;
+}
+
+.cedtag:after {
+    clear: both;
+}
+
+
+
+

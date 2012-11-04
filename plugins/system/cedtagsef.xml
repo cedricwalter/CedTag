@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="plugin" group="system" method="upgrade">
+    <name>System - CedTag SEF</name>
+    <element>cedtagsef</element>
+	<author>Cedric Walter</author>
+    <creationDate>April 2012</creationDate>
+    <copyright></copyright>
+    <license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL v3</license>
+    <authorEmail>cedric.walter@gmail.com</authorEmail>
+    <authorUrl>www.waltercedric.com</authorUrl>
+    <version>2.6.0</version>
+    <description>TagSef will build a search engine friendly url, which is also human friendly.</description>
+
+    <files>
+        <filename plugin="cedtagsef">cedtagsef.php</filename>
+        <filename>index.html</filename>
+    </files>
+
+</extension>

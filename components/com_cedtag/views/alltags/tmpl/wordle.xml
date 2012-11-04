@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+    <layout title="Wordle" option="wordle">
+
+        <message>
+            <![CDATA[TAGS DEFAULT LAYOUT DESC]]>
+        </message>
+    </layout>
+
+    <!-- Add fields to the parameters object for the layout. -->
+    <fields name="params">
+        <fieldset name="basic" label="WORDLE Options">
+            <field name="wordleCount" type="text" size="5" default="25" label="Count"
+                   description="Max number of tags to display in wordle cloud (Default is 25)."/>
+
+            <field name="wordlePlacement" type="list" default="6" label="Preferred Placement"
+                   description="How the tags will be displayed in (Default is Mixed).">
+                <option value="0">Horizontaly</option>
+                <option value="1">Mainly Horizontaly</option>
+                <option value="6">Mixed</option>
+                <option value="9">Mainly Vertical</option>
+                <option value="10">Vertical</option>
+            </field>
+
+            <field name="wordlePresetPalette" type="list" default="aqua" label="Palette Presets"
+                   description="Preset palette (Default is aqua).">
+                <option value="aqua">Aqua</option>
+                <option value="yellow/blue">Yellow/Blue</option>
+                <option value="grey">Grey</option>
+                <option value="brown">Brown</option>
+                <option value="army">Army</option>
+                <option value="pastel">Pastel</option>
+                <option value="red">Red</option>
+            </field>
+
+            <field name="wordleUseCustomPalette" type="list" default="0" label="Use Custom Palette"
+                   description="Use Custom Palette.">
+                <option value="1">JYES</option>
+                <option value="0">JNO</option>
+            </field>
+
+            <field name="wordleCustomPalette" type="text" size="40" default="CC6600,FFFBD0,FF9900,C13100" label="Custom Palette"
+                   description="Html colors separated by comma (Default is CC6600,FFFBD0,FF9900,C13100)."/>
+
+            <field name="wordleBackgroundColor" type="text" size="6" default="000000" label="Background Color"
+                   description="BackgroundColor (Default is 000000)."/>
+
+            <field name="wordleTransparency" type="text" size="3" default="127" label="Transparent Image"
+                   description="A value between 0 and 127. 0 indicates completely opaque while 127 indicates completely transparent (Default is 127)."/>
+
+            <field name="wordleFontMin" type="text" size="5" default="8" label="Min Font Size in px"
+                   description="Min Font size in px (Default is 8)."/>
+            <field name="wordleFontMax" type="text" size="5" default="32" label="Max Font Size in px"
+                   description="Max Font size in px (Default is 32)."/>
+
+            <field name="wordleWidth" type="text" size="5" default="600" label="Width in px"
+                   description="Width for the page (Default is 600)."/>
+
+            <field name="wordleHeight" type="text" size="5" default="600" label="Height in px"
+                   description="Height for the page (Default is 600)."/>
+
+            <field name="wordleTitle" type="text" size="12" default="All tags" label="Title"
+                   description="Title for the page (Default is All tags)."/>
+
+            <field name="wordleMetaDescription" type="textarea" rows="5" cols="30" default="A tag is like a subject or category. This page shows all tags in weighted order. The bigger the text, the more active the tag is."
+                   label="Meta Description" description="Customize meta description."/>
+
+            <field name="wordleMetaKeywords" type="textarea" rows="5" cols="30" default="tag clouds" label="Meta Keywords"
+                   description="Customize meta keywords."/>
+
+
+            <field name="wordleReverse" type="list" default="random" label="Reverse"
+                   description="Reverse order that the tags will be displayed in.">
+                <option value="1">JYES</option>
+                <option value="0">JNO</option>
+            </field>
+
+            <field name="enableCache" type="list" default="1" label="Enable Cache"
+                   description="Caching (Default is Yes).">
+                <option value="1">JYES</option>
+                <option value="0">JNO</option>
+            </field>
+
+
+            <!--
+           <field name="wordleTagOrder" type="list" default="random" label="Order"
+                  description="Order that the tags will be displayed in.">
+               <option value="random">Random</option>
+               <option value="date">Oldest first</option>
+               <option value="rdate">Most recent first</option>
+               <option value="alpha">Term Alphabetical</option>
+               <option value="ralpha">Term Reverse-Alphabetical</option>
+               <option value="hits">Most Hits</option>
+               <option value="rhits">Least Hits</option>
+           </field> -->
+        </fieldset>
+
+    </fields>
+</metadata>

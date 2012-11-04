@@ -1,0 +1,57 @@
+/* credits to http://cssglobe.com/post/9435/pure-css3-post-tags/ */
+
+.cedtag ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    float: left;
+    width: 100%;
+    margin-bottom: 20px;
+
+}
+
+.cedtag li {
+    list-style: none;
+    float: left;
+}
+
+.cedtag li a {
+    display: inline-block;
+
+    background: url('images/tag_bg_black.png');
+    color: white !important;
+
+    height: 20px;
+    line-height: 20px;
+    padding: 0 7px 0 11px;
+    margin: 5px 5px 0 0;
+    font-size: 11px;
+
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    -moz-border-radius: 0 3px 3px 0;
+    -webkit-border-top-right-radius: 3px;
+    -webkit-border-bottom-right-radius: 3px;
+    border-radius: 0 3px 3px 0
+}
+
+.cedtag li a:hover {
+    color: lightblue !important;
+    -webkit-transition-delay: 0s;
+    -webkit-transition-duration: 0.5s;
+    -webkit-transition-property: color;
+    -webkit-transition-timing-function: linear;
+}
+
+.cedtag a {
+    font-size: 11px;
+    color: #fff !important;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    text-transform: capitalize
+}
+
+.cedtag ul:after {
+    clear: left;
+}
+
+
+

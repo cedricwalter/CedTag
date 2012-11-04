@@ -1,0 +1,27 @@
+.cedtag ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    float: left;
+    width: 100%;
+}
+
+.cedtag li {
+    list-style-type: none;
+    display: inline;
+}
+
+.cedtag a {
+    display: inline-block;
+    color: #19558D;
+    padding: 0 0.4em;
+    line-height: 1.5em;
+    background-color: #DFEAF4;
+    -moz-border-radius: 3px 3px 3px 3px;
+    -webkit-border-radius: 3px 3px 3px 3px;
+}
+
+
+
+
+

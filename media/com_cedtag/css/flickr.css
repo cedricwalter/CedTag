@@ -1,0 +1,46 @@
+/*
+http://gduverger.com/tag/
+*/
+.cedtag ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    float: left;
+    width: 100%;
+}
+
+.cedtag:hover  {
+	background-color: #e0ffff;
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+.cedtag li {
+	display: inline;
+	float: left;
+	margin-right: 9px;
+	min-height: 18px;
+	position: relative;
+	color: #999999;
+	font-size: 12px;
+	line-height: 18px;
+	list-style-type: none;
+	background: url("data:image/gif;base64,R0lGODlhBgAGALMAAOHh4YSEhJ6enuDg4MDAwJ2dnXp6evf393l5ef///wAAAAAAAAAAAAAAAAAAAAAAACH5BAAAAAAALAAAAAAGAAYAAAQQMMkpD5gnmCIHMsgkIAQ1RQA7") no-repeat scroll 100% 50% transparent;
+	padding-right: 13px;
+}
+
+.cedtag li.last {
+	background: none;
+	margin-right: 0;
+	padding-right: 0;
+}
+
+.cedtag a {
+	word-wrap: break-word;
+	color: #999999;
+	text-decoration: none;
+}
+
+.cedtag:hover a {
+	color: #0063DC;
+}

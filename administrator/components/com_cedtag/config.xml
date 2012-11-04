@@ -1,0 +1,569 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+
+    <fieldset name="Themes" label="Themes">
+
+        <field name="themes" type="list" default="stylish" label="Themes" disabled="false"
+               description="Select theme">
+            <option value="simple">Rounded boxes</option>
+            <option value="text">Text only</option>
+            <option value="stylish.gray">gray</option>
+            <option value="stylish.blue">blue</option>
+            <option value="stylish.black">black</option>
+            <option value="stylish.red">red</option>
+            <option value="stylish.yellow">yellow</option>
+            <option value="stylish.green">green</option>
+            <option value="tag">Tag style</option>
+            <option value="flickr">Flickr style</option>
+            <option value="quora">Quora style</option>
+        </field>
+
+    </fieldset>
+
+
+    <fieldset name="Parameters for Frontpage" label="Frontpage">
+
+        <field name="FrontPageEditTagEditOnly" type="radio" default="0" label="Frontpage tagging when editing"
+                       description="Frontpage tagging to be just available in frontpage edit, Default is No.">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+        </field>
+
+        <field name="FrontPageTagView" type="radio" default="1" label="Show Tags in FrontPage"
+               description="Show Tags For FrontPage, Default is Yes.">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field name="FrontPageTagViewTagPosition" type="list" default="2" label="Tags Frontpage Position"
+               description="Tag positions, default is show at the top, below the title.">
+            <option value="0">Display after the article fulltext</option>
+            <option value="1">Display below the article title</option>
+            <option value="2">Display at both position</option>
+        </field>
+        <field name="showFrontPageTagTitle" type="radio" default="0" label="Show Tags title in FrontPage"
+               description="Show Tags For FrontPage, Default is Yes.">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field name="page_limit" type="text" size="20" default="10" label="Page Limit"
+               description="How many articles to show on each page.">
+        </field>
+
+        <field name="layout" type="list" default="blog" label="Layout" description="Front Side Layout">
+            <option value="default">List layout</option>
+            <option value="blog">Blog layout</option>
+        </field>
+
+        <field name="BlogTag" type="radio" default="1" label="Show Tags For Blog Layout"
+               description="Show Tags For Blog Layout, Default is Yes.">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+
+        <field name="onlyIntro" type="list" default="1" label="Blog Mode"
+               description="If you use blog layout, you can select full text mode or introduction mode.">
+            <option value="0">Full Text</option>
+            <option value="1">Only Introduction</option>
+        </field>
+        <field name="description" type="radio" default="1" label="Show Tag Description"
+               description="Show Tag Description">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+
+        <field name="Order" type="list" default="" label="Order"
+               description="Order that the articles will be displayed in.">
+            <option value="">Default</option>
+            <option value="date">Oldest first</option>
+            <option value="rdate">Most recent first</option>
+            <option value="alpha">Title Alphabetical</option>
+            <option value="ralpha">Title Reverse-Alphabetical</option>
+            <option value="author">Author Alphabetical</option>
+            <option value="rauthor">Author Reverse-Alphabetical</option>
+            <option value="hits">Most Hits</option>
+            <option value="rhits">Least Hits</option>
+        </field>
+
+        <field name="tagNotFoundUseWarningPage" type="list" default="1" label="When tag is not found"
+               description="Use http error 404 when tag is not found or use view /components/com_cedtag/views/tag/tmpl/requested_tag_do_not_exist.php (default).">
+            <option value="0">Http 404 error</option>
+            <option value="1">Warning page</option>
+        </field>
+
+        <field name="sefUrlBase" type="text" size="20" default="tag" label="SEF Url Base"
+               description="How the urls will look like, if you use tag the url will be http://yoursite/tag/${tagname} (default is tag).">
+        </field>
+
+        <field name="removeCopyright" type="radio" default="0" label="Remove Copyright"
+               description="Remove Copyright (Default is No)">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+
+    </fieldset>
+
+    <fieldset name="Parameters for Backend" label="Backend">
+        <field name="tag_page_limit" type="text" default="30" label="Tag/Term Page Limit" size="4"
+               description="How many tags/terms to show on each page.">
+        </field>
+    </fieldset>
+
+    <fieldset name="Tags" label="Tags">
+
+        <field name="capitalize" type="radio" default="0" label="Capitalize"
+               description="Capitalize tags before showing to user.">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field name="lowcase" type="radio" default="1" label="Convert to Lowcase"
+               description="To lowcase tags before storing to database.">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field name="autoMetaKeywordsExtractor" type="radio" default="1" label="Auto extract meta keywords as tags for NEW articles"
+               description="Auto extract from article meta keywords to tags, only applies to NEW created articles.">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field name="metaKeywordsAreSourceForExistingArticles" type="radio" default="0"
+               label="Force Existing articles get their tags always from article meta keywords at save time"
+               description="Existing articles get their tags always from article meta keywords at save time.">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+
+        <field name="spacesAllowedWithoutQuotes" type="radio" default="0" label="Spaces in Tag allowed"
+               description="You can already do multiword tags with spaces in them by default, but those must be wrapped in quotes.
+                       A new option in 2.5.4 will lets you use spaces without requiring the user to quote the input.
+                       There are normally 5 ways to insert a tag after inputting some text: space, comma, enter, selecting
+                       an autocomplete option, or defocusing the widget. With this set to true option set to true, space no
+                       longer inserts a tag, it just adds a space to the current tag input.">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field name="StripCharacters"
+               type="textarea"
+               rows="3"
+               cols="30"
+               default="-|_|,|~|!|?|@|%|^|(|)|&lt;|&gt;|:|;|{|}|[|]|&amp;|`|&quot;|#|*"
+               label="Strip Characters" description="Characters to strip from the tag name, seperate with |">
+        </field>
+        <field name="useStopWords" type="radio" default="1" label="Stopwords"
+               description="StopWords do not appear as Terms because they are either insignificant (i.e., articles, prepositions) or common. Default is 1">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+
+        <field name="mappingFrequencyToSizeAlgorithm" type="list" default="dynamicbuckets" label="Mapping frequency"
+               description="This determine how the system is mapping tag frequencies relative to each other to font size">
+            <option value="pareto">Pareto distribution</option>
+            <option value="dynamicbuckets">Dynamic Bucketizing by Frequency</option>
+            <!--<option value="fixedbuckets">Fixed number of Bucket by Frequency</option> -->
+        </field>
+
+        <field name="wikipediaServer" type="list" default="http://en.wikipedia.org" label="Autofill wikipedia source"
+               description="Choose your main language for description autofilling using WikiPedia openSearch API. (Require Curl to be installed in PHP)">
+               <option value="http://ar.wikipedia.org/">العربية</option>
+            <option value="http://bg.wikipedia.org/">Български</option>
+            <option value="http://ca.wikipedia.org/">Català</option>
+            <option value="http://cs.wikipedia.org/">Česky</option>
+            <option value="http://da.wikipedia.org/">Dansk</option>
+            <option value="http://de.wikipedia.org/">Deutsch</option>
+            <option value="http://en.wikipedia.org/">English</option>
+            <option value="http://es.wikipedia.org/">Español</option>
+            <option value="http://eo.wikipedia.org/">Esperanto</option>
+            <option value="http://eu.wikipedia.org/">Euskara</option>
+            <option value="http://fa.wikipedia.org/">فارسی</option>
+            <option value="http://fr.wikipedia.org/">Français</option>
+            <option value="http://ko.wikipedia.org/">한국어</option>
+            <option value="http://hi.wikipedia.org/">हिन्दी</option>
+            <option value="http://hr.wikipedia.org/">Hrvatski</option>
+            <option value="http://id.wikipedia.org/">Bahasa Indonesia</option>
+            <option value="http://it.wikipedia.org/">Italiano</option>
+            <option value="http://he.wikipedia.org/">עברית</option>
+            <option value="http://lt.wikipedia.org/">Lietuvių</option>
+            <option value="http://hu.wikipedia.org/">Magyar</option>
+            <option value="http://ms.wikipedia.org/">Bahasa Melayu</option>
+            <option value="http://nl.wikipedia.org/">Nederlands</option>
+            <option value="http://ja.wikipedia.org/">日本語</option>
+            <option value="http://no.wikipedia.org/">Norsk (bokmål)</option>
+            <option value="http://pl.wikipedia.org/">Polski</option>
+            <option value="http://pt.wikipedia.org/">Português</option>
+            <option value="http://kk.wikipedia.org/">Қазақша</option>
+            <option value="http://ro.wikipedia.org/">Română</option>
+            <option value="http://ru.wikipedia.org/">Русский</option>
+            <option value="http://sk.wikipedia.org/">Slovenčina</option>
+            <option value="http://sl.wikipedia.org/">Slovenščina</option>
+            <option value="http://sr.wikipedia.org/">Српски</option>
+            <option value="http://fi.wikipedia.org/">Suomi</option>
+            <option value="http://sv.wikipedia.org/">Svenska</option>
+            <option value="http://tr.wikipedia.org/">Türkçe</option>
+            <option value="http://uk.wikipedia.org/">Українська</option>
+            <option value="http://vi.wikipedia.org/">Tiếng Việt</option>
+            <option value="http://vo.wikipedia.org/">Volapük</option>
+            <option value="http://war.wikipedia.org/">Winaray</option>
+            <option value="http://zh.wikipedia.org/">Zhōngwén">中文</option>
+        </field>
+
+        <field name="wikipediaAutocompleteStrategy" type="list" default="0" label="Autofill wikipedia description"
+               description="How your existing terms descriptions will be treated">
+            <option value="0">Only autofill empty descriptions</option>
+            <option value="1">CAUTION: Always autofill All descriptions (you loose all your manual changes!)</option>
+        </field>
+
+    </fieldset>
+
+
+    <fieldset name="Parameters for Tagloud" label="Tagloud">
+
+        <field name="useGoogleFonts" type="list" default="1" label="Google Fonts"
+               description="Use Google Fonts, visit http://www.google.com/webfonts">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+
+        <field name="googleFonts" type="list" default="font-family: 'Open Sans', sans-serif;|Open+Sans" label="Google Fonts *"
+               description="Google Fonts, hit save css if changing this settings!">
+            <option value="font-family: 'Droid Sans', sans-serif;|Droid+Sans">Droid Sans</option>
+            <option value="font-family: 'Lato', sans-serif;|Lato">Lato</option>
+            <option value="font-family: 'Arvo', serif;|Arvo">Arvo</option>
+            <option value="font-family: 'Lora', serif;|Lora">Lora</option>
+            <option value="font-family: 'PT Sans', sans-serif;|PT+Sans">PT Sans</option>
+            <option value="font-family: 'PT Sans Narrow', sans-serif;|PT+Sans+Narrow">PT Sans Narrow</option>
+            <option value="font-family: 'Ubuntu', sans-serif;|Ubuntu">Ubuntu</option>
+            <option value="font-family: 'Lobster', cursive;|Lobster">Lobster</option>
+            <option value="font-family: 'Droid Serif', serif;|Droid+Serif">Droid Serif</option>
+            <option value="font-family: 'Open Sans', sans-serif;|Open+Sans">Open Sans</option>
+            <option value="font-family: 'Oswald', sans-serif;|Oswald">Oswald</option>
+            <option value="font-family: 'Yanone Kaffeesatz', sans-serif;|Yanone+Kaffeesatz">Yanone Kaffeesatz</option>
+            <option value="font-family: 'Just Me Again Down Here', cursive;|Just+Me+Again+Down+Here">Just Me Again Down Here</option>
+            <option value="font-family: 'Great Vibes', cursive;|Great+Vibes">Great Vibes cursive</option>
+        </field>
+
+        <field name="tagloud_limit" type="list" default="0" label="Limit number of Tags"
+               description="Limit number of tags displayed in cloud. Default is No">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+
+        <field name="tagloud_limit_size" type="text" default="100" label="Tag/Term Page Limit" size="4"
+               description="How many tags/terms will be displayed in cloud.">
+        </field>
+
+    </fieldset>
+
+    <fieldset name="Ads" label="Ads">
+
+        <field name="ads_top_use" type="list" default="0" label="Use Top Ads"
+               description="You can use any markup to insert targetted publicity in the top. Default is No.">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+
+        <field name="ads_top_content" type="textarea" rows="10" cols="60" default="" label="Top Ads Code"
+               description="Ads code, like adsense" filter="raw">
+        </field>
+
+        <field name="ads_bottom_use" type="list" default="0" label="Use Bottom Ads"
+               description="You can use any markup to insert targetted publicity in the bottom. Default is No.">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+
+        <field name="ads_bottom_content" type="textarea" rows="10" cols="60" default="" label="Bottom Ads Code"
+               description="Ads code, like adsense" filter="raw">
+        </field>
+    </fieldset>
+    <fieldset name="Articles" label="Articles">
+        <field name="FrontPageTagArticleView" type="radio" default="1" label="Show Tags in article view"
+               description="Show Tags when viewing an article, Default is Yes.">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field name="ArticleViewTagPosition" type="list" default="0" label="Tags Article View Position"
+               description="Tag positions, default is show at the bottom of the content.">
+            <option value="0">Display after the article fulltext</option>
+            <option value="1">Display below the article title</option>
+            <option value="2">Display at both position</option>
+        </field>
+        <field name="showArticleTagTitle" type="radio" default="0" label="Show Tags title in FrontPage"
+               description="Show Tags For FrontPage, Default is Yes.">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field name="ShowAddTagButton" type="radio" default="1" label="Show Add Tag Button"
+               description="Show Add Tag Button for the Author.">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field name="SuppresseSingleTerms" type="radio" default="0" label="Suppress Single Terms"
+               description="Suppress those terms only having one article.">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field name="HitsNumber" type="radio" default="1" label="Show Hits Number"
+               description="Show Hits Number as prompt. Default is yes.">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field name="MaxTagsNumber" type="text" default="10" label="Max Tags Number"
+               description="Show the number of tags at most. When having tags more than the number, we just ignore them.">
+
+        </field>
+        <field name="RelatedArticlesByTags" type="radio" default="0" label="Show Related Articles By Tags"
+               description="Show Related Articles By Tags.">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field name="RelatedArticlesCountByTags" type="text" default="10" label="Related Articles Count"
+               description="The number of related articles by tags.">
+
+        </field>
+        <field name="RelatedArticlesTitleByTags" type="text" default="Related Articles" label="Related Articles Title"
+               description="The related articles title.">
+
+        </field>
+    </fieldset>
+
+    <fieldset name="Import" label="Import">
+        <field name="IgnoeNumericTags" type="list" default="0" label="Ignore numeric tags"
+               description="Ignoe numeric tags, this option only applies to tags importing.">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field name="MinTagLength" type="text" default="1" label="Min Tag Length"
+               description="Ignore those tags which have less characters than this number,this option only applies to tags importing.">
+        </field>
+    </fieldset>
+
+    <fieldset name="Export" label="Export">
+
+        <field name="export_csv_delimiter" type="text" default="," label="CSV delimiter" size="1"
+               description="The optional delimiter parameter sets the field delimiter (one character only, default is comma)">
+        </field>
+        <field name="export_csv_enclosure" type="text" default="" label="CSV enclosure" size="1"
+               description="The optional enclosure parameter sets the field enclosure (one character only, default is empty)">
+        </field>
+        <field name="export_csv_id" type="list" default="1" label="id"
+               description="export id in csv">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field name="export_csv_name" type="list" default="1" label="name"
+               description="export id in csv">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field name="export_csv_alias" type="list" default="1" label="alias"
+               description="export alias in csv">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field name="export_csv_description" type="list" default="1" label="description"
+               description="export description in csv">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field name="export_csv_weight" type="list" default="1" label="weight"
+               description="export weight in csv">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field name="export_csv_hits" type="list" default="1" label="hits"
+               description="export hits in csv">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field name="export_csv_created" type="list" default="1" label="created"
+               description="export created in csv">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field name="export_published_hits" type="list" default="1" label="published"
+               description="export published in csv">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+    </fieldset>
+
+
+    <fieldset name="Html5tagcloud" label="Html5 tagcloud">
+
+
+        <field name="interval" type="text" default="20" label="interval"
+               description="Interval between animation frames, in milliseconds"/>
+        <field name="maxSpeed" type="text" default="0.05" label="maxSpeed"
+               description="Maximum speed of rotation"/>
+
+        <field name="minSpeed" type="text" default="0.95" label="minSpeed"
+               description="Minimum speed of rotation when mouse leaves canvas"/>
+
+        <field name="decel" type="text" default="10" label="decel"
+               description="Deceleration rate when mouse leaves canvas"/>
+
+        <field name="minBrightness" type="text" default="0.1" label="minBrightness" size="3"
+               description="Brightness of tags at farthest point (0.0-1.0)"/>
+
+
+        <field name="textColour" type="text" default="#ff99ff" label="textColour"
+               description="Colour of the tag text - empty string or null to use the colour of the original link."/>
+        <field name="textHeight" type="text" default="15" label="textHeight"
+               description="Height of the tag text font (in pixels)"/>
+        <field name="textFont" type="text" default="Helvetica, Arial, sans-serif" label="textFont"
+               description="Font family for the tag text - empty string or null to use the font of the original link."/>
+        <field name="outlineColour" type="text" default="#ffff99" label="outlineColour"
+               description="Colour of the active tag highlight"/>
+        <field name="outlineMethod" type="text" default="outline" label="aa"
+               description="Type of highlight to use. Options are outline for an outline at the same depth as the active tag, classic for the old-style outline on top of all tags, block for a solid block around the active tag and colour to change the colour of the text or image of the current tag to the outlineColour value."/>
+
+        <field name="outlineThickness" type="text" default="2" label="outlineThickness"
+               description="Thickness of outline in pixels"/>
+
+        <field name="outlineOffset" type="text" default="5" label="zoomStep"
+               description="Distance of outline from text, in pixels. This also increases the size of the active area around the tag."/>
+
+        <field name="pulsateTo" type="text" default="1.0" label="pulsateTo" size="3"
+               description="Pulsate outline to this opacity (0.0-1.0)"/>
+
+        <field name="pulsateTime" type="text" default="3" label="pulsateTime"
+               description="Pulse rate, in seconds per beat"/>
+
+        <field name="depth" type="text" default="0.5" label="depth" size="3"
+               description="Controls the perspective (0.0-1.0)"/>
+
+        <field name="initial" type="text" default="null" label="initial"
+               description="Initial rotation, with horizontal and vertical as an array, e.g. [0.8,-0.3]. Values are multiplied by maxSpeed."/>
+
+        <field name="freezeActive" type="radio" default="false" label="freezeActive"
+               description="Set to true to pause movement when a tag is highlighted.">
+            <option value="true">JYES</option>
+            <option value="false">JNO</option>
+        </field>
+
+
+        <field name="activeCursor" type="text" default="pointer" label="activeCursor"
+               description="The CSS cursor type to use when the mouse is over a tag."/>
+
+
+        <field name="frontSelect" type="radio" default="false" label="frontSelect"
+               description="Set to true to prevent selection of tags at back of cloud.">
+            <option value="true">JYES</option>
+            <option value="false">JNO</option>
+        </field>
+
+
+        <field name="txtOpt" type="radio" default="true" label="txtOpt"
+               description="Text optimisation, converts text tags to images for better performance.">
+            <option value="true">JYES</option>
+            <option value="false">JNO</option>
+        </field>
+
+        <field name="txtScale" type="text" default="2" label="txtScale"
+               description="Scaling factor of text when converting to image in txtOpt mode."/>
+
+        <field name="reverse" type="radio" default="false" label="Reverse"
+               description="Set to true to reverse direction of movement relative to mouse position.">
+            <option value="true">JYES</option>
+            <option value="false">JNO</option>
+        </field>
+
+        <field name="hideTags" type="radio" default="true" label="Hide Tags"
+               description="Set to true to automatically hide the tag list element if TagCanvas is started successfully.">
+            <option value="true">JYES</option>
+            <option value="false">JNO</option>
+        </field>
+
+
+        <field name="zoom" type="text" default="1.0" label="zoom"
+               description="Adjusts the relative size of the tag cloud in the canvas. Larger values will zoom into the cloud, smaller values will zoom out."/>
+
+
+        <field name="wheelZoom" type="radio" default="true" label="wheelZoom"
+               description="Enables zooming the cloud in and out using the mouse wheel or scroll gesture.">
+            <option value="true">JYES</option>
+            <option value="false">JNO</option>
+        </field>
+
+        <field name="zoomStep" type="text" default="0.05" label="zoomStep" size="4"
+               description="The amount that the zoom is changed by with each movement of the mouse wheel."/>
+        <field name="zoomMax" type="text" default="3.0" label="zoomMax" size="3"
+               description="Maximum zoom value."/>
+        <field name="zoomMin" type="text" default="0.3" label="zoomMin" size="3"
+               description="Minimum zoom value."/>
+
+        <field name="shadow" type="text" default="#000000" label="shadow" size="7"
+               description="Colour of the shadow behind each tag."/>
+        <field name="shadowBlur" type="text" default="0" label="shadowBlur"
+               description="Amount of tag shadow blurring, in pixels."/>
+
+        <field name="shadowOffset" type="text" default="[0,0]" label="shadowOffset"
+               description="X and Y offset of the tag shadow, in pixels."/>
+
+        <field name="weight" type="radio" default="false" label="Weight"
+               description="Set to true to turn on weighting of tags.">
+            <option value="true">JYES</option>
+            <option value="false">JNO</option>
+        </field>
+        <field name="weightMode" type="list" default="size" label="weightMode"
+               description="Method to use for displaying tag weights. Should be one of size, colour or both. The default - canvas tags are shown using the font size of the original tag link. Both: Uses 'size' and 'colour' on the tags at the same time.">
+            <option value="size">size</option>
+            <option value="colour">colour</option>
+            <option value="both">both</option>
+        </field>
+        <field name="weightSize" type="text" default="1.0" label="weightSize" size="3"
+               description="Multiplier for adjusting the size of tags when using a weight mode of size or both."/>
+        <field name="weightGradient" type="text" default="{0:'#f00', 0.33:'#ff0', 0.66:'#0f0', 1:'#00f'}"
+               label="weightGradient"
+               description="The colour gradient used for colouring tags when using a weight mode of colour or both."/>
+        <field name="weightFrom" type="text" default="null" label="weightFrom"
+               description="The link attribute to take the tag weight from. The default of null means that the weight is taken from the calculated link font size."/>
+
+        <field name="shape" type="radio" default="sphere" label="shape"
+               description="The shape of the cloud. Currently supported are sphere, hcylinder for a cylinder that starts off horizontal and vcylinder for a cylinder that starts off vertical.">
+            <option value="sphere">sphere</option>
+            <option value="hcylinder">hcylinder</option>
+            <option value="vcylinder">vcylinder</option>
+        </field>
+
+        <field name="lock" type="text" default="null" label="lock"
+               description="A value of 'x' limits rotation of the cloud to the (horizontal) x-axis, and a value of 'y' limits rotation to the (vertical) y-axis. (These are strings, so the quotes are required)"/>
+        <field name="tooltip" type="text" default="null" label="tooltip"
+               description="Sets tooltip display method: null for no tooltips; native for operating system tooltips; div for div-based."/>
+        <field name="tooltipClass" type="text" default="tctooltip" label="tooltipClass"
+               description="Class of tooltip div."/>
+        <field name="tooltipDelay" type="text" default="300" label="aa"
+               description="Time to pause while mouse is not moving before displaying tooltip div, in milliseconds."/>
+
+
+        <field name="radiusX" type="text" default="1" label="radiusX" size="4"
+               description="Initial size of cloud from centre to sides."/>
+        <field name="radiusY" type="text" default="1" label="radiusY" size="4"
+               description="Initial size of cloud from centre to top and bottom."/>
+        <field name="radiusZ" type="text" default="1" label="radiusZ" size="4"
+               description="Initial size of cloud from centre to front and back."/>
+        <field name="stretchX" type="text" default="1" label="stretchX" size="4"
+               description="Stretch or compress the cloud horizontally."/>
+        <field name="stretchY" type="text" default="1" label="stretchY" size="4"
+               description="Stretch or compress the cloud vertically."/>
+
+        <field name="shuffleTags" type="radio" default="false" label="shuffleTags"
+               description="Set to true to randomize the order of the tags.">
+            <option value="true">JYES</option>
+            <option value="false">JNO</option>
+        </field>
+        <field name="noSelect" type="radio" default="false" label="noSelect"
+               description="Set to true to prevent the selection of tags.">
+            <option value="true">JYES</option>
+            <option value="false">JNO</option>
+        </field>
+
+        <field name="noMouse" type="radio" default="false" label="noMouse"
+               description="Set to true to prevent any mouse interaction. The initial option must be used to animate the cloud, otherwise it will be motionless.">
+            <option value="true">JYES</option>
+            <option value="false">JNO</option>
+        </field>
+
+    </fieldset>
+
+
+</config>

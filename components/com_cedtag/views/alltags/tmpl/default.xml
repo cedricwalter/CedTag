@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+    <layout title="All Tags">
+        <message>
+            <![CDATA[TAGS DEFAULT LAYOUT DESC]]>
+        </message>
+    </layout>
+    <fields name="params">
+        <fieldset name="basic" label="options">
+
+            <field name="allTagsCount" type="text" size="5" default="9999" label="Count"
+                   description="Title for the page."/>
+
+            <field name="allTagsTitle" type="text" size="12" default="All tags" label="Title"
+                   description="Title for the page."/>
+
+            <field name="allTagsMetaDescription" type="textarea" rows="5" cols="30" default="A tag is like a subject or category. This page shows all tags in weighted order. The bigger the text, the more active the tag is."
+                   label="Meta Description" description="Customize meta description."/>
+
+            <field name="allTagsMetaKeywords" type="textarea" rows="5" cols="30" default="tag clouds" label="Meta Keywords"
+                   description="Customize meta keywords."/>
+
+            <field name="allTagsReverse" type="list" default="0" label="Reverse"
+                   description="Reverse order that the tags will be displayed in.">
+                <option value="1">JYES</option>
+                <option value="0">JNO</option>
+            </field>
+
+           <field name="tagOrder" type="list" default="alpha" label="Order"
+                  description="Order that the tags will be displayed in.">
+               <option value="random">Random</option>
+               <option value="date">Oldest first</option>
+               <option value="rdate">Most recent first</option>
+               <option value="alpha">Term Alphabetical</option>
+               <option value="ralpha">Term Reverse-Alphabetical</option>
+               <option value="hits">Most Hits</option>
+               <option value="rhits">Least Hits</option>
+           </field>
+
+        </fieldset>
+    </fields>
+</metadata>

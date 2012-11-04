@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="plugin" group="content" method="upgrade">
+    <name>Content - CedTag</name>
+    <element>cedtag</element>
+    <author>Cedric Walter</author>
+    <creationDate>April 2012</creationDate>
+    <copyright>GNU/GPLv3</copyright>
+    <license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL v3</license>
+    <authorEmail>cedric.walter@gmail.com</authorEmail>
+    <authorUrl>www.waltercedric.com</authorUrl>
+    <version>2.6.0</version>
+    <description>
+        1.Show tags at the bottom of the articles.
+        2.Show Related articles by tags at the bottom of the articles.
+        3.Auto extract meta keywords as tags when saving articles.
+    </description>
+
+    <files>
+        <folder>language</folder>
+        <filename plugin="cedtag">cedtag.php</filename>
+        <filename>index.html</filename>
+    </files>
+
+</extension>
