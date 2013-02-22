@@ -11,13 +11,13 @@ jimport('joomla.event.plugin');
 jimport('joomla.plugin.plugin');
 jimport('joomla.language.helper');
 
-require_once JPATH_SITE . '/components/com_cedtag/helpers/themes.php';
-require_once JPATH_SITE . '/components/com_cedtag/helpers/helper.php';
-require_once JPATH_SITE . '/components/com_cedtag/helpers/suggest.php';
+require_once (JPATH_SITE . '/components/com_cedtag/helpers/themes.php');
+require_once (JPATH_SITE . '/components/com_cedtag/helpers/helper.php');
+require_once (JPATH_SITE . '/components/com_cedtag/helpers/suggest.php');
+require_once (JPATH_SITE . '/components/com_content/helpers/route.php');
+require_once (JPATH_SITE . '/components/com_cedtag/models/tags.php');
 
-require_once JPATH_SITE . '/components/com_content/helpers/route.php';
-
-require_once JPATH_SITE . '/components/com_cedtag/models/tags.php';
+require_once(dirname(__FILE__) . '/related/relatedfactory.php');
 
 class plgContentCedTag extends JPlugin
 {
@@ -43,26 +43,41 @@ class plgContentCedTag extends JPlugin
      * @param $page
      * @return mixed
      */
-    public function onContentBeforeDisplay($context, &$row, &$params, $page=0)
+    public function onContentBeforeDisplay($context, &$row, &$params, $page = 0)
     {
         $app = JFactory::getApplication();
         if ($app->isAdmin()) {
             return true;
         }
+        $view = JFactory::getApplication()->input->get('view');
+        $viewIsBlogOrList = $view == 'tag';
 
         $frontPageTagView = CedTagsHelper::param('FrontPageTagView', '1');
-        $view = JRequest :: getVar('view');
+        $displayTagInBlogOrListView = CedTagsHelper::param('BlogTag', '1');
 
-        if ($frontPageTagView == '0') {
-            return;
+        if (!$viewIsBlogOrList && $frontPageTagView == '0') {
+            return true;
+        }
+        if ($viewIsBlogOrList && !$displayTagInBlogOrListView) {
+            return true;
+        }
+
+        if ($viewIsBlogOrList && $displayTagInBlogOrListView) {
+            //0  Display after the article title
+            //1  Display after the article intro text
+            //2  Display after the article fulltext
+            //3  Display after the article title and after the article fulltext
+            $blogTagPosition = CedTagsHelper::param('blogTagPosition', '0');
+            $blogTagShowTagTitle = CedTagsHelper::param('blogTagShowTagTitle', '1');
+            return $this->execute($context, $row->id, $row->catid, $row->introtext, $blogTagPosition, $blogTagShowTagTitle);
         }
 
         //0 Display after the article fulltext
         //1 Display below the article title
         //2 Display at both position
-        $position = CedTagsHelper::param('FrontPageTagViewTagPosition', '1');
-        $showTagTitle = CedTagsHelper::param('showFrontPageTagTitle', '0');
-        $this->execute($context, $row->id, $row->introtext, $params, $page, $position, $showTagTitle);
+        $frontPageTagViewTagPosition = CedTagsHelper::param('FrontPageTagViewTagPosition', '1');
+        $showFrontPageTagTitle = CedTagsHelper::param('showFrontPageTagTitle', '0');
+        return $this->execute($context, $row->id, $row->catid, $row->introtext, $frontPageTagViewTagPosition, $showFrontPageTagTitle);
     }
 
     /**
@@ -83,7 +98,6 @@ class plgContentCedTag extends JPlugin
         if (!$canProceed) {
             return true;
         }
-
         //do not run in administrator area
         $app = JFactory::getApplication();
         if ($app->isAdmin()) {
@@ -95,19 +109,17 @@ class plgContentCedTag extends JPlugin
         if (!$frontPageTagArticleView) {
             return true;
         }
-
         //no content id, no chance to run
         if (isset($row) && (!isset($row->id) || is_null($row->id))) {
             return true;
         }
 
         $blogTag = CedTagsHelper::param('BlogTag');
-        $layout = JRequest :: getVar('layout');
+        $layout = JFactory::getApplication()->input->get('layout');
         if ($layout == 'blog' && !$blogTag) {
             return true;
         }
-
-        $view = JRequest :: getVar('view');
+        $view = JFactory::getApplication()->input->get('view');
         if (($layout != 'blog') && ($view == 'category' || $view == 'section')) {
             return true;
         }
@@ -117,195 +129,122 @@ class plgContentCedTag extends JPlugin
         //2 Display at both position
         $position = intval(CedTagsHelper::param('ArticleViewTagPosition', '0'));
         $showTagTitle = intval(CedTagsHelper::param('showArticleTagTitle', '0'));
-        return $this->execute($context, $row->id, $row->text, $params, $page, $position, $showTagTitle);
+
+        return $this->execute($context, $row->id, $row->catid, $row->text, $position, $showTagTitle);
     }
 
 
-    private function execute($context, $id, &$text, &$params, $page = 0, $position, $showTagTitle)
+    private function execute($context, $id, $catid, &$text, $position, $showTagTitle)
     {
+        global $access;
 
-        $cedTagModelTags = new CedTagModelTags();
-        $tags = $cedTagModelTags->getModelTags($id);
-
-        $CedTagsHelper = new CedTagsHelper();
-        $canEdit = $CedTagsHelper->canUserDoTagOperations($id);
-        if ($canEdit) {
-
-            $frontPageEditTagEditOnly = CedTagsHelper::param('FrontPageEditTagEditOnly', '0');
-            $layout = JRequest :: getVar('layout');
-
-            /*   $frontPageEditTagEditOnly  $layout  ->display
-             *       yes                      edit      yes
-             *                                any       no
-             *
-             *       no                       edit      yes
-             *                                any       yes
-             */
-            $display = true;
-            if ($frontPageEditTagEditOnly && $layout != 'edit') {
-                $display = false;
-            }
-
-            if ($display) {
-                $CedTagSuggest = new CedTagSuggest();
-                $tagIt = array();
-                foreach ($tags as $tag) {
-                    $tagIt[] = $tag->tag;
-                }
-                $CedTagSuggest->addSiteJs($tagIt, $id);
-                $tagResult = '<div class="cedtagplugin">';
-                $tagResult .= ' <div class="title">' . JText::_('PLG_CONTENT_CEDTAGS_ARTICLE_TAGGED') . '</div>';
-                $tagResult .= ' <div>' . JText::_('PLG_CONTENT_CEDTAGS_DOCUMENTATION') . '</div>';
-                $tagResult .= ' <ul id="tags' . $id . '" class="tags"></ul>';
-                $tagResult .= '</div>';
-            }
-
-
-        } else {
-            $htmlList = "";
-            foreach ($tags as $tag) {
-                $htmlList .= '<li><a href="' . $tag->link . '" rel="tag" title="' . $tag->title . '" >' . $tag->tag . '</a></li> ';
-            }
-            $tagResult = '<div class="cedtag" />';
-            if ($showTagTitle) {
-                $tagResult .= ' <div class="title">' . JText::_('PLG_CONTENT_CEDTAGS_ARTICLE_TAGGED') . '</div >';
-            }
-            $tagResult .= ' <ul class="cedtag" > ' . $htmlList . '</ul >';
-            $tagResult .= '</div > ';
-        }
+        $htmlTag = $this->getHtmlTag($context, $id, $catid, $showTagTitle);
 
         //0 Display after the article fulltext
         //1 Display below the article title
         //2 Display at both position
         if ($position == 1) {
-            $text = $tagResult . $text;
+            $text = $htmlTag[0] . $text;
         } else {
             if ($position == 2) {
                 // Both before and after Text
-                $text = $tagResult . $text . $tagResult;
+                $text = $htmlTag[0] . $text . $htmlTag[0];
             } else {
                 // After Text
-                $text .= $tagResult;
+                $text .= $htmlTag[0];
             }
         }
 
-        $view = JRequest :: getVar('view');
+        $userIsViewingAnArticle = (JFactory::getApplication()->input->get('view') == 'article');
         $showRelatedArticles = CedTagsHelper::param('RelatedArticlesByTags', 0);
-        if ($showRelatedArticles && !empty($tags) && ($view == 'article')) {
-            $text .= $this->showRelatedArticlesByTags($id, $tags);
+        $thereIsSomeTagsInCurrentArticle = !empty($tags);
+
+        if ($showRelatedArticles && $thereIsSomeTagsInCurrentArticle && $userIsViewingAnArticle) {
+            $related = CedTagsHelper::param('related', 'Joomla');
+            $plugin = CedTagRelatedFactory::getInstance($related);
+            $text .= $plugin->getRelatedAsHtml($id, $catid, $access, $htmlTag[1]);
         }
 
-        return true;
     }
 
     /**
+     * @param $context
      * @param $id
-     * @param $tags
-     * @return string
-     */
-    private function showRelatedArticlesByTags($id, $tags)
-    {
-        $count = CedTagsHelper::param('RelatedArticlesCountByTags', 10);
-        $relatedArticlesTitle = CedTagsHelper::param('RelatedArticlesTitleByTags', "Related Articles");
-        //$max=max(intval($relatedArticlesCount),array_count_values($termIds));
-
-        //find the unique article ids
-        $cids = $this->getUniqueArticleId($tags, $id);
-
-        $html = "";
-        if (is_array($cids) && sizeof($cids) > 0) {
-
-            $dbo = JFactory::getDBO();
-            $nullDate = $dbo->getNullDate();
-
-            $date = JFactory::getDate();
-            $now = JDate::getInstance()->toSql($date);
-
-            $query = $dbo->getQuery(true);
-            $query->select('a . id');
-            $query->select('a . title');
-            $query->select('a . alias');
-            $query->select('a . access');
-            $query->select('CASE WHEN CHAR_LENGTH(a . alias) THEN CONCAT_WS(":", a . id, a . alias) ELSE a . id END as slug');
-            $query->select('CASE WHEN CHAR_LENGTH(cc . alias) THEN CONCAT_WS(":", cc . id, cc . alias) ELSE cc . id END as catslug');
-
-            $query->from('#__content AS a');
-
-            $query->innerJoin('#__categories AS cc ON cc.id = a.catid');
-            $query->where('a.id in(' . @implode(',', $cids) . ')');
-            $query->where('a.state = 1');
-            $query->where('( a.publish_up = ' . $dbo->Quote($nullDate) . ' OR a.publish_up <= ' . $dbo->Quote($now) . ' )');
-            $query->where('( a.publish_down = ' . $dbo->Quote($nullDate) . ' OR a.publish_down >= ' . $dbo->Quote($now) . ' )');
-            $query->where('cc.published = 1');
-
-            $dbo->setQuery($query, 0, $count);
-            //$queryDump = $query->dump();
-            $rows = $dbo->loadObjectList();
-
-            if (empty($rows)) {
-                return '';
-            }
-            $user = JFactory::getUser();
-            $aid = (JVERSION < 1.6)? $user->get('aid', 0) : max ($user->getAuthorisedViewLevels());
-
-            $html = '<div class="relateditemsbytags">' . $relatedArticlesTitle . '</div>
-                    <div>
-                    <ul class="relateditems">';
-
-            foreach ($rows as $row) {
-
-                if ($row->access <= $aid) {
-                    $link = (JVERSION < 1.6)? JRoute::_(ContentHelperRoute::getArticleRoute($row->slug, $row->catslug, $row->sectionid)) : JRoute::_(ContentHelperRoute::getArticleRoute($row->slug, $row->catslug));
-                } else {
-                    $link = JRoute::_('index.php?option=com_user&view=login');
-                }
-                $html .= '<li> <a href="' . $link . '">' . htmlspecialchars($row->title) . '</a></li>';
-            }
-            $html .= '</ul></div>';
-
-        }
-        return $html;
-    }
-
-    /**
-     * @param $tags
-     * @param $id
+     * @param $catid
+     * @param $showTagTitle
      * @return mixed
      */
-    private function getUniqueArticleId($tags, $id)
+    private function getHtmlTag($context, $id, $catid, $showTagTitle)
     {
-        $dbo = JFactory::getDBO();
-        $query = $dbo->getQuery(true);
+        $cache = JFactory::getCache('plugins_cedtag', '');
+        $cache->setCaching(1);
 
-        $relatedArticlesCount = 0;
-        $max = max(intval($relatedArticlesCount), count($tags));
-        $tags = array_slice($tags, 0, $max);
+        $cacheId = md5(serialize(array($context, $id, $catid, $showTagTitle)));
+        if (!($html = $cache->get($cacheId))) {
 
-        $tagIds = array();
-        foreach ($tags as $tag) {
-            $tagIds[] = $tag->id;
+            $cedTagModelTags = new CedTagModelTags();
+            $tags = $cedTagModelTags->getModelTags($id);
+
+            $CedTagsHelper = new CedTagsHelper();
+            $canEdit = $CedTagsHelper->canUserDoTagOperations($id);
+            if ($canEdit) {
+                $frontPageEditTagEditOnly = CedTagsHelper::param('FrontPageEditTagEditOnly', '0');
+                $layout = JFactory::getApplication()->input->get('layout');
+
+                /*   $frontPageEditTagEditOnly  $layout  ->display
+                 *       yes                      edit      yes
+                 *                                any       no
+                 *
+                 *       no                       edit      yes
+                 *                                any       yes
+                 */
+                $display = true;
+                if ($frontPageEditTagEditOnly && $layout != 'edit') {
+                    $display = false;
+                }
+
+                if ($display) {
+                    $CedTagSuggest = new CedTagSuggest();
+                    $tagIt = array();
+                    foreach ($tags as $tag) {
+                        $tagIt[] = $tag->tag;
+                    }
+                    $CedTagSuggest->addSiteJs($tagIt, $id);
+                    $tagResult = '<div class="cedtagplugin">';
+                    $tagResult .= ' <div class="title">' . JText::_('PLG_CONTENT_CEDTAGS_ARTICLE_TAGGED') . '</div>';
+                    $tagResult .= ' <div>' . JText::_('PLG_CONTENT_CEDTAGS_DOCUMENTATION') . '</div>';
+                    $tagResult .= ' <ul id="tags' . $id . '" class="tags"></ul>';
+                    $tagResult .= '</div>';
+                }
+            } else {
+                $htmlList = "";
+                foreach ($tags as $tag) {
+                    $htmlList .= '<li><a href="' . $tag->link . '" rel="tag" title="' . $tag->title . '" >' . $tag->tag . '</a></li> ';
+                }
+                $tagResult = '<div class="cedtag" />';
+                if ($showTagTitle) {
+                    $tagResult .= ' <div class="title">' . JText::_('PLG_CONTENT_CEDTAGS_ARTICLE_TAGGED') . '</div >';
+                }
+                $tagResult .= ' <ul class="cedtag" > ' . $htmlList . '</ul >';
+                $tagResult .= '</div > ';
+            }
+
+            $cache->store(array($tagResult, $tags), $cacheId);
         }
-        $tagIdsCondition = @implode(',', $tagIds);
 
-        $query->select('distinct cid');
-        $query->from('#__cedtag_term_content');
-        $query->where('tid in('.$tagIdsCondition.')');
-        $query->where('cid<>' . $id);
-        $dbo->setQuery($query);
-        $text = $query->dump();
-
-        $ids = $dbo->loadColumn(0);
-        return $ids;
+        return $cache->get($cacheId);
     }
+
 
     /**
      * Auto extract meta keywords as tags
      * Article is passed by reference, but after the save, so no changes will be saved.
      * Method is called right after the content is saved
      *
-     * @param    string        The context of the content passed to the plugin (added in 1.6)
-     * @param    object        A JTableContent object
-     * @param    bool        If the content has just been created
+     * @param    string $context       The context of the content passed to the plugin (added in 1.6)
+     * @param    object $article       A JTableContent object
+     * @param    bool   $isNew     If the content has just been created
+     * @return bool
      */
     public
     function onContentAfterSave($context, &$article, $isNew)
@@ -323,7 +262,6 @@ class plgContentCedTag extends JPlugin
                     $combined = array();
                     $combined[$id] = $tags;
                     require_once(JPATH_SITE . '/administrator/components/com_cedtag/models/tag.php');
-
                     $model = new CedTagModelTag();
                     $model->batchUpdate($combined);
                 }
@@ -332,5 +270,3 @@ class plgContentCedTag extends JPlugin
         return true;
     }
 }
-
-?>

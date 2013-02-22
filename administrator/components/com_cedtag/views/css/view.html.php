@@ -29,7 +29,7 @@ class CedTagViewCss extends JView
         $tagCssFile = $CedTagThemes->getFile();
         $isCssWritable = is_writable($tagCssFile);
 
-        $cssFileContent = JFile::read($tagCssFile);
+        $cssFileContent = file_get_contents($tagCssFile);
         $this->assign('isCssWritable', $isCssWritable);
         $this->assignRef('cssFileName', $tagCssFile);
         $this->assignRef('cssFileContent', $cssFileContent);
@@ -52,7 +52,7 @@ class CedTagViewCss extends JView
             JToolBarHelper::custom('restore', 'default', '', JText::_('RESTORE DEFAULT'), false);
             JToolBarHelper::spacer();
         }
-        JToolBarHelper::back(JText::_('CONTROL PANEL'), 'index.php?option=com_cedtag');
+        JToolBarHelper::back(JText::_('CEDTAG_CONTROL_PANEL'), 'index.php?option=com_cedtag');
     }
 
 

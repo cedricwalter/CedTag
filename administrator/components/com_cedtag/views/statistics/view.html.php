@@ -31,7 +31,7 @@ class CedTagViewStatistics extends JView
     {
         JToolBarHelper::title(JText::_('STATISTICS'), 'tag.png');
         JToolBarHelper::spacer();
-        JToolBarHelper::back(JText::_('CONTROL PANEL'), 'index.php?option=com_cedtag');
+        JToolBarHelper::back(JText::_('CEDTAG_CONTROL_PANEL'), 'index.php?option=com_cedtag');
 
     }
 

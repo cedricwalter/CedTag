@@ -1,27 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension
-        type="module"
-        version="2.5"
-        client="site"
-        method="upgrade">
+<extension type="module" version="2.5" client="site" method="upgrade">
     <name>CedTag Custom Tags Cloud</name>
     <element>mod_cedtagcustom</element>
     <author>Cedric Walter</author>
     <creationDate>April 2012</creationDate>
-    <copyright>Copyright (C)2009 joomlatags.org (C)2012 waltercedric.com All rights
-        reserved.
-    </copyright>
+    <copyright>Copyright (C)2009 joomlatags.org (C)2012 waltercedric.com All rights reserved. </copyright>
     <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
     <authorEmail>cedric.walter@gmail.com - joomlatags@gmail.com</authorEmail>
     <authorUrl>www.waltercedric.org - www.joomlatags.org</authorUrl>
-    <version>2.6.0</version>
+    <version>2.6.1</version>
     <description>MOD_CEDCUSTOMTAGSCLOUD_XML_DESCRIPTION</description>
-
     <languages>
-   		<language tag="en-GB">en-GB.mod_cedtagcustom.ini</language>
-   		<language tag="en-GB">en-GB.mod_cedtagcustom.sys.ini</language>
-   	</languages>
-
+        <language tag="en-GB">en-GB.mod_cedtagcustom.ini</language>
+        <language tag="en-GB">en-GB.mod_cedtagcustom.sys.ini</language>
+    </languages>
     <files>
         <filename module="mod_cedtagcustom">mod_cedtagcustom.php</filename>
         <filename>helper.php</filename>
@@ -29,81 +21,34 @@
         <filename>tmpl/default.php</filename>
         <filename>tmpl/index.html</filename>
     </files>
-
     <config>
         <fields name="params">
             <fieldset name="basic">
-                <field name="tagsForSelection" type="sql"
-                       query="select id,concat(id,'--',name) as name from #__cedtag_term;" key_field="id"
-                       value_field="name" label="MOD_CEDCUSTOMTAGSCLOUD_TAGSFORSELECTION_LABEL"
-                       description="MOD_CEDCUSTOMTAGSCLOUD_TAGSFORSELECTION_DESC" rows="8"
-                       cols="40"/>
-                <field name="tagIds" type="text" default="" label="MOD_CEDCUSTOMTAGSCLOUD_TAGSFORSELECTION_LABEL"
-                       description="MOD_CEDCUSTOMTAGSCLOUD_TAGSFORSELECTION_DESC"
-                       size="60"/>
-
-                <field
-                        name="sorting"
-                        type="list"
-                        default="1"
-                        label="MOD_CEDCUSTOMTAGSCLOUD_SORTING_LABEL"
-                        description="MOD_CEDCUSTOMTAGSCLOUD_SORTING_DESC">
+                <field name="tagsForSelection" type="sql" query="select id,concat(id,'--',name) as name from #__cedtag_term;" key_field="id" value_field="name" label="MOD_CEDCUSTOMTAGSCLOUD_TAGSFORSELECTION_LABEL" description="MOD_CEDCUSTOMTAGSCLOUD_TAGSFORSELECTION_DESC"
+                    rows="8" cols="40"/>
+                <field name="tagIds" type="text" default="" label="MOD_CEDCUSTOMTAGSCLOUD_TAGSFORSELECTION_LABEL" description="MOD_CEDCUSTOMTAGSCLOUD_TAGSFORSELECTION_DESC" size="60"/>
+                <field name="sorting" type="list" default="1" label="MOD_CEDCUSTOMTAGSCLOUD_SORTING_LABEL" description="MOD_CEDCUSTOMTAGSCLOUD_SORTING_DESC">
                     <option value="tag_latestasort">By Latest created</option>
                     <option value="tag_alphasort">MOD_CEDCUSTOMTAGSCLOUD_SORTING_VALUE1</option>
                     <option value="sizeasort">MOD_CEDCUSTOMTAGSCLOUD_SORTING_VALUE2</option>
                 </field>
-
-                <field
-                        name="reverse"
-                        type="radio"
-                        default="0"
-                        label="MOD_CEDCUSTOMTAGSCLOUD_REVERSE_LABEL"
-                        description="MOD_CEDCUSTOMTAGSCLOUD_REVERSE_DESC">
+                <field name="reverse" type="radio" default="0" label="MOD_CEDCUSTOMTAGSCLOUD_REVERSE_LABEL" description="MOD_CEDCUSTOMTAGSCLOUD_REVERSE_DESC" class=".btn-group">
                     <option value="0">JNO</option>
                     <option value="1">JYES</option>
                 </field>
             </fieldset>
-
-            <fieldset
-                    name="advanced">
-                <field
-                        name="layout"
-                        type="modulelayout"
-                        label="Style"
-                        description="JFIELD_ALT_MODULE_LAYOUT_DESC"/>
-                <field
-                        name="moduleclass_sfx"
-                        type="text"
-                        label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
-                        description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
-                <field
-                        name="cache"
-                        type="list"
-                        default="1"
-                        label="COM_MODULES_FIELD_CACHING_LABEL"
-                        description="COM_MODULES_FIELD_CACHING_DESC">
-                    <option
-                            value="1">JGLOBAL_USE_GLOBAL
-                    </option>
-                    <option
-                            value="0">COM_MODULES_FIELD_VALUE_NOCACHING
-                    </option>
+            <fieldset name="advanced">
+                <field name="layout" type="modulelayout" label="JFIELD_ALT_LAYOUT_LABEL" description="JFIELD_ALT_MODULE_LAYOUT_DESC"/>
+                <field name="moduleclass_sfx" type="text" label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
+                <field name="cache" type="list" default="1" label="COM_MODULES_FIELD_CACHING_LABEL" description="COM_MODULES_FIELD_CACHING_DESC">
+                    <option value="1">JGLOBAL_USE_GLOBAL </option>
+                    <option value="0">COM_MODULES_FIELD_VALUE_NOCACHING </option>
                 </field>
-                <field
-                        name="cache_time"
-                        type="text"
-                        default="900"
-                        label="COM_MODULES_FIELD_CACHE_TIME_LABEL"
-                        description="COM_MODULES_FIELD_CACHE_TIME_DESC"/>
-                <field
-                        name="cachemode"
-                        type="hidden"
-                        default="static">
-                    <option
-                            value="static"></option>
+                <field name="cache_time" type="text" default="900" label="COM_MODULES_FIELD_CACHE_TIME_LABEL" description="COM_MODULES_FIELD_CACHE_TIME_DESC"/>
+                <field name="cachemode" type="hidden" default="static">
+                    <option value="static"/>
                 </field>
             </fieldset>
         </fields>
     </config>
-
 </extension>

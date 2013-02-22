@@ -7,6 +7,11 @@
  **/
 defined('_JEXEC') or die('Restricted access');
 
+// Access check.
+if (!JFactory::getUser()->authorise('core.manage', 'com_cedtag')) {
+    throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 401);
+}
+
 // Include dependencies
 jimport('joomla.application.component.controller');
 

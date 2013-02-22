@@ -20,23 +20,30 @@ $CedTagSuggest->addAdminJs(array(), null);
 ?>
 
 <form action="<?php echo JRoute::_('index.php?controller=term&option=com_cedtag'); ?>" method="post" name="adminForm" id="adminForm">
-    <table>
-        <tr>
-            <td width="50%"><?php echo JText::_('Filter'); ?>:<br/>
-                <label for="search"><input
-                    type="text" name="search" id="search" value="<?php echo($search);?>"
+    <fieldset id="filter-bar">
+        <div class="filter-search fltlft">
+            <label for="search"><input
+                    type="text"
+                    placeholder="<?php echo JText::_('Filter by Term'); ?>"
+                    name="search" id="search"
+                    value="<?php echo($search);?>"
                     class="text_area" onchange="document.adminForm.submit();"/></label>
-                <button onclick="this.form.submit();"><?php echo JText::_('Go'); ?></button>
-                <button
+            <button onclick="this.form.submit();"><?php echo JText::_('Go'); ?></button>
+            <button
                     onclick="document.getElementById('search').value='';this.form.submit();"><?php echo JText::_('Reset'); ?></button>
-            </td>
-            <td width="500px">
-            <?php echo JText::_('Quick way to create new tags and press enter to create'); ?>:
-            <ul id="tags" class="tags" ></ul>
-            </td>
+        </div>
+        <div class="filter-search fltlft">
+            <?php echo JText::_('Quick way to create new tags and press enter to create'); ?>:<ul id="tags" class="tags"></ul>
+        </div>
+        <div class="filter-select fltrt">
+            <select name="filter_published" class="inputbox" onchange="this.form.submit()">
+                <option value=""><?php echo JText::_('JOPTION_SELECT_PUBLISHED');?></option>
+                <?php echo JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), 'value', 'text', $this->state->get('filter.published'), true);?>
+            </select>
+        </div>
+    </fieldset>
 
-        </tr>
-    </table>
+
     <table class="adminlist">
         <thead>
         <tr>
@@ -67,7 +74,7 @@ $CedTagSuggest->addAdminJs(array(), null);
         $cedTagsHelper = new CedTagsHelper();
         if (count($rows)) {
             for ($i = 0, $n = count($rows); $i < $n; $i++) {
-                $row = &$rows[$i];
+                $row = & $rows[$i];
                 JFilterOutput::objectHtmlSafe($row);
                 $row->description = $cedTagsHelper->truncate($row->description);
                 $link = 'index.php?option=com_cedtag&controller=term&task=edit&cid[]=' . $row->id;

@@ -36,7 +36,7 @@ class CedTagViewExport extends JView
    			$bar->appendButton('Confirm', JText::_('Are you sure you want to export?'), 'default',  JText::_('Export'), 'export', false);
             JToolBarHelper::spacer();
         }
-        JToolBarHelper::back(JText::_('CONTROL PANEL'), 'index.php?option=com_cedtag');
+        JToolBarHelper::back(JText::_('CEDTAG_CONTROL_PANEL'), 'index.php?option=com_cedtag');
 
     }
 

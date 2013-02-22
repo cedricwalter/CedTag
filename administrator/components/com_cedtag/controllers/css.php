@@ -12,8 +12,8 @@ jimport('joomla.application.input');
 jimport('joomla.filesystem.file');
 
 require_once (JPATH_COMPONENT . '/controllers/file.php');
-require_once JPATH_SITE . '/components/com_cedtag/helpers/helper.php';
-require_once JPATH_SITE . '/components/com_cedtag/helpers/themes.php';
+require_once (JPATH_SITE . '/components/com_cedtag/helpers/helper.php');
+require_once (JPATH_SITE . '/components/com_cedtag/helpers/themes.php');
 
 
 class CedTagControllerCss extends CedTagControllerFile

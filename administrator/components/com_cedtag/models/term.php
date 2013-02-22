@@ -29,7 +29,11 @@ class CedTagModelTerm extends JModel
     }
 
     /**
-     * @return string
+     * @param $id
+     * @param $name
+     * @param $description
+     * @param $message
+     * @param $redirectTo
      */
     public function autofillDescriptions($id, $name, $description, &$message, &$redirectTo)
     {
@@ -95,6 +99,11 @@ class CedTagModelTerm extends JModel
         return $tags;
     }
 
+    /**
+     * @param $source
+     * @param $updateTerm
+     * @param $tag
+     */
     public function updateDescriptionForTag($source, $updateTerm, $tag)
     {
         if ($updateTerm) {
@@ -144,6 +153,28 @@ class CedTagModelTerm extends JModel
     }
 
     /**
+     * Delete all terms and all content association
+     * @return bool|mixed
+     */
+    public function clearall()
+    {
+        $dbo = JFactory::getDbo();
+        $query = $dbo->getQuery(true);
+
+        $query->delete('#__cedtag_term');
+        $dbo->setQuery($query);
+        $res = $dbo->query();
+
+        $query->clear();
+        $query->delete('#__cedtag_term_content');
+        $dbo->setQuery($query);
+        $res = $res & $dbo->query();
+
+        return $res;
+    }
+
+
+    /**
      * @param $id id of term
      * @param $name
      * @param null $description
@@ -171,6 +202,12 @@ class CedTagModelTerm extends JModel
         return $dbo->query();
     }
 
+    /**
+     * @param $name
+     * @param null $description
+     * @param int $weight
+     * @return bool|int
+     */
     public function store($name, $description = null, $weight = 0)
     {
         $dbo = JFactory::getDbo();
@@ -226,6 +263,10 @@ class CedTagModelTerm extends JModel
         }
     }
 
+    /**
+     * @param $terms
+     * @return bool|int
+     */
     public function insertTerms($terms)
     {
         //$terms = CedTagsHelper::isValidName($terms);
@@ -244,6 +285,9 @@ class CedTagModelTerm extends JModel
         return $isok;
     }
 
+    /**
+     * @param $id
+     */
     public function deleteContentTerms($id)
     {
         $dbo = JFactory::getDbo();
@@ -256,6 +300,10 @@ class CedTagModelTerm extends JModel
         $dbo->query();
     }
 
+    /**
+     * @param $cid content id
+     * @param $tIds tag id
+     */
     public function insertContentTerms($cid, $tIds)
     {
         foreach ($tIds as $tid) {
@@ -263,6 +311,10 @@ class CedTagModelTerm extends JModel
         }
     }
 
+    /**
+     * @param $tid
+     * @param $cid
+     */
     public function insertContentterm($tid, $cid)
     {
         $dbo = JFactory::getDbo();
@@ -276,6 +328,10 @@ class CedTagModelTerm extends JModel
         $dbo->query();
     }
 
+    /**
+     * @param $cid
+     * @return mixed
+     */
     public function termsForContent($cid)
     {
         $dbo = JFactory::getDbo();
@@ -293,6 +349,32 @@ class CedTagModelTerm extends JModel
         $dbo->setQuery($query);
 
         return $dbo->loadColumn();
+    }
+
+    /**
+     * @param null $ordering
+     * @param null $direction
+     */
+    protected function populateState($ordering = null, $direction = null)
+    {
+        // Adjust the context to support modal layouts.
+        if ($layout = JRequest::getVar('layout')) {
+            $this->context .= '.' . $layout;
+        }
+
+        //$search = $this->getUserStateFromRequest($this->context . 'filter.published', 'filter_published');
+//        /$this->setState('tag.filter.search', $search);
+
+        // List state information.
+        parent::populateState('a.title', 'asc');
+    }
+
+
+    protected function getStoreId($id = '')
+    {
+        // Compile the store id.
+        //$id .= ':' . $this->getState('filter.published');
+        return parent::getStoreId($id);
     }
 
     public function getTermList()
@@ -329,12 +411,21 @@ class CedTagModelTerm extends JModel
         $query->from('#__cedtag_term as t');
         $query->leftJoin('#__cedtag_term_content as c  on c.tid=t.id');
 
+        // Filter by published state
+        $published = $this->getState('filter.published');
+        if (is_numeric($published)) {
+            $query->where('t.published = ' . (int)$published);
+        } elseif ($published === '') {
+            $query->where('(t.published = 0 OR t.published = 1)');
+        }
+
         if (!is_null($search)) {
             $query->where("name like '%" . $search . "%' ");
         }
         $query->group('(t.id)');
         $query->order('t.name');
 
+        $sql = $query->dump();
         $dbo->setQuery($query, $limitStart, $limit);
         $this->list = $dbo->loadObjectList();
 

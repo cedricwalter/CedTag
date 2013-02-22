@@ -1,0 +1,126 @@
+Warning
+
+IT IS MANDATORY TO COMPLETELY REMOVE ALL VERSION < 2.6.0 BEFORE INSTALLING THIS NEW ONE!
+Go to the Extension Manager under the tab Manage, enter in filter "tag", select all and click Actions – Uninstall
+Reason: I did change a lot of folder name and file casing casing to be more Joomla compliant
+Don’t be scared you will not loose any Tags or data from your database! uninstalling do not remove currently any tables!
+
+
+2.6.1
+
+cedThumbnails support in cedTag! cedThumbnails show Related Stories Under Each Post, it is a small widget that appears under each post, linking to related stories from your blog archive,
+cedThumbnails links to stories that are relevant and interesting to readers of a particular post, keeping them engaged with your blog, and increasing your traffic!
+You can now use Tags from cedTag to display related articles in Joomla. You can choose either
+* CedThumbnails  (require extension CedThumbnails)
+* Joomla - using Meta-Keywords
+
+Maintenance Page: This new page will let you perform basic maintenance operations. Feel Free to ask for more operations using the support channel (Forums or Feedback (UserVoice))
+* Replace Tag xxxx with Tag yyyy in all articles with Tag xxxx
+* Add Tag yyyy to all articles which have also Tag xxxx
+* Remove Tag xxxx to all articles which have also Tag yyyy.
+
+NEW: change position of tag in category view, blog view that you can set tags to appear after intro text (show after text before readmore button)
+NEW: version of extension is now displayed in administrator backend panel.
+NEW: Adding a  “Clear All” button in   “TERM MANAGER” to remove all Tags and all
+
+Bug Fixing
+BUG: fix 500 error This error is now solved for good, was in cedtag component SEF (Thanks to Signature Ltd)
+BUG: missing CSS style on ads top
+
+Miscellaneous
+The whole code has been validated using PHP code guidelines PSR-0/PSR-1/PSR-2
+
+
+2.6.0
+
+SECURITY: all Ajax operations+Admin operation are now protected 
+		  with a Joomla token to avoid CSRF
+SECURITY: All SQL statement have been migrated to use Joomla 
+           Query Object so the code should be portable now under 
+		   SQL Server, Postgress
+PERF: Faster escaping in modules if there is no tags matching 
+      any criteria,
+NEW: More themes are available.
+NEW: In �article Manager�, multi-tag filtering it is now 
+     possible to simply select multiple tags and/or searching
+	 for one tag and then another within the previous results.
+NEW: In �article Manager�, tab index is supported, enter
+	 tags hit tab to go to next articles,
+NEW: Full rewriting of Tag List layout, now table less.
+NEW: Full rewriting of blog layout: having as much if not
+     all features of the internal Joomla category blog feature.
+	  * Table less layout,
+	  * Category display,
+	  * Articles Metadata: publish, created, hits,
+	  * Articles operations like print, email,
+	   As it reuse the setting of Joomla, you�ll have to go to
+	   Joomla configuration to make changes or better it will 
+	   inherit the same setting as Joomla content blog layout.
+- NEW: full internationalization of all 5 modules:
+ Custom Tags Cloud (en-GB.mod_cedtagcustom.ini),
+ Latest Tags Cloud (en-GB.mod_cedtaglatest.ini),
+ Most Popular Tags Cloud (en-  GB.mod_cedtagmostpopular.ini),
+ Most Read Tags Cloud (en- GB.mod_cedtagmostread.ini),
+ Random Tags Cloud (en-GB.mod_cedtagrandom.ini).
+- NEW: Add �Save� button for �Template manager� 
+       and �Stop words�
+
+- NEW: It is now possible to change the title of tags by 
+       changing the value of the key COM_CEDTAG_ITEMS_TITLE
+	   in  /plugins/content/cedtag/language/en-GB/en-GB.plg_content_cedtags.ini
+		; %1$s = frequency, 
+		; %2$s = name, 
+		; %3$s = created, 
+		; %4$s = hits 
+COM_CEDTAG_ITEMS_TITLE="%1$s items tagged with %2$s | created %3$s | Hits: %4$s"
+- NEW: More Options for Menu Entry �All Tags� Count, Page 
+       Title, Meta Description, Meta Keywords, Reverse display 
+	   and tags ordering. Some default are provided.
+- NEW/BUG Wordle now working on Linux, was always working on 
+          windows due to a path issue to the true type font 
+		  I did introduced, I took the time to add a lot more
+		  settings so you can fully customized the images created!
+- NEW: Rockettheme Installer removed to use standard Joomla 
+       installation packages. To remove now all CedTag components,
+	   just remove the main component. No risk of incomplete removal.
+- NEW: menu entries for administration backend
+- NEW: 5 Modules are now created as default but not published nor 
+       assigned to any page.
+- NEW: option so front page tagging to be just available in front 
+       page edit before , it was too long, and breaks the browsing 
+	   experience for any logged author browsing the site, sometimes
+	   appearing even twice. (Request)
+- NEW: scripts to switch off all subsystem of cedTag if you get no 
+       access to your site (happen only when you remove some part 
+	   and not all of cedTag)
+	   
+Known Issues
+- CSV export of all tags is currently broken
+ 
+Bugs
+
+- BUG: Error 500 Some people encounter while using URL rewriting. 
+	   Found also that RokComment is crashing when used with cedTag. I did
+	   solve the issue by patching RokComment (I think the error is there 
+	   and not in my component). YOu can ask me for the custom build of RokComment.
+- BUG: correct handling of trash item in frontend 
+- BUG: correct handling of Joomla ACL using authorized access levels for the user 
+- BUG: Can add tag but cannot delete tag, request 
+     http://forums.waltercedric.com/index.php?topic=1401.0 
+- BUG: Content plugin don�t get executed in blog layout, 
+- BUG: wordle links were not supporting SEF 
+- BUG: advertisement code was not allowing html, 
+- BUG: Custom tag cloud module: the SQL query was broken, 
+- BUG: Custom tag cloud font size and title overlay was not defined , 
+- BUG: All tags layout was not taking �count� into account for limiting 
+     the size of the cloud. 
+- BUG: default file css restore was not depending on user selection of 
+     theme, as a result restore was always using simple.default.css 
+- BUG: installer now create default modules instances without publishing them. 
+- BUG: metadata of menu entry �All tags� was not reading parameters, now you 
+     can set count, sorting, metadata descriptions and keywords 
+- BUG: paging at the limits (where ?limitstart= is in the url) lead to a tag not found. 
+- BUG: �:� was always filtered from tag name even when removed from �Strip Characters� 
+- BUG: Solved �Warning: Missing argument 4 for 
+     plgContentCedTags::onContentBeforeDisplay() in plugins/content/cedTags/cedTags.php
+ 	 on line 41"

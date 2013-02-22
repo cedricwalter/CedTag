@@ -15,6 +15,8 @@ jimport('joomla.error.log');
 class CedTagsHelper extends JObject
 {
 
+    var $cache = null;
+
     public function __construct()
     {
         parent::__construct();
@@ -304,12 +306,12 @@ class CedTagsHelper extends JObject
         return ($tag1->created < $tag2->created) ? -1 : 1;
     }
 
-    static function tag_random($tag1, $tag2)
+    public static function tag_random($tag1, $tag2)
     {
         return rand(-1, 1);
     }
 
-    static function hitsasort($tag1, $tag2)
+    public static function hitsasort($tag1, $tag2)
     {
         if ($tag1->hits == $tag2->hits) {
             return 0;
@@ -317,7 +319,7 @@ class CedTagsHelper extends JObject
         return ($tag1->hits < $tag2->hits) ? -1 : 1;
     }
 
-    static function sizeasort($tag1, $tag2)
+    public static function sizeasort($tag1, $tag2)
     {
         if ($tag1->size == $tag2->size) {
             return 0;
@@ -331,14 +333,10 @@ class CedTagsHelper extends JObject
         static $version;
 
         if (!isset($version)) {
-            $xml = JFactory::getXMLParser('Simple');
             $xmlFile = JPATH_ADMINISTRATOR . '/components/com_cedtag/manifest.xml';
             if (file_exists($xmlFile)) {
-                if ($xml->loadFile($xmlFile)) {
-                    $root = $xml->document;
-                    $element = $root->getElementByPath('version');
-                    $version = $element ? $element->data() : '';
-                }
+                $xml = JFactory::getXML($xmlFile);
+                $version = (string)$xml->version;
             }
         }
         return $version;
@@ -378,14 +376,14 @@ class CedTagsHelper extends JObject
         //return urlencode($tagname);
     }
 
-    public function unUrlTagname($tagname)
+    public function unUrlTagname($tagName)
     {
         /*return preg_replace(
             '/[:-]/',
             ' ',
             urldecode($tagname)
         );*/
-        return urldecode($tagname);
+        return urldecode($tagName);
     }
 
     public function truncate($blurb)
@@ -431,7 +429,7 @@ class CedTagsHelper extends JObject
             if (!is_file($file)) {
                 JFile::copy(JPATH_ADMINISTRATOR . '/components/com_cedtag/stopwords/stopwords_en-GB-default.php', $file);
             }
-            $FileContent = trim(JFile::read($file));
+            $FileContent = trim(file_get_contents($file));
             $excludedArray = explode(",", $FileContent);
         }
 

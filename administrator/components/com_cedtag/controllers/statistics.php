@@ -30,6 +30,7 @@ class CedTagControllerStatistics extends JController
     /**
      * @param bool $cachable
      * @param bool $urlparams
+     * @return JController|void
      */
     public function display($cachable = false, $urlparams = false)
     {

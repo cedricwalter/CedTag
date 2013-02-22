@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="2.5" method="upgrade">
+    <name>CedTag</name>
+    <packagename>cedtag</packagename>
+    <author>Cedric Walter</author>
+    <authorEmail>cedric.walter@gmail.com</authorEmail>
+    <authorUrl>http://www.waltercedric.com</authorUrl>
+    <packager>Cedric Walter</packager>
+    <packagerurl>http://www.waltercedric.com</packagerurl>
+    <creationDate>April 2012</creationDate>
+    <copyright>Copyright (C) 2012 waltercedric.com All rights reserved.</copyright>
+    <license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
+    <version>2.6.1</version>
+    <description>Package Cedric Walter Tags</description>
+
+	<scriptfile>script.cedtag.php</scriptfile>
+
+	<install>
+		<sql>
+			<file driver="mysqli" charset="utf8">install.mysql.sql</file>
+			<file driver="mysql" charset="utf8">install.mysql.sql</file>
+		</sql>
+	</install>
+	<uninstall>
+		<sql>
+			<file driver="mysqli" charset="utf8">uninstall.mysql.sql</file>
+			<file driver="mysql" charset="utf8">uninstall.mysql.sql</file>
+		</sql>
+	</uninstall>
+
+	<!--
+    <update>
+    	<schemas>
+    		<schemapath type="mysql">sql/updates</schemapath>
+    	</schemas>
+    </update>
+-->
+
+    <!-- Extension Update Specification -->
+    <!-- Note: No spaces or linebreaks allowed between the server tags -->
+    <updateservers>
+        <server type="extension" priority="1" name="Extension Update Site">http://updates.waltercedric.com/components/com_cedtag/update.xml</server>
+    </updateservers>
+	
+	<files folder="components/com_cedtag">
+        <filename>controller.php</filename>
+        <filename>index.html</filename>
+        <filename>router.php</filename>
+        <filename>cedtag.php</filename>
+        <folder>views</folder>
+        <folder>models</folder>
+        <folder>helpers</folder>
+        <folder>wordcloud</folder>
+	</files>
+	<media destination="com_cedtag" folder="media/com_cedtag">
+		<folder>css</folder>
+		<folder>images</folder>
+		<folder>js</folder>
+		<filename>index.html</filename>
+	</media>
+	<languages folder="language/en-GB">
+		<language tag="en-GB">en-GB.com_cedtag.ini</language>
+	</languages>
+    <administration>
+        <menu link="option=com_cedtag">cedTag</menu>
+		<submenu>
+			<menu link="option=com_cedtag">Control Panel</menu>
+			<menu link="option=com_cedtag&amp;controller=tag">Articles Manager</menu>
+			<menu link="option=com_cedtag&amp;controller=term">Tag Manager</menu>
+            <!--
+			<menu link="option=com_config&amp;view=component&amp;component=com_cedtag&amp;path=&amp;tmpl=component">Configuration</menu>-->
+			<menu link="option=com_cedtag&amp;controller=css">Template manager</menu>
+			<menu link="option=com_cedtag&amp;controller=stopwords">Stopwords</menu>
+			<menu link="option=com_cedtag&amp;controller=maintenance">Maintenance</menu>
+			<menu link="option=com_cedtag&amp;controller=import">Import from</menu>
+			<menu link="option=com_cedtag&amp;controller=export">Export to</menu>
+			<menu link="option=com_cedtag&amp;controller=statistics">Statistics</menu>
+			<menu link="index.php?option=com_cedtag&amp;controller=diagnostic">Diagnostics</menu>
+		</submenu>
+		<files folder="administrator/components/com_cedtag">
+            <filename>controller.php</filename>
+            <filename>cedtag.php</filename>
+            <filename>config.xml</filename>
+            <filename>index.html</filename>
+			<folder>updates</folder>
+            <folder>views</folder>
+            <folder>helpers</folder>
+			<folder>stopwords</folder>
+            <folder>models</folder>
+            <folder>controllers</folder>
+			<filename>install.mysql.sql</filename>
+			<filename>uninstall.mysql.sql</filename>
+		</files>
+		<languages folder="administrator/language/en-GB">
+			<language tag="en-GB">en-GB.com_cedtag.ini</language>
+		</languages>
+	</administration>
+
+	<modules>
+		<module module="mod_cedtagcustom" client="site" />
+		<module module="mod_cedtaglatest" client="site" />
+		<module module="mod_cedtagmostpopular" client="site" />
+		<module module="mod_cedtagmostread" client="site" />
+		<module module="mod_cedtagrandom" client="site" />
+	</modules>
+	<plugins>
+		<plugin plugin="cedtagadd" group="editors-xtd" />
+		<plugin plugin="cedtag" group="content" />
+		<plugin plugin="cedtagsearch" group="search" />
+		<plugin plugin="cedtagsef" group="system" />
+	</plugins>
+
+</extension>

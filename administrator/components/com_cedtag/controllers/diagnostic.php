@@ -28,10 +28,11 @@ class CedTagControllerDiagnostic extends JController
     }
 
     /**
-     * @param bool $cachable
-     * @param bool $urlparams
+     * @param bool $cacheable
+     * @param bool $urlParams
+     * @return JController|void
      */
-    public function display($cachable = false, $urlparams = false)
+    public function display($cacheable = false, $urlParams = false)
     {
         JFactory::getApplication()->input->set('view', 'diagnostic');
         parent::display();

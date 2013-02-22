@@ -32,7 +32,7 @@ class CedTagViewImport extends JView
 
             JToolBarHelper::spacer();
         }
-        JToolBarHelper::back(JText::_('CONTROL PANEL'), 'index.php?option=com_cedtag');
+        JToolBarHelper::back(JText::_('CEDTAG_CONTROL_PANEL'), 'index.php?option=com_cedtag');
 
         parent::display($tpl);
     }

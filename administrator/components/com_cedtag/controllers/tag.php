@@ -52,6 +52,7 @@ class CedTagControllerTag extends JController
     /**
      * @param bool $cachable
      * @param bool $urlparams
+     * @return \JController|void
      */
     public function display($cachable = false, $urlparams = false)
     {
@@ -146,7 +147,8 @@ class CedTagControllerTag extends JController
         JSession::checkToken('get') or jexit(JText::_('JINVALID_TOKEN'));
 
         $CedTagsHelper = new CedTagsHelper();
-        $partialTag = JRequest::getVar('term', '', 'get', 'cmd');
+        $partialTag = JFactory::getApplication()->input->get('term');
+
         return $CedTagsHelper->getTagModel()->suggestJson($partialTag);
     }
 

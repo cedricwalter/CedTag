@@ -125,7 +125,7 @@ class cedtagViewtag extends JView
             //preference
         }
 
-        JToolBarHelper::back(JText::_('Control Panel'), 'index.php?option=com_cedtag');
+        JToolBarHelper::back(JText::_('CEDTAG_CONTROL_PANEL'), 'index.php?option=com_cedtag');
     }
 
     function add($tpl = null)

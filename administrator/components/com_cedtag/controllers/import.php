@@ -31,8 +31,9 @@ class CedTagControllerImport extends JController
     /**
      * @param bool $cachable
      * @param bool $urlparams
+     * @return JController|void
      */
-    public function display($cachable = false, $urlparams = false)
+    public function display($cacheable = false, $urlparams = false)
     {
         JFactory::getApplication()->input->set('view', 'import');
         parent::display();

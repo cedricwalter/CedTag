@@ -11,7 +11,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.plugin.plugin');
-require_once JPATH_SITE . '/components/com_cedtag/helpers/helper.php';
+require_once (JPATH_SITE . '/components/com_cedtag/helpers/helper.php');
 	
 class plgSystemCedTagSef extends JPlugin
 {
@@ -69,8 +69,13 @@ class plgSystemCedTagSef extends JPlugin
         if (strpos($tag, '.')) {
             $tag = substr($tag, 0, strrpos($tag, '.'));
         }
-        JRequest::setVar('tag', $tag);
-        JRequest::setVar('option', 'com_cedtag');
+
+        //http://docs.joomla.org/JInput_Background_for_Joomla_Platform
+        $jInput = JFactory::getApplication()->input;
+        $jInput->set('tag', $tag);
+        $jInput->set('option', 'com_cedtag');
+        $jInput->set('view', 'tag'); //avoid error 500
+        $jInput->set('Itemid', 0); //To show only modules shown in all positions
     }
 
     /**

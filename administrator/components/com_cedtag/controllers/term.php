@@ -10,6 +10,9 @@ defined('_JEXEC') or die();
 jimport('joomla.application.controller');
 jimport('joomla.application.input');
 
+// userhelper for acl
+require_once JPATH_SITE . '/administrator/components/com_users/helpers/users.php';
+
 class CedTagControllerTerm extends JController
 {
     function __construct()
@@ -29,6 +32,9 @@ class CedTagControllerTerm extends JController
                 break;
             case 'remove':
                 $this->remove();
+                break;
+            case 'clearall':
+                $this->clearall();
                 break;
             case 'batchadd':
                 $this->batchAdd();
@@ -85,9 +91,10 @@ class CedTagControllerTerm extends JController
         $name = $input->get('name', '', 'POST');
 
         //Argh this work
-        $description = JRequest::getVar( 'description', '', 'post', 'string', JREQUEST_ALLOWHTML );
+        $description = JRequest::getVar('description', '', 'post', 'string', JREQUEST_ALLOWHTML);
+
         //but not is one
-        //  $input->get('description', '', 'post', 'string', JREQUEST_ALLOWHTML);
+        //$description = $input->get('description', '', 'none');
 
         $weight = $input->get('weight', '', 'post');
         $model = $this->getModel('term');
@@ -130,6 +137,28 @@ class CedTagControllerTerm extends JController
         }
         $this->setRedirect("index.php?option=com_cedtag&controller=term", $msg);
     }
+
+
+    private function clearall()
+    {
+        JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+
+        $canDo = UsersHelper::getActions();
+        if ($canDo->get('core.delete')) {
+            $model = $this->getModel('term');
+            $res = $model->clearall();
+            if ($res) {
+                $msg = JText::_('All Terms and all Tags have been removed from all articles');
+            } else {
+                $msg = JText::_('Failed to remove all Terms');
+            }
+        } else {
+            $msg = JText::_('YOU DO NOT HAVE ENOUGH PERMISSIONS TO CLEAR ALL TERMS');
+        }
+
+        $this->setRedirect("index.php?option=com_cedtag&controller=term", $msg);
+    }
+
 
     private function batchAdd()
     {

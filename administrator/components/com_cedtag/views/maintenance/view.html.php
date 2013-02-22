@@ -35,11 +35,15 @@ class CedTagViewMaintenance extends JView
         JToolBarHelper::title(JText::_('Maintenance'), 'tag.png');
 
         $canDo = UsersHelper::getActions();
-        if ($canDo->get('core.create')) {
-            //JToolBarHelper::custom('migrate', 'default', '', JText::_('Execute'), false);
-            //JToolBarHelper::spacer();
+        /*
+         if ($canDo->get('core.create')) {
+            $bar = JToolBar::getInstance('toolbar');
+            $bar->appendButton('Confirm', JText::_('Are you sure?'), 'execute', JText::_('Execute'), 'execute', false);
+            JToolBarHelper::spacer();
+            JToolBarHelper::divider();
         }
-        JToolBarHelper::back(JText::_('CONTROL PANEL'), 'index.php?option=com_cedtag');
+        */
+        JToolBarHelper::back(JText::_('CEDTAG_CONTROL_PANEL'), 'index.php?option=com_cedtag');
 
     }
 

@@ -8,7 +8,7 @@
     <license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL v3</license>
     <authorEmail>cedric.walter@gmail.com</authorEmail>
     <authorUrl>www.waltercedric.com</authorUrl>
-    <version>2.6.0</version>
+    <version>2.6.1</version>
     <description>TagSef will build a search engine friendly url, which is also human friendly.</description>
 
     <files>

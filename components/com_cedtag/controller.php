@@ -12,7 +12,7 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.controller');
 jimport('joomla.application.input');
 
-require_once JPATH_SITE . '/components/com_cedtag/helpers/helper.php';
+require_once (JPATH_SITE . '/components/com_cedtag/helpers/helper.php');
 
 /**
  *
@@ -37,9 +37,6 @@ class CedTagController extends JController
                 break;
             case 'tag':
                 $this->display();
-                break;
-            case 'save':
-                $this->save();
                 break;
             case 'tags':
                 $this->allTags();

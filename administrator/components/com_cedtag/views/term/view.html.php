@@ -105,7 +105,14 @@ class CedTagViewTerm extends JView
         if ($canDo->get('core.delete')) {
             JToolBarHelper::deleteList(JText::_('Confirm Suppression'), 'remove', JText::_('Delete'));
             JToolBarHelper::spacer();
+
+            $bar = JToolBar::getInstance('toolbar');
+            $bar->appendButton('Confirm', JText::_('Remove all Terms? this will also remove all Tags for all Articles!'), 'clearall', JText::_('Clear all'), 'clearall', false);
+            JToolBarHelper::spacer();
+            JToolBarHelper::divider();
         }
+
+
         if ($canDo->get('core.edit.state')) {
             //trash
         }
@@ -113,15 +120,18 @@ class CedTagViewTerm extends JView
             //preference
         }
 
-        JToolBarHelper::back(JText::_('CONTROL PANEL'), 'index.php?option=com_cedtag');
+        JToolBarHelper::back(JText::_('CEDTAG_CONTROL_PANEL'), 'index.php?option=com_cedtag');
 
         //get params
         $params = JComponentHelper::getParams('com_cedtag');
         $this->assignRef('params', $params);
+
         //get data
         $termList = $this->get('termList');
-
         $this->assignRef('termList', $termList);
+
+        $this->state = $this->get('State');
+        $this->pagination = $this->get('Pagination');
 
         parent::display($tpl);
     }

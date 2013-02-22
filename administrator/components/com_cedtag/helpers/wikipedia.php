@@ -28,8 +28,31 @@ class CedTagWikipedia extends JObject
 
     public function getDefinition($searchTerm)
     {
+        $this->setRequested($this->getRequested() + 1);
 
-        $url = $this->wikipediaServer . "/w/api.php?action=opensearch&search=" . urlencode($searchTerm) . "&format=xml&limit=1";
+        $description = $this->getDefinitionFrom($searchTerm, $this->wikipediaServer);
+
+        if (!is_array($description)) {
+            $notFound = $this->getNotFound();
+            $notFound[] = $searchTerm;
+        } else {
+            $this->setFound($this->getFound() + 1);
+        }
+
+        return $description;
+    }
+
+
+    /**
+     * @param $searchTerm
+     * @param string $wikipediaServer
+     * @return array|string  [text, description, url]
+     */
+    public function getDefinitionFrom($searchTerm, $wikipediaServer = 'http://en.wikipedia.org')
+    {
+        $url = $wikipediaServer .
+            '/w/api.php?action=opensearch&search='
+            . urlencode($searchTerm) . '&format=xml&limit=1';
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_HTTPGET, true);
         curl_setopt($ch, CURLOPT_POST, false);
@@ -43,14 +66,12 @@ class CedTagWikipedia extends JObject
         curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 6.1; he; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8");
         $page = curl_exec($ch);
         $xml = simplexml_load_string($page);
-        $this->setRequested($this->getRequested() + 1);
         if ((string)$xml->Section->Item->Description) {
-            $this->setFound($this->getFound() + 1);
-            return array((string)$xml->Section->Item->Text, (string)$xml->Section->Item->Description, (string)$xml->Section->Item->Url);
-        }
+            return array((string)$xml->Section->Item->Text,
+                (string)$xml->Section->Item->Description,
+                (string)$xml->Section->Item->Url);
 
-        $notFound = $this->getNotFound();
-        $notFound[] = $searchTerm;
+        }
         return "";
     }
 

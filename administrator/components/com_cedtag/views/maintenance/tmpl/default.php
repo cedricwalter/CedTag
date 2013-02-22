@@ -23,41 +23,60 @@ $disabled = $coreCreate ? "" : "disabled";
                         <?php echo JText::_("You do not have enough permissions: You need core.create permissions to be able to create/add/remove tags");?>
                     </p>
                     <?php } ?>
-
                     <?php echo JText::_('Operation');?>
-                    <select id="task" name="task" class="" aria-invalid="false" size="1" <?echo $disabled ?>>
+                    <select id="task" label="task" placeholder="<?php echo JText::_('Operation');?>"
+                            name="task"
+                            class=""
+                            aria-invalid="false"
+                            size="1" <?echo $disabled ?>>
                         <option value="" selected="selected"></option>
-                        <option value="replace">Replace Tag xxxx with Tag yyyy in all articles with Tag xxxx</option>
-                        <option value="add">Add Tag yyyy to all articles which have also Tag xxxx</option>
-                        <option value="remove">Remove Tag xxxx to all articles which have also Tag yyyy</option>
+                        <!--
+                            <option value="publish"><?php echo JText::_("Publish Tags having less than Z articles."); ?></option>
+                        <option value="unpublish"><?php echo JText::_("Unpublish Tags having less than Z articles."); ?></option>
+                            -->
+                        <option value="replace"><?php echo JText::_("Replace Tag xxxx with Tag yyyy in all articles with Tag xxxx."); ?></option>
+                        <option value="add"><?php echo JText::_("Add Tag yyyy to all articles which have also Tag xxxx."); ?></option>
+                        <option value="remove"><?php echo JText::_("Remove Tag xxxx to all articles which have also Tag yyyy."); ?></option>
                     </select>
 
                     <p>
-
-                    <h2><?php echo JText::_('Tags xxxx');?></h2></p>
-                    <p>
                     <ul class="adminformlist">
+                        <!--
                         <li>
-                            <input type="text" name="tagxxxx" id="tagxxxx" value="" class="" aria-invalid="false" <?echo $disabled ?>>
+                            <input label="articles" type="text" name="articles" id="articles" value="" class="" <?echo $disabled ?>
+                                   placeholder="<?php echo JText::_("Articles"); ?>">
+                        </li> -->
+                        <li>
+                            <?php echo JText::_('Tag xxxx');?>
                         </li>
-                    </ul>
-                    </p>
 
-                    <p>
-                    <h2><?php echo JText::_('Tags yyyy');?></h2></p>
-
-                    <p>
-                    <ul class="adminformlist">
                         <li>
-                            <?php echo JText::_('Tag yyyy name');?>
-                            <input style="margin: 0 2em;" class="inputbox" type="text" size="30" maxlength="100" name="tagyyyy"
+                            <input type="text"
+                                   name="tagxxxx"
+                                   id="tagxxxx"
+                                   value=""
+                                   placeholder="<?php echo JText::_('Tags xxxx');?>"
+                                   class="" aria-invalid="false" <?echo $disabled ?>>
+                        </li>
+                        <li>
+                            <?php echo JText::_('Tag yyyy');?>
+                        </li>
+                        <li>
+                            <input class="inputbox"
+                                   type="text"
+                                   size="30" maxlength="100"
+                                   placeholder="<?php echo JText::_('Tag yyyy');?>"
+                                   name="tagyyyy"
                                    value="" <?echo $disabled ?>>
-                            <?php echo JText::_('Tag yyyy weight (optional if tag already exist)');?>
-                            <input class="inputbox" type="text" size="10" maxlength="10" name="tagyyyyweigtht"
-                                   value="0" <?echo $disabled ?>>
+                            <input class="inputbox" type="text"
+                                   size="30"
+                                   maxlength="10"
+                                   name="tagyyyyweigtht"
+                                   placeholder="<?php echo JText::_('Tag yyyy weight (optional)');?>"
+                                   value="" <?echo $disabled ?>>
                         </li>
                         <li>
-                            <?php echo JText::_('Tad yyyy description (optional if tag already exist)');?>:
+                            <?php echo JText::_('Tag yyyy description (optional)');?>:
                             <?php
                             $params = array(
                                 'smilies' => 0,
@@ -70,10 +89,6 @@ $disabled = $coreCreate ? "" : "disabled";
                         </li>
                     </ul>
                     </p>
-
-
-
-
                     <?php if ($coreCreate) { ?>
                     <input type="submit" name="execute" value="<?php echo JText::_('execute');?>" class="inputbox">
                     <?php

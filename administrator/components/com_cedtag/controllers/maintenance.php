@@ -21,11 +21,12 @@ class CedTagControllerMaintenance extends JController
     {
         $input = JFactory::getApplication()->input;
 
-        $tagX = $input->get('tagxxxx', null);
+        $tagX = $input->get('tagxxxx', null, 'string');
+        $articles = $input->get('articles', null, 'int');
 
-        $tagY = $input->get('tagyyyy', null);
-        $tagYWeigtht = $input->get('tagyyyyweigtht', null);
-        $tagYDescription = $input->get('tagyyyydescription', null);
+        $tagY = $input->get('tagyyyy', null, 'string');
+        $tagYWeigtht = $input->get('tagyyyyweigtht', null, 'int');
+        $tagYDescription = $input->get('tagyyyydescription', null, 'string');
 
         switch ($task) {
             case 'replace':
@@ -37,6 +38,12 @@ class CedTagControllerMaintenance extends JController
             case 'remove':
                 $this->remove($tagX, $tagY);
                 break;
+            case 'publish':
+                $this->publish($articles);
+                break;
+            case 'publish':
+                $this->unpublish($articles);
+                break;
             default:
                 $this->display();
         }
@@ -45,11 +52,32 @@ class CedTagControllerMaintenance extends JController
     /**
      * @param bool $cachable
      * @param bool $urlparams
+     * @return JController|void
      */
     public function display($cachable = false, $urlparams = false)
     {
         JFactory::getApplication()->input->set('view', 'maintenance');
         parent::display();
+    }
+
+    private function unpublish($articles)
+    {
+        JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+
+        $model = $this->getModel('maintenance');
+        $message = $model->unpublish($articles);
+
+        $this->setRedirect("index.php?option=com_cedtag&controller=maintenance", $message);
+    }
+
+    private function publish($articles)
+    {
+        JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+
+        $model = $this->getModel('maintenance');
+        $message = $model->publish($articles);
+
+        $this->setRedirect("index.php?option=com_cedtag&controller=maintenance", $message);
     }
 
     /**

@@ -70,7 +70,7 @@
                 self._splitAt = /,/g;
 
             //add the html input
-            this.element.html('<li class="tagit-new"><input class="tagit-input" type="text" tabindex="'+this.options.tabindex+'" /></li>');
+            this.element.html('<li class="tagit-new"><input class="tagit-input" type="text" placeholder="Enter Term" tabindex="'+this.options.tabindex+'" /></li>');
 
             this.input = this.element.find(".tagit-input");
 

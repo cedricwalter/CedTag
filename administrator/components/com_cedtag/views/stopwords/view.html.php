@@ -35,7 +35,7 @@ class CedTagViewStopWords extends JView
             JToolBarHelper::spacer();
         }
 
-        JToolBarHelper::back(JText::_('CONTROL PANEL'), 'index.php?option=com_cedtag');
+        JToolBarHelper::back(JText::_('CEDTAG_CONTROL_PANEL'), 'index.php?option=com_cedtag');
 
         $lang = strval(JFactory::getLanguage()->getDefault());
 
@@ -46,7 +46,7 @@ class CedTagViewStopWords extends JView
 
         $isWritable = is_writable($file);
 
-        $FileContent = trim(JFile::read($file));
+        $FileContent = trim(file_get_contents($file));
         $this->assign('isWritable', $isWritable);
         $this->assignRef('FileName', $file);
         $this->assignRef('FileContent', $FileContent);

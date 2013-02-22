@@ -91,8 +91,6 @@ class plgButtonCedTagAdd extends JPlugin
             }
         }
 
-        //JRequest::setVar('tagsWarning','FIRST_SAVE_WARNING');
-
         $button->set('modal', true);
         $button->set('class', 'modal');
         $button->set('text', JText::_('Add Tags'));

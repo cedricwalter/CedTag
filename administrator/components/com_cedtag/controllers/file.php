@@ -31,7 +31,7 @@ class CedTagControllerFile extends JController
         }
     }
 
-    public function display($cachable = false, $urlparams = false)
+    public function display($cacheable = false, $urlParams = false)
     {
         JFactory::getApplication()->input->set('view', $this->getDefaultView());
         parent::display();
@@ -68,17 +68,32 @@ class CedTagControllerFile extends JController
         return $fileContent;
     }
 
+    /**
+     * to be overriden
+     * @return string
+     */
     public function getDefaultFile()
     {
+        return "";
     }
 
+    /**
+     * to be overriden
+     * @return string
+     */
     public function getFile()
     {
+        return "";
     }
 
-    // dont name this getView() as joomla use this already
+    /**
+     * dont name this getView() as joomla use this already
+     * to be overriden
+     * @return string
+     */
     public function getDefaultView()
     {
+        return "";
     }
 
     public function restore()

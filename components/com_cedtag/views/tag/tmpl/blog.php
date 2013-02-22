@@ -17,64 +17,69 @@ JHtml::addIncludePath(JPATH_SITE . '/components/com_cedtag/helpers');
 //blog_item.php use icon.php
 JHtml::addIncludePath(JPATH_SITE . '/components/com_content/helpers');
 
+$document = JFactory::getDocument();
+$document->addStyleSheet('media/com_cedtag/css/blog.css');
+
 ?>
 
-<h1><?php echo JText::_('Posts Tagged') . " " . JText::_('\'') . $this->tag . JText::_('\'') ?></h1>
+<h1><?php echo JText::_('COM_CEDTAG_POSTS_TAGGED') . " " . JText::_('\'') . $this->tag . JText::_('\'') ?></h1>
 
 <?php if (isset($this->showDescription) && $this->showDescription && ($this->tagDescription != null)) { ?>
-    <div class="category-desc">
-       <?php echo $this->tagDescription; ?>
-    </div>
+<div class="category-desc">
+    <?php echo $this->tagDescription; ?>
+</div>
 <?php
 }
 ?>
 
-<?php if (isset($this->ads_top_use) && $this->ads_top_use) {
-    echo $this->ads_top_content;
-}
-?>
+<?php if (isset($this->ads_top_use) && $this->ads_top_use) { ?>
+<div class="cedTagAdsTopContent">
+    <?php  echo $this->ads_top_content; ?>
+</div>
+<?php } ?>
 
 <?php
 if (isset($this->results) && !empty($this->results)) {
     foreach ($this->results as $item) {
-        $this->item = &$item;
+        $this->item = & $item;
         echo $this->loadTemplate('item');
     }
 } ?>
 
 <?php
-if (isset($this->ads_bottom_use) && $this->ads_bottom_use) { ?>
-    <div class="bottomads">
-        <?php echo $this->ads_bottom_content; ?>
-    </div>
+if (isset($this->ads_bottom_use) && $this->ads_bottom_use) {
+    ?>
+<div class="cedTagAdsBottomContent">
+    <?php  echo $this->ads_bottom_content; ?>
+</div>
 <?php
 }
 ?>
 
-<?php if (($this->show_pagination == 1  || ($this->show_pagination == 2)) && ($this->pagination->get('pages.total') > 1)) { ?>
-    <div class="pagination">
-        <?php if ($this->show_pagination_results) { ?>
-            <p class="counter">
-                <?php echo $this->pagination->getPagesCounter(); ?>
-            </p>
-        <?php } ?>
-        <?php echo $this->pagination->getPagesLinks(); ?>
-    </div>
+<?php if (($this->show_pagination == 1 || ($this->show_pagination == 2)) && ($this->pagination->get('pages.total') > 1)) { ?>
+<div class="pagination">
+    <?php if ($this->show_pagination_results) { ?>
+    <p class="counter">
+        <?php echo $this->pagination->getPagesCounter(); ?>
+    </p>
+    <?php } ?>
+    <?php echo $this->pagination->getPagesLinks(); ?>
+</div>
 <?php } ?>
 <!-- CedTag Free Tagging system for Joomla by www.waltercedric.com -->
 
 <?php
-    $document = JFactory::getDocument();
-    $cedTagsHelper = new CedTagsHelper();
-    if ($this->tagDescription) {
-        $document->setDescription($cedTagsHelper->truncate($this->tagDescription));
-    } else {
-        $document->setDescription($cedTagsHelper->truncate($this->tag));
-    }
+$document = JFactory::getDocument();
+$cedTagsHelper = new CedTagsHelper();
+if ($this->tagDescription) {
+    $document->setDescription($cedTagsHelper->truncate($this->tagDescription));
+} else {
+    $document->setDescription($cedTagsHelper->truncate($this->tag));
+}
 
-    $config = JFactory::getConfig();
-    $document->setTitle(JText::_('Items tagged with ') . $this->tag . ' | ' . $config->getValue('sitename'));
-    $document->setMetadata('keywords', $this->tag);
-    $CedTagThemes = new CedTagThemes();
-    $CedTagThemes->addCss();
+$config = JFactory::getConfig();
+$document->setTitle(JText::_('COM_CEDTAG_ITEMS_TITLE') . $this->tag . ' | ' . $config->getValue('sitename'));
+$document->setMetadata('keywords', $this->tag);
+$CedTagThemes = new CedTagThemes();
+$CedTagThemes->addCss();
 ?>

@@ -31,6 +31,7 @@ class CedTagFrequencyMapping extends JObject
     public function mappingFrequencyToSizeWithDynamicBuckets($rows)
     {
         $tags = array();
+        $tagsNameToRow = array();
         foreach ($rows as $row) {
             $tags[$row->name] = $row->frequency;
             $tagsNameToRow[$row->name] = $row;
@@ -59,14 +60,14 @@ class CedTagFrequencyMapping extends JObject
         }
 
         $result = array();
-        while (list($tagname, $tagsize) = each($tags)) {
+        while (list($tagName, $tagSize) = each($tags)) {
             $term = new stdClass();
-            $term->link = JRoute::_('index.php?option=com_cedtag&task=tag&tag=' . CedTagsHelper::urlTagname($tagname));
-            $term->name = CedTagsHelper::ucwords($tagname);
-            $term->size = $buckets[$tagsize];
-            $term->frequency = $tagsNameToRow[$tagname]->frequency;
-            $term->hits = $tagsNameToRow[$tagname]->hits;
-            $term->created = $tagsNameToRow[$tagname]->created;
+            $term->link = JRoute::_('index.php?option=com_cedtag&task=tag&tag=' . CedTagsHelper::urlTagname($tagName));
+            $term->name = CedTagsHelper::ucwords($tagName);
+            $term->size = $buckets[$tagSize];
+            $term->frequency = $tagsNameToRow[$tagName]->frequency;
+            $term->hits = $tagsNameToRow[$tagName]->hits;
+            $term->created = $tagsNameToRow[$tagName]->created;
             $term->title = JText::sprintf('COM_CEDTAG_ITEMS_TITLE',
                 (string)$term->frequency,
                 (string)$term->name,
@@ -88,6 +89,7 @@ class CedTagFrequencyMapping extends JObject
     public function mappingFrequencyToSizeWithPareto($rows)
     {
         $tags = array();
+        $tagsNameToRow = array();
         foreach ($rows as $row) {
             $tags[$row->name] = $row->frequency;
             $tagsNameToRow[$row->name] = $row;
@@ -131,20 +133,20 @@ class CedTagFrequencyMapping extends JObject
     */
     private function fromParetoCurve($tags, $minSize, $maxSize)
     {
-        $logweights = array(); // array of log value of counts
+        $logWeights = array(); // array of log value of counts
         $output = array(); // output array of linearized count values
 
         // Convert each weight to its log value.
-        foreach ($tags AS $tagname => $w) {
+        foreach ($tags AS $tagName => $w) {
             // take each weight from input, convert to log, put into new array called logweights
-            $logweights[$tagname] = log($w);
+            $logWeights[$tagName] = log($w);
         }
 
         // MAX AND MIN OF logweights ARRAY
-        $max = max(array_values($logweights));
-        $min = min(array_values($logweights));
+        $max = max(array_values($logWeights));
+        $min = min(array_values($logWeights));
 
-        foreach ($logweights AS $lw) {
+        foreach ($logWeights AS $lw) {
             if ($lw < $min) {
                 $min = $lw;
             }
@@ -154,15 +156,16 @@ class CedTagFrequencyMapping extends JObject
         }
 
         // Now calculate the slope of a straight line, from min to max.
+        $slope = 0;
         if ($max > $min) {
             $slope = ($maxSize - $minSize) / ($max - $min);
         }
 
         $middle = ($minSize + $maxSize) / 2;
 
-        foreach ($logweights AS $tagname => $w) {
+        foreach ($logWeights AS $tagName => $w) {
             if ($max <= $min) { //With max=min all tags have the same weight.
-                $output[$tagname] = $middle;
+                $output[$tagName] = $middle;
             } else { // Calculate the distance from the minimum for this weight.
                 $distance = $w - $min; //Calculate the position on the slope for this distance.
                 $result = $slope * $distance + $minSize; // If the tag turned out too small, set minSize.
@@ -173,7 +176,7 @@ class CedTagFrequencyMapping extends JObject
                 if ($result > $maxSize) {
                     $result = $maxSize;
                 }
-                $output[$tagname] = $result;
+                $output[$tagName] = $result;
             }
         }
         return $output;

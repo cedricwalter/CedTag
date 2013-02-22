@@ -421,7 +421,8 @@ class CedTagModelTag extends ContentModelArticles
         }
     }
 
-    public function tagExists($name) {
+    public function tagExists($name)
+    {
         $tagId = $this->getTagId($name);
         return isset($tagId);
     }
@@ -484,20 +485,17 @@ class CedTagModelTag extends ContentModelArticles
         $date = JFactory::getDate();
         $now = JDate::getInstance()->toSql($date);
 
-        if (!isset($description)) {
-            $description = $dbo->quote('');
-        }
         if (!isset($weight)) {
             $weight = 0;
         }
 
-        $values = ''.$dbo->quote($name). ',' . $description. ',' . $weight . ',' . $dbo->quote($now);
+        $values = '' . $dbo->quote($name) . ',' . $dbo->quote($description) . ',' . $weight . ',' . $dbo->quote($now);
 
         $query->insert('#__cedtag_term');
         $query->columns(array($dbo->quoteName('name'), $dbo->quoteName('description'), $dbo->quoteName('weight'), $dbo->quoteName('created')));
         $query->values($values);
         $dbo->setQuery($query);
-
+        $sql = $query->dump();
         $dbo->query();
 
         $tid = $dbo->insertid();
@@ -544,7 +542,7 @@ class CedTagModelTag extends ContentModelArticles
         $query = $dbo->getQuery(true);
 
         $query->select('count(*) as frequency');
-        $query->from('#__term_content');
+        $query->from('#__cedtag_term_content');
         $query->where('cid = ' . $dbo->quote(intval($cid)));
 
         $dbo->setQuery($query);
@@ -570,7 +568,7 @@ class CedTagModelTag extends ContentModelArticles
     }
 
     /**
-     * Replace tagX with tagY
+     * Replace Tag xxxx with Tag yyyy in all articles
      *
      * @param $idTagX id of tagX
      * @param $idTagY id of tagY
@@ -580,11 +578,86 @@ class CedTagModelTag extends ContentModelArticles
         $dbo = JFactory::getDBO();
         $query = $dbo->getQuery(true);
 
-        $query->update('#__term_content');
-        $query->set('tid =' . $dbo->quote(intval($idTagX)));
-        $query->where('tid = ' . $dbo->quote(intval($idTagY)));
+        $query->update('#__cedtag_term_content');
+        $query->set('tid =' . $dbo->quote(intval($idTagY)));
+        $query->where('tid = ' . $dbo->quote(intval($idTagX)));
         $dbo->setQuery($query);
-        $dbo->query();
+        //$sql = $query->dump();
+        return $dbo->query();
+    }
+
+    /**
+     *
+     * @param $tagX name of tag
+     * @return mixed
+     */
+    public function getTagIdForTagName($tagX)
+    {
+        $dbo = JFactory::getDBO();
+        $query = $dbo->getQuery(true);
+
+        $query->select('id as id');
+        $query->from('#__cedtag_term');
+        $query->where('name = ' . $dbo->quote($tagX));
+        $dbo->setQuery($query);
+        $idTag = $dbo->loadColumn();
+        if (is_array($idTag)) {
+            return $idTag[0];
+        }
+        return null;
+    }
+
+    /**
+     * @param $idX
+     * @return mixed
+     */
+    public function getContentIdsForTagId($idX)
+    {
+        $dbo = JFactory::getDBO();
+        $query = $dbo->getQuery(true);
+
+        $query->select('cid');
+        $query->from('#__cedtag_term_content');
+        $query->where('tid = ' . $dbo->quote($idX));
+        $dbo->setQuery($query);
+        $cIds = $dbo->loadColumn();
+        return $cIds;
+    }
+
+    public function removeTagXToAllArticlesWithTagY($idTagX, $idTagY)
+    {
+        $dbo = JFactory::getDBO();
+        $query = $dbo->getQuery(true);
+
+        $cIds = $this->getContentIdsForTagId($idTagY);
+        $articleCounter = 0;
+        foreach ($cIds as $cId) {
+            $query->clear();
+            $query->delete('#__cedtag_term_content');
+            $query->where('tid =' . $dbo->quote($idTagX));
+            $query->where('cid =' . $dbo->quote($cId));
+            $dbo->setQuery($query);
+            $dbo->query();
+            $articleCounter++;
+        }
+        return $articleCounter;
+    }
+
+    public function addTagYToAllArticlesWithTagX($idTagX, $idTagY)
+    {
+        $dbo = JFactory::getDBO();
+        $query = $dbo->getQuery(true);
+
+        $cIds = $this->getContentIdsForTagId($idTagX);
+
+        foreach ($cIds as $cid) {
+            $query->clear();
+            $query->insert('#__cedtag_term_content');
+            $query->columns(array($dbo->quoteName('tid'), $dbo->quoteName('cid')));
+            $query->values($idTagY . ',' . $cid);
+            $dbo->setQuery($query);
+            $dbo->query();
+        }
     }
 
 }

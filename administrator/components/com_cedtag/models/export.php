@@ -20,63 +20,77 @@ class CedTagModelExport extends CedTagModelTag
 
     private function getSqlFor($param, $field, &$sql)
     {
-        $isfield = CedTagsHelper::param($param, '1');
-        $sql .= $isfield ? "$field as $field," : "";
+        $isField = CedTagsHelper::param($param, '1');
+        $sql .= $isField ? "$field as $field," : "";
         return $sql;
     }
 
 
     public function exportTagsToCsv()
     {
-        $app = JFactory::getApplication();
+        $items = $this->fetchData();
 
-        $sql = "select ";
-        $this->getSqlFor('export_csv_id', 'id', $sql);
-        $this->getSqlFor('export_csv_name', 'name', $sql);
-        $this->getSqlFor('export_csv_alias', 'alias', $sql);
-        $this->getSqlFor('export_csv_description', 'description', $sql);
-        $this->getSqlFor('export_csv_weight', 'weight', $sql);
-        $this->getSqlFor('export_csv_hits', 'hits', $sql);
-        $this->getSqlFor('export_csv_created', 'created', $sql);
-        $this->getSqlFor('export_published_hits', 'hits', $sql);
-
-        $sql = substr_replace($sql, "", -1);
-
-        $sql .= "  from #__cedtag_term;";
-
-        $dbo = JFactory::getDbo();
-        $dbo->setQuery($sql);
-        $dbo->query();
-        $items = $dbo->loadObjectList();
-
-        $csvarray = array();
+        $csvArray = array();
         foreach ($items as $item) {
-            $datacsv = array($item->id, $item->name);
-            $csvarray[] = $datacsv;
+            $dataCsv = array($item->id, $item->name);
+            $csvArray[] = $dataCsv;
         }
 
-        $fp = fopen("php://output", "w");
+        $this->outputHeaders();
 
-        $export_csv_delimiter = CedTagsHelper::param('export_csv_delimiter', null);
-        $export_csv_enclosure = CedTagsHelper::param('export_csv_enclosure', null);
-        foreach ($csvarray as $fields) {
-            fputcsv($fp, $fields, $export_csv_delimiter, $export_csv_enclosure);
+        // create a file pointer connected to the output stream
+        $fp = @fopen("php://output", "w");
+
+        $headerDisplayed = false;
+        try {
+            foreach ($items as $item) {
+                //typecast (object)$array; and (array)$stdClass; which will do the conversion, see PHP Manual for objects
+                //http://php.net/manual/en/language.types.object.php
+                $itemsArray = (array)$item;
+
+                if (!$headerDisplayed) {
+                    fputcsv($fp, array_keys($itemsArray));
+                    $headerDisplayed = true;
+                }
+
+                $arrayValues = array_values($itemsArray);
+                fputcsv($fp, $arrayValues);
+            }
+        } catch (Exception $e) {
+
         }
-
         fclose($fp);
 
-        $datetime = Jdate::getInstance()->toUnix();
-
-        header("Content-type: text/csv");
-        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-        header("Content-type: application/csv");
-        header("Content-Disposition: attachment; filename=cedTag_export.csv");
-        header("Pragma: no-cache");
-        header("Expires: 0");
-
+        $app = JFactory::getApplication();
         $app->close();
     }
 
+    /**
+     * output headers so that the file is downloaded rather than displayed
+     */
+    private function outputHeaders()
+    {
+        header("Content-type: text/csv");
+        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+        header("Content-type: application/csv");
+        header('Content-Description: File Transfer');
+        header("Content-Disposition: attachment; filename=cedTag_export.csv");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+    }
+
+    private function fetchData()
+    {
+        $dbo = JFactory::getDbo();
+        $query = $dbo->getQuery(true);
+
+        $query->select('*');
+        $query->from('#__cedtag_term');
+        $dbo->setQuery($query);
+        $dbo->query();
+        $items = $dbo->loadObjectList();
+        return $items;
+    }
 
     public function exportTagsToMetaKeys()
     {
@@ -91,20 +105,18 @@ class CedTagModelExport extends CedTagModelTag
             $dbo->setQuery($query);
             $dbo->query();
             $executionMessages .= JText::_('-OK');
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $executionResult = false;
             $executionMessages .= JText::_('-FAIL');
         }
         try {
             $executionMessages .= JText::_('Fill Table with the metadata');
             $query = 'INSERT INTO ' . $tmpTable . ' SELECT c.id, GROUP_CONCAT(t.name SEPARATOR ",") FROM #__content';
-            $query .= 'AS c LEFT JOIN #__cedtag_term_content AS t2c ON t2c.cid=c.id LEFT JOIN #__cedtag_term AS t ON t.id=t2c.tid and t.published=\'1\' GROUP BY c.id;';
+            $query .= ' AS c LEFT JOIN #__cedtag_term_content AS t2c ON t2c.cid=c.id LEFT JOIN #__cedtag_term AS t ON t.id=t2c.tid and t.published=\'1\' GROUP BY c.id;';
             $dbo->setQuery($query);
             $dbo->query();
             $executionMessages .= JText::_('-OK');
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $executionResult = false;
             $executionMessages .= JText::_('-FAIL');
         }
@@ -114,19 +126,17 @@ class CedTagModelExport extends CedTagModelTag
             $dbo->setQuery($query);
             $dbo->query();
             $executionMessages .= JText::_('-OK');
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $executionResult = false;
             $executionMessages .= JText::_('-FAIL');
         }
         try {
-            $executionMessages .= JText::_('Drop table '.$tmpTable);
+            $executionMessages .= JText::_('Drop table ' . $tmpTable);
             $query = 'DROP TABLE ' . $tmpTable . ';';
             $dbo->setQuery($query);
             $dbo->query();
             $executionMessages .= JText::_('-OK');
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $executionResult = false;
             $executionMessages .= JText::_('-FAIL');
         }
